@@ -72,12 +72,12 @@ code{font-family:var(--mono);font-size:.875em;background:var(--line-2);
 
 /* ---- tables ---- */
 .tscroll{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
-table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
-th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-2);vertical-align:top}
-thead th{background:var(--line-2);font-weight:600;font-size:12.5px;color:var(--ink-2);
+.tscroll table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+.tscroll th,.tscroll td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-2);vertical-align:top}
+.tscroll thead th{background:var(--line-2);font-weight:600;font-size:12.5px;color:var(--ink-2);
   letter-spacing:.02em;white-space:nowrap}
-tbody tr:last-child td{border-bottom:0}
-td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
+.tscroll tbody tr:last-child td{border-bottom:0}
+.tscroll td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
 .tag{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:5px;white-space:nowrap}
 .tag.ok{background:var(--ok-soft);color:var(--ok)}
 .tag.warn{background:var(--warn-soft);color:var(--warn)}
@@ -120,7 +120,7 @@ td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
 
 /* the mock viewport: fixed design width, scaled down so layout never reflows */
 .vp{width:100%;overflow:hidden;background:#fff}
-.vp > .inner{width:1440px;transform-origin:0 0;font-size:13px;line-height:1.5;
+.vp > .inner{width:1600px;transform-origin:0 0;font-size:13px;line-height:1.5;
   font-family:'Inter','Noto Sans JP',-apple-system,sans-serif;color:#111}
 /* scale is set per-breakpoint via --s */
 /* --s is measured per element by the script at the end of <body>; this is the
@@ -138,16 +138,15 @@ td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
    leaks into the page chrome. Four skins: stock / A / B / C.
    =========================================================== */
 .vp .inner *{box-sizing:border-box}
-.vp .inner table{min-width:0;border-collapse:collapse;width:100%}
-.vp .inner th,.vp .inner td{padding:0;border:0;font-size:inherit;background:none;white-space:normal;word-break:break-word}
-.vp .inner table{table-layout:fixed}
-.vp .inner th:first-child,.vp .inner td:first-child{white-space:nowrap;width:17%}
-.vp .inner th:nth-child(2),.vp .inner td:nth-child(2){width:19%}
-.vp .inner th:nth-child(3),.vp .inner td:nth-child(3){width:10%}
+.vp .inner table{min-width:0;border-collapse:collapse;width:100%;table-layout:fixed}
+.vp .inner th,.vp .inner td{text-align:left;vertical-align:top;border:0;
+  white-space:normal;overflow-wrap:break-word}
+.vp .inner th:first-child,.vp .inner td:first-child{white-space:nowrap;width:16%}
+.vp .inner th:nth-child(2),.vp .inner td:nth-child(2){width:17%}
+.vp .inner th:nth-child(3),.vp .inner td:nth-child(3){width:9%}
 .vp .inner th:nth-child(4),.vp .inner td:nth-child(4){width:20%}
-.vp .inner th:nth-child(5),.vp .inner td:nth-child(5){width:19%}
-.vp .inner th:nth-child(6),.vp .inner td:nth-child(6){width:15%}
-.vp .inner thead th{letter-spacing:0;text-transform:none}
+.vp .inner th:nth-child(5),.vp .inner td:nth-child(5){width:21%}
+.vp .inner th:nth-child(6),.vp .inner td:nth-child(6){width:17%}
 .m-row{display:flex;height:100%}
 .m-main{flex:1;min-width:0;display:flex;flex-direction:column}
 .m-body{flex:1;padding:22px 26px;overflow:hidden}
@@ -156,6 +155,7 @@ td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
 .m-hdrow .m-ttl{margin:0}
 .m-flex{display:flex;gap:20px;align-items:flex-start}
 .m-grow{flex:1;min-width:0}
+.m-pill{white-space:nowrap}
 .m-ico{display:inline-block;width:14px;height:14px;border-radius:3px;background:currentColor;
   opacity:.4;vertical-align:-2px;margin-right:9px;flex:none}
 .m-cards{display:flex;gap:12px;margin-bottom:18px}
@@ -193,139 +193,242 @@ td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
   font-size:11px;margin-bottom:6px;color:#555;background:#fff}
 .sk-stock .m-btn{background:#79aec8;color:#fff;border:0;border-radius:3px;padding:4px 10px;font-size:11px}
 
-/* ---------- A: django-unfold (Tailwind) ---------- */
-.sk-unfold{background:#fafafa;font-family:"Inter","Noto Sans JP",sans-serif;color:#18181b}
-.sk-unfold .m-nav{width:238px;flex:none;background:#fff;border-right:1px solid #e4e4e7;padding:17px 13px}
-.sk-unfold .m-brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14px;
-  padding:0 7px 17px;color:#18181b}
-.sk-unfold .m-brand .lg{width:25px;height:25px;border-radius:7px;background:#2563eb;color:#fff;
-  display:grid;place-items:center;font-size:11px;font-weight:700}
-.sk-unfold .m-grp{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#a1a1aa;
-  font-weight:600;padding:13px 8px 6px}
-.sk-unfold .m-nl{display:flex;align-items:center;border-radius:7px;padding:7px 9px;font-size:12.5px;
-  color:#52525b;margin-bottom:1px}
-.sk-unfold .m-nl.on{background:#eff6ff;color:#1d4ed8;font-weight:600}
-.sk-unfold .m-nl.on .m-ico{opacity:.85}
-.sk-unfold .m-top{background:#fff;border-bottom:1px solid #e4e4e7;padding:11px 24px;display:flex;
-  align-items:center;gap:14px}
-.sk-unfold .m-search{flex:1;max-width:330px;background:#f4f4f5;border:1px solid #e4e4e7;border-radius:999px;
-  padding:6px 14px;font-size:11.5px;color:#a1a1aa}
-.sk-unfold .m-av{width:27px;height:27px;border-radius:50%;background:#e4e4e7;flex:none}
-.sk-unfold .m-moon{width:27px;height:27px;border-radius:7px;border:1px solid #e4e4e7;flex:none;margin-left:auto}
-.sk-unfold .m-crumb{font-size:11.5px;color:#a1a1aa;margin-bottom:5px}
-.sk-unfold .m-tools{display:flex;gap:8px;margin-bottom:15px}
-.sk-unfold .m-b1{background:#2563eb;color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600}
-.sk-unfold .m-b2{background:#fff;border:1px solid #e4e4e7;color:#3f3f46;border-radius:7px;
-  padding:7px 14px;font-size:12px;font-weight:600}
-.sk-unfold .m-card{background:#fff;border:1px solid #e4e4e7;border-radius:11px;overflow:hidden}
-.sk-unfold thead th{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#a1a1aa;
-  font-weight:600;padding:11px 15px;border-bottom:1px solid #f4f4f5}
-.sk-unfold td{padding:11px 15px;border-bottom:1px solid #f4f4f5;font-size:12.5px;color:#3f3f46}
-.sk-unfold tbody tr:last-child td{border-bottom:0}
-.sk-unfold .m-pill{display:inline-block;background:#f4f4f5;color:#52525b;border-radius:999px;
-  padding:2px 9px;font-size:11px;font-weight:600}
-.sk-unfold .m-pill.b{background:#eff6ff;color:#1d4ed8}
-.sk-unfold .m-pill.g{background:#f0fdf4;color:#15803d}
-.sk-unfold .m-side{width:232px;flex:none;background:#fff;border:1px solid #e4e4e7;border-radius:11px;padding:15px}
-.sk-unfold .m-side h4{margin:0 0 12px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#a1a1aa}
-.sk-unfold .m-side .g{margin-bottom:14px}
-.sk-unfold .m-side .g b{display:block;font-size:11.5px;color:#3f3f46;margin-bottom:6px;font-weight:600}
-.sk-unfold .m-side .g a{display:block;color:#2563eb;text-decoration:none;padding:1.5px 0;font-size:11.5px}
-.sk-unfold .m-side .g a.on{font-weight:700;color:#18181b}
-.sk-unfold .m-in{display:block;width:100%;background:#fff;border:1px solid #e4e4e7;border-radius:7px;
-  padding:6px 10px;font-size:11.5px;color:#71717a;margin-bottom:7px}
-.sk-unfold .m-chipr{display:inline-block;background:#f4f4f5;border-radius:6px;padding:4px 9px;
-  font-size:11px;color:#52525b;margin:0 4px 4px 0}
-.sk-unfold .m-chipr.on{background:#2563eb;color:#fff;font-weight:600}
-.sk-unfold .m-stat{flex:1;background:#fff;border:1px solid #e4e4e7;border-radius:11px;padding:14px 16px}
-.sk-unfold .m-bt{background:#f4f4f5}.sk-unfold .m-bf{background:#2563eb}
+/* ---------- A: django-unfold (Tailwind) ----------
+   Rebuilt 2026-10-15 against the live demo at demo.unfoldadmin.com.
+   Palette taken from the running app's own CSS variables:
+   --color-primary-600 = Tailwind purple-600, --color-base-* = Tailwind gray.
+   Earlier version of this skin was guessed (blue, tiny uppercase headers,
+   top-bar search) and was wrong on all three counts.                     */
+.sk-unfold{background:#f8fafc;font-family:"Inter","Noto Sans JP",sans-serif;color:#111827}
 
-/* ---------- B: django-jazzmin (AdminLTE / Bootstrap) ---------- */
+/* sidebar ------------------------------------------------------------- */
+.sk-unfold .m-nav{width:286px;flex:none;background:#fff;border-right:1px solid #e5e7eb;
+  display:flex;flex-direction:column;padding:0}
+.sk-unfold .m-brand{display:flex;align-items:center;gap:11px;padding:14px 16px;
+  border-bottom:1px solid #e5e7eb}
+.sk-unfold .m-brand .lg{width:30px;height:30px;border-radius:8px;flex:none;
+  background:linear-gradient(140deg,#a855f7,#7e22ce);color:#fff;display:grid;place-items:center;
+  font-size:12px;font-weight:700}
+.sk-unfold .m-brand .bt{flex:1;min-width:0;line-height:1.3}
+.sk-unfold .m-brand .bn{display:block;font-size:13.5px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sk-unfold .m-brand .bn i{font-style:normal;font-size:10.5px;font-weight:500;color:#9ca3af;margin-left:5px}
+.sk-unfold .m-brand .bs{display:block;font-size:11px;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sk-unfold .m-brand .ch{color:#9ca3af;font-size:11px;flex:none}
+.sk-unfold .m-sbox{margin:13px 16px 4px;display:flex;align-items:center;gap:7px;
+  border:1px solid #e5e7eb;border-radius:8px;padding:7px 10px;font-size:12.5px;color:#9ca3af}
+.sk-unfold .m-sbox .kbd{margin-left:auto;font-size:10px;color:#9ca3af;background:#f3f4f6;
+  border-radius:4px;padding:1px 5px}
+.sk-unfold .m-grp{font-size:12.5px;font-weight:700;color:#111827;padding:15px 16px 5px}
+.sk-unfold .m-nl{display:flex;align-items:center;gap:10px;padding:7px 10px;margin:0 10px 1px;
+  font-size:13.5px;color:#4b5563;border-radius:7px}
+.sk-unfold .m-nl .m-ico{margin:0;opacity:.45}
+.sk-unfold .m-nl .nb{margin-left:auto;font-size:10.5px;font-weight:600;color:#fff;
+  background:#f97316;border-radius:3px;padding:1px 6px}
+.sk-unfold .m-nl .nb.b{background:#3b82f6}
+.sk-unfold .m-nl .ch{margin-left:auto;color:#9ca3af;font-size:10px}
+.sk-unfold .m-nl.on{background:#faf5ff;color:#9333ea;font-weight:600}
+.sk-unfold .m-nl.on .m-ico{opacity:1}
+.sk-unfold .m-me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 16px;
+  border-top:1px solid #e5e7eb}
+.sk-unfold .m-me .av{width:32px;height:32px;border-radius:50%;background:#e5e7eb;flex:none}
+.sk-unfold .m-me .mt{flex:1;min-width:0;line-height:1.3}
+.sk-unfold .m-me .mn{display:block;font-size:12.5px;font-weight:700;color:#111827}
+.sk-unfold .m-me .mm{display:block;font-size:11px;color:#9ca3af}
+
+/* top bar: a breadcrumb and actions — NOT a search field ---------------- */
+.sk-unfold .m-top{background:#fff;border-bottom:1px solid #e5e7eb;padding:13px 22px;
+  display:flex;align-items:center;gap:13px}
+.sk-unfold .m-tgl{width:17px;height:15px;border:1.5px solid #9ca3af;border-radius:3px;flex:none}
+.sk-unfold .m-bc{font-size:13.5px;color:#9ca3af}
+.sk-unfold .m-bc b{color:#111827;font-weight:700}
+.sk-unfold .m-acts{margin-left:auto;display:flex;align-items:center;gap:9px}
+.sk-unfold .m-b1{background:#9333ea;color:#fff;border-radius:7px;padding:7px 14px;
+  font-size:12.5px;font-weight:600}
+.sk-unfold .m-b2{background:#fff;border:1px solid #e5e7eb;color:#374151;border-radius:7px;
+  padding:7px 14px;font-size:12.5px;font-weight:600}
+.sk-unfold .m-body{padding:18px 22px}
+
+/* toolbar above the table ---------------------------------------------- */
+.sk-unfold .m-bar{background:#fff;border:1px solid #e5e7eb;border-radius:9px;padding:9px 13px;
+  display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.sk-unfold .m-bar .cb{width:16px;height:16px;border-radius:4px;background:#9333ea;flex:none}
+.sk-unfold .m-bar .ph{font-size:12.5px;color:#9ca3af;flex:1}
+.sk-unfold .m-bar .sl{font-size:10.5px;color:#9ca3af;border:1px solid #e5e7eb;border-radius:4px;padding:1px 6px}
+.sk-unfold .m-bar .fb{font-size:12.5px;font-weight:600;color:#374151;border:1px solid #e5e7eb;
+  border-radius:7px;padding:6px 12px}
+
+/* table: bold dark headers, striped rows -------------------------------- */
+.sk-unfold .m-card{background:#fff;border:1px solid #e5e7eb;border-radius:9px;overflow:hidden}
+.sk-unfold thead th{font-size:13px;font-weight:700;color:#4b5563;padding:11px 15px;
+  border-bottom:1px solid #e5e7eb;text-transform:none;letter-spacing:0}
+.sk-unfold td{padding:11px 15px;font-size:13px;color:#374151;border-bottom:1px solid #f3f4f6}
+.sk-unfold tbody tr:nth-child(even){background:#f8fafc}
+.sk-unfold tbody tr:last-child td{border-bottom:0}
+.sk-unfold .m-pill{display:inline-block;background:#f3f4f6;color:#4b5563;border-radius:4px;
+  padding:2px 7px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.sk-unfold .m-pill.b{background:#f3e8ff;color:#7e22ce}
+.sk-unfold .m-pill.g{background:#dcfce7;color:#15803d}
+.sk-unfold .m-pg{display:flex;align-items:center;gap:11px;padding:11px 3px 0;font-size:12.5px;color:#6b7280}
+.sk-unfold .m-pg b{color:#9333ea;font-weight:700}
+
+/* filter rail (what the Filters button reveals) ------------------------- */
+.sk-unfold .m-side{width:252px;flex:none;background:#fff;border:1px solid #e5e7eb;
+  border-radius:9px;padding:15px 16px}
+.sk-unfold .m-side h4{margin:0 0 13px;font-size:12.5px;font-weight:700;color:#111827}
+.sk-unfold .m-side .g{margin-bottom:15px}
+.sk-unfold .m-side .g b{display:block;font-size:12px;color:#111827;margin-bottom:6px;font-weight:700}
+.sk-unfold .m-side .g a{display:block;color:#4b5563;text-decoration:none;padding:2px 0;font-size:12.5px}
+.sk-unfold .m-side .g a.on{color:#9333ea;font-weight:600}
+.sk-unfold .m-in{display:block;width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:7px;
+  padding:7px 10px;font-size:12px;color:#6b7280;margin-bottom:7px}
+.sk-unfold .m-chipr{display:inline-block;border:1px solid #e5e7eb;border-radius:7px;padding:5px 11px;
+  font-size:12px;color:#4b5563;margin:0 5px 5px 0;background:#fff}
+.sk-unfold .m-chipr.on{background:#9333ea;border-color:#9333ea;color:#fff;font-weight:600}
+
+/* stat cards with sparklines ------------------------------------------- */
+.sk-unfold .m-stat{flex:1;background:#fff;border:1px solid #e5e7eb;border-radius:9px;
+  padding:14px 16px;display:flex;align-items:flex-end;gap:10px}
+.sk-unfold .m-stat .sc{flex:1;min-width:0}
+.sk-unfold .m-stat .m-k{font-size:12.5px;color:#4b5563;text-transform:none;letter-spacing:0;opacity:1}
+.sk-unfold .m-stat .m-v{font-size:26px;font-weight:700;color:#111827;white-space:nowrap}
+.sk-unfold .m-stat .up{font-size:11.5px;color:#16a34a;font-weight:600;margin-left:7px}
+.sk-unfold .m-spark{flex:none;width:76px;height:34px}
+.sk-unfold .m-bt{background:#f3f4f6}
+.sk-unfold .m-bf{background:#9333ea}
+
+/* ---------- B: django-jazzmin (AdminLTE / Bootstrap) ----------
+   Rebuilt 2026-10-15 against the project's own documentation screenshots
+   (django-jazzmin.readthedocs.io/img/list_view.png and dashboard.png).
+   Key correction: jazzmin renders list_filter as INLINE DROPDOWNS in the
+   card header, not as Django's right-hand filter rail.                  */
 .sk-jazz{background:#f4f6f9;font-family:"Source Sans Pro","Noto Sans JP",sans-serif;color:#212529}
-.sk-jazz .m-nav{width:245px;flex:none;background:#343a40;color:#c2c7d0;padding:0}
-.sk-jazz .m-brand{display:flex;align-items:center;gap:10px;padding:13px 16px;font-size:15px;
-  font-weight:600;color:#fff;border-bottom:1px solid #4b545c}
-.sk-jazz .m-brand .lg{width:26px;height:26px;border-radius:50%;background:#007bff;display:grid;
-  place-items:center;font-size:11px;color:#fff;font-weight:700}
-.sk-jazz .m-user{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #4b545c}
+
+/* sidebar -------------------------------------------------------------- */
+.sk-jazz .m-nav{width:250px;flex:none;background:#343a40;color:#c2c7d0;padding:0}
+.sk-jazz .m-brand{display:flex;align-items:center;gap:11px;padding:12px 15px;font-size:15px;
+  font-weight:400;color:#fff;border-bottom:1px solid #4b545c}
+.sk-jazz .m-brand .lg{width:28px;height:28px;border-radius:50%;background:#495057;display:grid;
+  place-items:center;font-size:11px;color:#fff;font-weight:700;flex:none}
+.sk-jazz .m-user{display:flex;align-items:center;gap:11px;padding:11px 15px;border-bottom:1px solid #4b545c}
 .sk-jazz .m-user .av{width:30px;height:30px;border-radius:50%;background:#6c757d;flex:none}
-.sk-jazz .m-user div{font-size:12px;color:#fff;overflow:hidden;text-overflow:ellipsis}
-.sk-jazz .m-grp{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:#869099;padding:13px 16px 5px}
-.sk-jazz .m-nl{display:flex;align-items:center;padding:8px 16px;font-size:12.5px;color:#c2c7d0;border-radius:4px;margin:0 7px 2px}
-.sk-jazz .m-nl.on{background:#007bff;color:#fff;font-weight:600}
-.sk-jazz .m-top{background:#fff;border-bottom:1px solid #dee2e6;padding:11px 20px;display:flex;align-items:center;gap:14px}
-.sk-jazz .m-top .t{font-size:12.5px;color:#495057}
-.sk-jazz .m-av{width:28px;height:28px;border-radius:50%;background:#dee2e6;margin-left:auto;flex:none}
-.sk-jazz .m-crumbbar{background:#fff;border-bottom:1px solid #dee2e6;padding:12px 20px;display:flex;
+.sk-jazz .m-user div{font-size:12.5px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sk-jazz .m-grp{font-size:11.5px;color:#869099;padding:14px 15px 5px}
+.sk-jazz .m-nl{display:flex;align-items:center;gap:10px;padding:8px 13px;font-size:13px;
+  color:#c2c7d0;border-radius:4px;margin:0 7px 2px}
+.sk-jazz .m-nl .m-ico{margin:0;border-radius:50%;opacity:.55}
+.sk-jazz .m-nl.on{background:#007bff;color:#fff;font-weight:400}
+.sk-jazz .m-nl.on .m-ico{opacity:1}
+
+/* white top navbar with horizontal links and a search box --------------- */
+.sk-jazz .m-top{background:#fff;border-bottom:1px solid #dee2e6;padding:10px 18px;
+  display:flex;align-items:center;gap:17px}
+.sk-jazz .m-top .bars{font-size:15px;color:#495057;flex:none}
+.sk-jazz .m-top .t{font-size:13px;color:#495057}
+.sk-jazz .m-top .t.on{color:#212529;font-weight:600}
+.sk-jazz .m-nsearch{display:flex;align-items:center;border:1px solid #ced4da;border-radius:4px;
+  overflow:hidden;font-size:12px}
+.sk-jazz .m-nsearch span{padding:4px 10px;color:#adb5bd;width:132px}
+.sk-jazz .m-nsearch i{font-style:normal;padding:4px 9px;border-left:1px solid #ced4da;color:#6c757d}
+.sk-jazz .m-top .icons{margin-left:auto;display:flex;gap:13px;color:#6c757d;font-size:12px}
+
+/* page header: title left, breadcrumbs right --------------------------- */
+.sk-jazz .m-crumbbar{background:#f4f6f9;padding:13px 18px;display:flex;
   align-items:center;justify-content:space-between}
-.sk-jazz .m-crumbbar h1{margin:0;font-size:20px;font-weight:400;color:#212529}
-.sk-jazz .m-crumbbar .c{font-size:12px;color:#6c757d}
+.sk-jazz .m-crumbbar h1{margin:0;font-size:21px;font-weight:400;color:#212529}
+.sk-jazz .m-crumbbar .c{font-size:12.5px;color:#6c757d}
 .sk-jazz .m-crumbbar .c a{color:#007bff;text-decoration:none}
-.sk-jazz .m-body{padding:18px 20px}
-.sk-jazz .m-card{background:#fff;border-radius:4px;box-shadow:0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2)}
-.sk-jazz .m-ch{display:flex;align-items:center;justify-content:space-between;
-  padding:11px 15px;border-bottom:1px solid rgba(0,0,0,.125)}
-.sk-jazz .m-ch h3{margin:0;font-size:15px;font-weight:400;color:#212529}
-.sk-jazz .m-b1{background:#007bff;color:#fff;border-radius:4px;padding:5px 12px;font-size:12px}
-.sk-jazz .m-b2{background:#fff;border:1px solid #6c757d;color:#6c757d;border-radius:4px;padding:5px 12px;font-size:12px}
-.sk-jazz thead th{background:#f8f9fa;font-size:11.5px;font-weight:600;color:#495057;
-  padding:9px 14px;border-bottom:2px solid #dee2e6}
-.sk-jazz td{padding:9px 14px;border-top:1px solid #dee2e6;font-size:12.5px;color:#212529}
-.sk-jazz tbody tr:nth-child(odd){background:rgba(0,0,0,.025)}
+.sk-jazz .m-body{padding:0 18px 18px}
+
+/* card with the blue top accent --------------------------------------- */
+.sk-jazz .m-card{background:#fff;border-radius:4px;border-top:3px solid #007bff;
+  box-shadow:0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2)}
+.sk-jazz .m-ch{display:flex;align-items:center;gap:9px;padding:11px 14px;
+  border-bottom:1px solid rgba(0,0,0,.125);flex-wrap:nowrap}
+.sk-jazz .m-ch h3{margin:0;font-size:15px;font-weight:400;color:#212529;flex:none}
+.sk-jazz .m-ch .sp{margin-left:auto}
+.sk-jazz .m-seg{display:flex;border-radius:4px;overflow:hidden;border:1px solid #007bff;flex:none}
+.sk-jazz .m-seg span{font-size:11.5px;padding:4px 10px;color:#007bff;background:#fff}
+.sk-jazz .m-seg span.on{background:#6c757d;color:#fff;border-color:#6c757d}
+.sk-jazz .m-sel{border:1px solid #ced4da;border-radius:4px;padding:4px 9px;font-size:11.5px;
+  color:#495057;background:#fff;flex:none}
+.sk-jazz .m-sel i{font-style:normal;margin-left:14px;color:#6c757d;font-size:9px}
+.sk-jazz .m-b1{background:#007bff;color:#fff;border-radius:4px;padding:4px 12px;font-size:12px;flex:none}
+.sk-jazz .m-b2{background:#fff;border:1px solid #6c757d;color:#6c757d;border-radius:4px;
+  padding:4px 12px;font-size:12px;flex:none}
+.sk-jazz .m-bg{background:#28a745;color:#fff;border-radius:4px;padding:4px 12px;font-size:12px;flex:none}
+.sk-jazz .m-act{display:flex;align-items:center;gap:9px;padding:11px 14px;font-size:12px;color:#6c757d}
+
+/* table: blue bold headers, striped rows ------------------------------- */
+.sk-jazz thead th{background:#fff;font-size:12.5px;font-weight:700;color:#007bff;
+  padding:10px 14px;border-bottom:1px solid #dee2e6}
+.sk-jazz td{padding:10px 14px;border-top:1px solid #dee2e6;font-size:12.5px;color:#212529}
+.sk-jazz tbody tr:nth-child(even){background:#f8f9fa}
 .sk-jazz .m-pill{display:inline-block;border-radius:10rem;padding:2px 8px;font-size:10.5px;
   font-weight:700;background:#17a2b8;color:#fff}
-.sk-jazz .m-pill.b{background:#007bff}.sk-jazz .m-pill.g{background:#28a745}
-.sk-jazz .m-side{width:228px;flex:none}
-.sk-jazz .m-side .m-card{margin-bottom:0}
-.sk-jazz .m-side h4{margin:0;padding:11px 14px;font-size:13px;font-weight:400;
-  border-bottom:1px solid rgba(0,0,0,.125);color:#212529}
-.sk-jazz .m-side .g{padding:11px 14px;border-bottom:1px solid rgba(0,0,0,.075);font-size:12px}
-.sk-jazz .m-side .g b{display:block;font-size:11px;color:#6c757d;font-weight:600;margin-bottom:6px}
-.sk-jazz .m-side .g a{display:block;color:#007bff;text-decoration:none;padding:1px 0}
-.sk-jazz .m-side .g a.on{font-weight:700;color:#212529}
-.sk-jazz .m-in{display:block;width:100%;border:1px solid #ced4da;border-radius:4px;padding:5px 9px;
-  font-size:11.5px;margin-bottom:7px;color:#495057;background:#fff}
+.sk-jazz .m-pill.b{background:#007bff}
+.sk-jazz .m-pill.g{background:#28a745}
+.sk-jazz .m-pg{padding:11px 14px;font-size:12px;color:#6c757d}
+.sk-jazz .m-pg b{color:#212529}
 .sk-jazz .m-stat{flex:1;background:#fff;border-radius:4px;padding:13px 15px;
-  box-shadow:0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2);border-left:3px solid #007bff}
-.sk-jazz .m-bt{background:#e9ecef}.sk-jazz .m-bf{background:#007bff}
+  box-shadow:0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2);border-top:3px solid #007bff}
+.sk-jazz .m-bt{background:#e9ecef}
+.sk-jazz .m-bf{background:#007bff}
 
-/* ---------- C: django-admin-interface (stock structure, repainted) ---------- */
+/* ---------- C: django-admin-interface (stock structure, repainted) ----------
+   Rebuilt 2026-10-15 against the project's own README screencast. Its
+   signature is a TWO-TONE header: a brand bar carrying a large wordmark and a
+   small user-tools row, then a breadcrumb bar in a lighter tint of the same
+   colour with white text. Table headers stay uppercase as in stock Django,
+   and the right-hand filter rail is kept (unlike jazzmin).                  */
 .sk-ai{background:#fff;font-family:"Noto Sans JP","Helvetica Neue",sans-serif;color:#2c3038}
-.sk-ai .m-top{background:#2b3a67;color:#fff;padding:12px 26px;display:flex;align-items:center;gap:11px}
-.sk-ai .m-top .lg{width:24px;height:24px;border-radius:6px;background:#f4a261;color:#2b3a67;
-  display:grid;place-items:center;font-size:11px;font-weight:700}
-.sk-ai .m-top .n{font-size:16px;font-weight:600;letter-spacing:.2px}
-.sk-ai .m-top .r{margin-left:auto;font-size:11.5px;opacity:.85}
-.sk-ai .m-crumb{background:#f0f2f7;border-bottom:1px solid #dfe3ec;padding:9px 26px;font-size:11.5px;color:#7a8194}
-.sk-ai .m-crumb a{color:#2b3a67;text-decoration:none;font-weight:500}
-.sk-ai .m-ttl{font-size:19px;font-weight:600;color:#2c3038;border-bottom:2px solid #f4a261;
-  padding-bottom:8px;display:inline-block}
+.sk-ai .m-top{background:#2b3a67;color:#fff;padding:13px 26px 9px}
+.sk-ai .m-top .n{font-size:25px;font-weight:700;letter-spacing:-.5px;display:block;line-height:1.1}
+.sk-ai .m-top .ut{display:block;margin-top:7px;font-size:10px;letter-spacing:.07em;
+  text-transform:uppercase;color:rgba(255,255,255,.72);font-weight:600}
+.sk-ai .m-top .ut .dot{color:#f4a261}
+.sk-ai .m-top .ut b{color:#fff;font-weight:700}
+.sk-ai .m-crumb{background:#4a5a8a;padding:8px 26px;font-size:11.5px;color:#fff;font-weight:600}
+.sk-ai .m-crumb a{color:#fff;text-decoration:none}
+.sk-ai .m-body{padding:18px 26px}
+.sk-ai .m-ttl{font-size:19px;font-weight:400;color:#6b7280}
 .sk-ai .m-tools{flex:none}
-.sk-ai .m-tools a{display:inline-block;background:#2b3a67;border:0;color:#fff;font-size:11px;
-  padding:6px 13px;border-radius:5px;margin-left:6px;text-decoration:none;font-weight:500}
-.sk-ai .m-tools a.alt{background:#fff;border:1px solid #c8cedd;color:#2b3a67}
-.sk-ai .m-card{border:1px solid #dfe3ec;border-radius:7px;overflow:hidden}
-.sk-ai thead th{background:#f0f2f7;color:#5a6276;font-weight:600;font-size:11px;
-  padding:9px 13px;border-bottom:1px solid #dfe3ec}
+.sk-ai .m-tools a{display:inline-block;background:#e9ebf2;border:0;color:#2b3a67;font-size:10.5px;
+  padding:6px 14px;border-radius:999px;margin-left:7px;text-decoration:none;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase}
+.sk-ai .m-tools a.alt{background:#2b3a67;color:#fff}
+.sk-ai .m-act{display:flex;align-items:center;gap:9px;margin:4px 0 13px;font-size:11.5px;color:#6b7280}
+.sk-ai .m-sel{border:1px solid #c8cedd;border-radius:4px;padding:4px 9px;font-size:11px;
+  color:#5a6276;background:#fff}
+.sk-ai .m-sel i{font-style:normal;margin-left:16px;color:#8a91a3;font-size:9px}
+.sk-ai .m-gobtn{border:1px solid #c8cedd;border-radius:4px;padding:4px 11px;font-size:11px;
+  background:#f0f2f7;color:#2c3038}
+.sk-ai .m-card{border:0}
+.sk-ai thead th{background:#f0f2f7;color:#5a6276;font-weight:700;font-size:10px;
+  text-transform:uppercase;letter-spacing:.05em;padding:9px 13px;border-bottom:1px solid #dfe3ec}
 .sk-ai td{padding:9px 13px;border-bottom:1px solid #eef0f5;font-size:12.5px}
 .sk-ai tbody tr:nth-child(even){background:#fafbfd}
-.sk-ai tbody tr:last-child td{border-bottom:0}
+.sk-ai td:nth-child(2){color:#2b3a67;font-weight:700}
 .sk-ai .m-pill{display:inline-block;background:#e8ecf6;color:#2b3a67;border-radius:4px;
-  padding:2px 8px;font-size:11px;font-weight:600}
+  padding:2px 8px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
 .sk-ai .m-pill.b{background:#2b3a67;color:#fff}
 .sk-ai .m-pill.g{background:#fdeadb;color:#b4580f}
-.sk-ai .m-side{width:224px;flex:none;border:1px solid #dfe3ec;border-radius:7px;overflow:hidden}
+.sk-ai .m-ft{display:flex;align-items:center;padding:12px 0 0;font-size:11.5px;color:#6b7280}
+.sk-ai .m-ft .m-btn{margin-left:auto}
+.sk-ai .m-side{width:224px;flex:none;border:1px solid #dfe3ec;border-radius:5px;overflow:hidden}
 .sk-ai .m-side h4{margin:0;padding:10px 13px;background:#f0f2f7;border-bottom:1px solid #dfe3ec;
-  font-size:11px;color:#5a6276;font-weight:600}
+  font-size:10px;color:#5a6276;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
 .sk-ai .m-side .g{padding:10px 13px;border-bottom:1px solid #eef0f5;font-size:11.5px;color:#5a6276}
-.sk-ai .m-side .g b{display:block;font-size:10.5px;color:#8a91a3;font-weight:600;margin-bottom:5px}
+.sk-ai .m-side .g b{display:block;font-size:10.5px;color:#8a91a3;font-weight:700;margin-bottom:5px;
+  text-transform:uppercase;letter-spacing:.04em}
 .sk-ai .m-side .g a{display:block;color:#2b3a67;text-decoration:none;padding:1px 0}
 .sk-ai .m-side .g a.on{font-weight:700;border-left:2px solid #f4a261;padding-left:6px;margin-left:-8px}
-.sk-ai .m-in{display:block;width:100%;border:1px solid #c8cedd;border-radius:5px;padding:5px 8px;
+.sk-ai .m-in{display:block;width:100%;border:1px solid #c8cedd;border-radius:4px;padding:5px 8px;
   font-size:11.5px;margin-bottom:6px;color:#5a6276;background:#fff}
-.sk-ai .m-btn{background:#2b3a67;color:#fff;border:0;border-radius:5px;padding:5px 12px;font-size:11px}
-.sk-ai .m-stat{flex:1;border:1px solid #dfe3ec;border-radius:7px;padding:13px 15px;background:#fafbfd}
-.sk-ai .m-bt{background:#e8ecf6}.sk-ai .m-bf{background:#2b3a67}
+.sk-ai .m-btn{background:#2b3a67;color:#fff;border:0;border-radius:4px;padding:6px 15px;
+  font-size:11px;font-weight:600}
+.sk-ai .m-stat{flex:1;border:1px solid #dfe3ec;border-radius:5px;padding:13px 15px;background:#fafbfd}
+.sk-ai .m-bt{background:#e8ecf6}
+.sk-ai .m-bf{background:#2b3a67}
 
 </style>
 </head>
@@ -448,32 +551,47 @@ Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</s
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
 <div class="vp h-list"><div class="inner sk-unfold"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS Admin</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl on"><i class="m-ico"></i>Activity log — Detail</div><div class="m-nl"><i class="m-ico"></i>Activity log — Summary</div><div class="m-nl"><i class="m-ico"></i>Master data</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
+<div class="m-brand"><span class="lg">D</span>
+<span class="bt"><span class="bn">DCS Admin<i>0.67.0</i></span><span class="bs">Distribution Calculating System</span></span>
+<span class="ch">&#8597;</span></div>
+<div class="m-sbox">Search apps and models<span class="kbd">&#8984;K</span></div>
+<div class="m-grp">Dashboards</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-grp">Activity log</div><div class="m-nl on"><i class="m-ico"></i>Detail<span class="nb">18k</span></div><div class="m-nl"><i class="m-ico"></i>Summary</div><div class="m-grp">Master data</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-grp">System</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks<span class="nb b">2</span></div>
+<div class="m-me"><span class="av"></span>
+<span class="mt"><span class="mn">Admin User</span><span class="mm">admin@example.co.jp</span></span>
+<span class="ch">&#8597;</span></div>
+</div>
 <div class="m-main">
-<div class="m-top"><div class="m-search">Search… ⌘K</div><div class="m-moon"></div><div class="m-av"></div></div>
-<div class="m-body">
-<div class="m-crumb">Home / Activity log / Detail</div>
-<h1 class="m-ttl">User activity log — Detail</h1>
-<div class="m-tools"><span class="m-b1">View summary</span><span class="m-b2">Download CSV</span></div>
-<div class="m-flex"><div class="m-grow"><div class="m-card"><table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div></div>
-<div class="m-side"><h4>Filter</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-b1">Apply</span></div></div></div>
-</div></div></div></div></div></div>
+<div class="m-top"><span class="m-tgl"></span>
+<span class="m-bc">Activity log &rsaquo; <b>Detail</b></span>
+<span class="m-acts"><span class="m-b2">View summary</span><span class="m-b1">Download CSV</span></span></div>
+<div class="m-body"><div class="m-bar"><span class="cb"></span>
+<span class="ph">Search by user, key or path</span><span class="sl">/</span>
+<span class="fb">Filters</span></div>
+<div class="m-flex"><div class="m-grow"><div class="m-card"><table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div>
+<div class="m-pg"><b>1</b> 2 3 4 5 6 &middot; 18,432 events</div></div>
+<div class="m-side"><h4>Filters</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-b1">Apply</span></div></div></div></div></div></div></div></div></div>
 <p class="cap"><b>Option A / django-unfold</b> — left sidebar, ⌘K command palette, dark-mode toggle. The filter names and behaviour stay exactly as they are.</p>
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
 <div class="vp h-sum"><div class="inner sk-unfold"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS Admin</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Activity log — Detail</div><div class="m-nl on"><i class="m-ico"></i>Activity log — Summary</div><div class="m-nl"><i class="m-ico"></i>Master data</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
+<div class="m-brand"><span class="lg">D</span>
+<span class="bt"><span class="bn">DCS Admin<i>0.67.0</i></span><span class="bs">Distribution Calculating System</span></span>
+<span class="ch">&#8597;</span></div>
+<div class="m-sbox">Search apps and models<span class="kbd">&#8984;K</span></div>
+<div class="m-grp">Dashboards</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-grp">Activity log</div><div class="m-nl"><i class="m-ico"></i>Detail<span class="nb">18k</span></div><div class="m-nl on"><i class="m-ico"></i>Summary</div><div class="m-grp">Master data</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-grp">System</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks<span class="nb b">2</span></div>
+<div class="m-me"><span class="av"></span>
+<span class="mt"><span class="mn">Admin User</span><span class="mm">admin@example.co.jp</span></span>
+<span class="ch">&#8597;</span></div>
+</div>
 <div class="m-main">
-<div class="m-top"><div class="m-search">Search… ⌘K</div><div class="m-moon"></div><div class="m-av"></div></div>
-<div class="m-body">
-<div class="m-crumb">Home / Activity log / Summary</div>
-<h1 class="m-ttl">User activity log — Summary</h1>
-<div class="m-tools"><span class="m-chipr on">Last 30 days</span><span class="m-chipr">Last 7 days</span>
-<span class="m-chipr">Custom range</span></div>
-<div class="m-cards"><div class="m-stat"><div class="m-k">Total events</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">Active users</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">Sessions</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">Unused features</div><div class="m-v">47</div></div></div>
-<div class="m-card" style="padding:17px 19px">
-<div class="m-k" style="margin-bottom:11px">Most-viewed screens</div><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div>
-</div></div></div></div></div></div>
+<div class="m-top"><span class="m-tgl"></span>
+<span class="m-bc">Activity log &rsaquo; <b>Summary</b></span>
+<span class="m-acts"><span class="m-b2">View summary</span><span class="m-b1">Download CSV</span></span></div>
+<div class="m-body"><div class="m-tools" style="margin-bottom:14px"><span class="m-chipr on">Last 30 days</span>
+<span class="m-chipr">Last 7 days</span><span class="m-chipr">Custom range</span></div>
+<div class="m-cards"><div class="m-stat"><span class="sc"><span class="m-k">Total events</span><div class="m-v">18,432<span class="up">&#9650; +12.4%</span></div></span><svg class="m-spark" viewBox="0 0 76 34" fill="none" preserveAspectRatio="none"><polyline points="0,26 8,19 16,23 24,12 32,17 40,8 48,14 56,6 64,11 76,3" stroke="#9333ea" stroke-width="1.6" fill="none"/></svg></div><div class="m-stat"><span class="sc"><span class="m-k">Active users</span><div class="m-v">19<span class="up">&#9650; +3.1%</span></div></span><svg class="m-spark" viewBox="0 0 76 34" fill="none" preserveAspectRatio="none"><polyline points="0,26 8,19 16,23 24,12 32,17 40,8 48,14 56,6 64,11 76,3" stroke="#9333ea" stroke-width="1.6" fill="none"/></svg></div><div class="m-stat"><span class="sc"><span class="m-k">Sessions</span><div class="m-v">1,204<span class="up">&#9650; +8.7%</span></div></span><svg class="m-spark" viewBox="0 0 76 34" fill="none" preserveAspectRatio="none"><polyline points="0,26 8,19 16,23 24,12 32,17 40,8 48,14 56,6 64,11 76,3" stroke="#9333ea" stroke-width="1.6" fill="none"/></svg></div><div class="m-stat"><span class="sc"><span class="m-k">Unused features</span><div class="m-v">47<span class="up">&#9650; -4.2%</span></div></span><svg class="m-spark" viewBox="0 0 76 34" fill="none" preserveAspectRatio="none"><polyline points="0,26 8,19 16,23 24,12 32,17 40,8 48,14 56,6 64,11 76,3" stroke="#9333ea" stroke-width="1.6" fill="none"/></svg></div></div>
+<div class="m-card" style="padding:16px 18px">
+<div style="font-size:12.5px;font-weight:700;color:#111827;margin-bottom:12px">Most-viewed screens</div><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div></div></div></div></div></div></div>
 <p class="cap"><b>Option A / django-unfold</b> — the summary page. The stat cards and tables can be rebuilt from unfold's own components.</p>
       <div class="pros">
         <div><h4>Strengths</h4><ul>
@@ -511,35 +629,43 @@ Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</s
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
 <div class="vp h-list"><div class="inner sk-jazz"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS Admin</div>
+<div class="m-brand"><span class="lg">D</span>DCS</div>
 <div class="m-user"><span class="av"></span><div>admin@example.co.jp</div></div>
-<div class="m-grp">Menu</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl on"><i class="m-ico"></i>Activity log — Detail</div><div class="m-nl"><i class="m-ico"></i>Activity log — Summary</div><div class="m-nl"><i class="m-ico"></i>Master data</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
+<div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-grp">Activity log</div><div class="m-nl on"><i class="m-ico"></i>Detail</div><div class="m-nl"><i class="m-ico"></i>Summary</div><div class="m-grp">Master data</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-grp">System</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
 <div class="m-main">
-<div class="m-top"><span class="t">Home</span><span class="t">View site</span><div class="m-av"></div></div>
-<div class="m-crumbbar"><h1>User activity log — Detail</h1>
-<div class="c"><a>Home</a> / <a>Activity log</a> / Detail</div></div>
-<div class="m-body">
-<div class="m-flex"><div class="m-grow"><div class="m-card">
-<div class="m-ch"><h3>Detail — 18,432 records</h3><div>
-<span class="m-b1">View summary</span> <span class="m-b2">Download CSV</span></div></div>
-<table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div></div>
-<div class="m-side"><div class="m-card"><h4>Filter</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-b1">Apply</span></div></div></div></div>
-</div></div></div></div></div></div>
+<div class="m-top"><span class="bars">&#9776;</span>
+<span class="t on">Home</span><span class="t">Activity log</span><span class="t">Master data &#9662;</span>
+<span class="m-nsearch"><span>Search users...</span><i>&#9906;</i></span>
+<span class="icons"><span>&#9638;</span><span>&#9634;</span><span>&#9712;</span></span></div>
+<div class="m-crumbbar"><h1>User activity log</h1><div class="c"><a>Home</a> / <a>Activity log</a> / Detail</div></div>
+<div class="m-body"><div class="m-card">
+<div class="m-ch"><h3>Select activity event to change</h3><span class="sp"></span>
+<span class="m-seg"><span class="on">All dates</span><span>2026-10-01</span><span>2026-10-14</span></span>
+<span class="m-sel">Type<i>&#9662;</i></span>
+<span class="m-sel">User<i>&#9662;</i></span>
+<span class="m-b1">Search</span></div>
+<div class="m-act"><span class="m-sel">---------<i>&#9662;</i></span><span class="m-b1">Go</span>
+<span>0 of 18,432 selected</span>
+<span class="sp"></span><span class="m-b2">View summary</span><span class="m-bg">Download CSV</span></div>
+<table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table>
+<div class="m-pg"><b>1</b> 2 3 4 5 6 &middot; 18,432 events</div></div></div></div></div></div></div></div>
 <p class="cap"><b>Option B / django-jazzmin</b> — AdminLTE 3 / Bootstrap 5, with a record count in the card header and a dark navy sidebar.</p>
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
 <div class="vp h-sum"><div class="inner sk-jazz"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS Admin</div>
+<div class="m-brand"><span class="lg">D</span>DCS</div>
 <div class="m-user"><span class="av"></span><div>admin@example.co.jp</div></div>
-<div class="m-grp">Menu</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Activity log — Detail</div><div class="m-nl on"><i class="m-ico"></i>Activity log — Summary</div><div class="m-nl"><i class="m-ico"></i>Master data</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
+<div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-grp">Activity log</div><div class="m-nl"><i class="m-ico"></i>Detail</div><div class="m-nl on"><i class="m-ico"></i>Summary</div><div class="m-grp">Master data</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-grp">System</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
 <div class="m-main">
-<div class="m-top"><span class="t">Home</span><span class="t">View site</span><div class="m-av"></div></div>
-<div class="m-crumbbar"><h1>User activity log — Summary</h1>
-<div class="c"><a>Home</a> / <a>Activity log</a> / Summary</div></div>
+<div class="m-top"><span class="bars">&#9776;</span>
+<span class="t on">Home</span><span class="t">Activity log</span><span class="t">Master data &#9662;</span>
+<span class="m-nsearch"><span>Search users...</span><i>&#9906;</i></span>
+<span class="icons"><span>&#9638;</span><span>&#9634;</span><span>&#9712;</span></span></div>
+<div class="m-crumbbar"><h1>User activity log</h1><div class="c"><a>Home</a> / <a>Activity log</a> / Summary</div></div>
 <div class="m-body"><div class="m-cards"><div class="m-stat"><div class="m-k">Total events</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">Active users</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">Sessions</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">Unused features</div><div class="m-v">47</div></div></div>
-<div class="m-card"><div class="m-ch"><h3>Most-viewed screens</h3><span class="m-b2">Last 30 days</span></div>
-<div style="padding:15px 17px"><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div></div>
-</div></div></div></div></div></div>
+<div class="m-card"><div class="m-ch"><h3>Most-viewed screens</h3><span class="sp"></span>
+<span class="m-seg"><span class="on">Last 30 days</span><span>Last 7 days</span></span></div>
+<div style="padding:15px 17px"><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div></div></div></div></div></div></div></div>
 <p class="cap"><b>Option B / django-jazzmin</b> — the summary page, inside a Bootstrap card.</p>
       <div class="pros">
         <div><h4>Strengths</h4><ul>
@@ -574,29 +700,35 @@ Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</s
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
 <div class="vp h-list"><div class="inner sk-ai"><div class="m-row"><div class="m-main">
-<div class="m-top"><span class="lg">D</span><span class="n">DCS Administration</span>
-<span class="r">admin@example.co.jp</span></div>
-<div class="m-crumb"><a>Home</a> › <a>Activity log</a> › Detail</div>
+<div class="m-top"><span class="n">DCS</span>
+<span class="ut"><span class="dot">&#9679;</span> PRODUCTION &mdash; WELCOME, <b>ADMIN</b>.
+<b>VIEW SITE</b> / <b>CHANGE PASSWORD</b> / <b>LOG OUT</b></span></div>
+<div class="m-crumb"><a>Home</a> &rsaquo; <a>Activity log</a> &rsaquo; Detail</div>
 <div class="m-body">
-<div class="m-hdrow"><h1 class="m-ttl">User activity log — Detail</h1><div class="m-tools"><a>View summary</a><a class="alt">Download CSV</a></div></div>
-<div class="m-flex"><div class="m-grow"><div class="m-card"><table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div></div>
+<div class="m-hdrow"><h1 class="m-ttl">Select activity event to view</h1>
+<div class="m-tools"><a>View summary</a><a class="alt">Download CSV</a></div></div>
+<div class="m-act">Action: <span class="m-sel">---------<i>&#9662;</i></span>
+<span class="m-gobtn">Go</span><span>0 of 18,432 selected</span></div>
+<div class="m-flex"><div class="m-grow"><table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table>
+<div class="m-ft">18,432 events</div></div>
 <div class="m-side"><h4>Filter</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-btn">Apply</span></div></div></div>
 </div></div></div></div></div></div>
 <p class="cap"><b>Option C / django-admin-interface</b> — Django's structure is untouched; only the colours and the logo change. The smallest migration of the three.</p>
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
 <div class="vp h-sum"><div class="inner sk-ai"><div class="m-row"><div class="m-main">
-<div class="m-top"><span class="lg">D</span><span class="n">DCS Administration</span>
-<span class="r">admin@example.co.jp</span></div>
-<div class="m-crumb"><a>Home</a> › <a>Activity log</a> › Summary</div>
+<div class="m-top"><span class="n">DCS</span>
+<span class="ut"><span class="dot">&#9679;</span> PRODUCTION &mdash; WELCOME, <b>ADMIN</b>.
+<b>VIEW SITE</b> / <b>CHANGE PASSWORD</b> / <b>LOG OUT</b></span></div>
+<div class="m-crumb"><a>Home</a> &rsaquo; <a>Activity log</a> &rsaquo; Summary</div>
 <div class="m-body">
-<h1 class="m-ttl">User activity log — Summary</h1>
+<h1 class="m-ttl">User activity log &mdash; Summary</h1>
 <div style="margin:14px 0 16px;font-size:11.5px;color:#5a6276">
 Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</span>
-〜 <span class="m-in" style="display:inline-block;width:110px">2026-10-14</span>
+&ndash; <span class="m-in" style="display:inline-block;width:110px">2026-10-14</span>
 <span class="m-btn">Show</span></div>
 <div class="m-cards"><div class="m-stat"><div class="m-k">Total events</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">Active users</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">Sessions</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">Unused features</div><div class="m-v">47</div></div></div>
-<div class="m-card" style="padding:14px 16px">
+<div style="border:1px solid #dfe3ec;border-radius:5px;padding:14px 16px">
 <div class="m-k" style="margin-bottom:11px">Most-viewed screens</div><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div>
 </div></div></div></div></div></div>
 <p class="cap"><b>Option C / django-admin-interface</b> — the summary page. The layout is identical to today's.</p>
@@ -698,10 +830,16 @@ Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</s
     <li><b>Husen:</b> after approval, implement on <code>feat/z94amcqevr-modernize-admin-ui</code> and raise a PR against <code>dev</code>.</li>
     <li><b>After that:</b> charts and dashboards go in as a separate ticket, built on the approved option.</li>
   </ul>
-  <div class="note warn"><b>About the images on this page:</b> each screen above <b>recreates how that library
-  looks</b>, applied to DCS's real columns, buttons and filters. They are not screenshots of a running system.
-  Once an option is chosen we will replace them with <b>real screenshots</b> from a local install (for option C,
-  after confirming it runs on Python 3.9 at all).
+  <div class="note warn"><b>About the images on this page:</b> each screen above <b>recreates how that
+  library looks</b>, applied to DCS's real columns, buttons and filters. They are not screenshots of a running
+  DCS. All three were rebuilt against the real products rather than from memory: Option A against the live
+  <a href="https://demo.unfoldadmin.com/">unfold demo</a> (its colour palette and table styling were read out
+  of the running app), Option B against the
+  <a href="https://django-jazzmin.readthedocs.io/">jazzmin documentation screenshots</a>, and Option C against
+  the <a href="https://github.com/fabiocaccamo/django-admin-interface">admin-interface</a> project README.
+  <br><br><b>One caveat on Option A specifically:</b> that public demo runs unfold <b>0.108.0</b>, while Python
+  3.9 limits us to <b>0.67.0</b>. The design language has been stable across those releases, but small details
+  may differ. We will confirm against a real 0.67.0 install before anything is built.
   <br><br>Note also that the live DCS admin is in <b>Japanese</b>; the mockups are labelled in English for this
   document. And because this page is served from a public repository, the email addresses, hostname and account
   figures shown are <b>placeholders</b> — the real values are in the ClickUp ticket.</div>
@@ -713,11 +851,11 @@ Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</s
 </div>
 
 <script>
-// Each mock screen is drawn at a fixed 1440px design width and scaled down to
+// Each mock screen is drawn at a fixed 1600px design width and scaled down to
 // whatever space it actually has, so the layout never reflows and nothing is
 // ever clipped. Breakpoints could not be exact at every width; measuring can.
 (function () {
-  var DESIGN = 1440;
+  var DESIGN = 1600;
   var vps = document.querySelectorAll('.vp');
   function fit() {
     for (var i = 0; i < vps.length; i++) {

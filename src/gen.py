@@ -21,6 +21,98 @@ BARS = [("Project list", 3210, 100), ("Contract management", 2884, 90), ("Projec
         ("Royalty sales", 1455, 45), ("Payslips", 980, 31)]
 
 
+
+# --- unfold-specific chrome, modelled on demo.unfoldadmin.com --------------
+UNFOLD_NAV = [
+    ("Dashboards", [("Home", None)]),
+    ("Activity log", [("Detail", "18k"), ("Summary", None)]),
+    ("Master data", [("Users", None), ("Royalty companies", None), ("Guidelines", None)]),
+    ("System", [("Scheduled tasks", "2b")]),
+]
+
+
+def unfold_nav(active="Detail"):
+    out = []
+    for group, items in UNFOLD_NAV:
+        out.append('<div class="m-grp">%s</div>' % group)
+        for label, badge in items:
+            b = ""
+            if badge:
+                b = '<span class="nb%s">%s</span>' % (
+                    " b" if badge.endswith("b") else "", badge.rstrip("b"))
+            out.append('<div class="m-nl%s"><i class="m-ico"></i>%s%s</div>'
+                       % (" on" if label == active else "", label, b))
+    return "".join(out)
+
+
+def unfold_shell(active, crumb, title, body):
+    """Sidebar + top bar. The top bar is a breadcrumb and action buttons -
+    the search lives in the SIDEBAR with a Cmd-K badge, not up here."""
+    return """<div class="m-nav">
+<div class="m-brand"><span class="lg">D</span>
+<span class="bt"><span class="bn">DCS Admin<i>0.67.0</i></span><span class="bs">Distribution Calculating System</span></span>
+<span class="ch">&#8597;</span></div>
+<div class="m-sbox">Search apps and models<span class="kbd">&#8984;K</span></div>
+%s
+<div class="m-me"><span class="av"></span>
+<span class="mt"><span class="mn">Admin User</span><span class="mm">admin@example.co.jp</span></span>
+<span class="ch">&#8597;</span></div>
+</div>
+<div class="m-main">
+<div class="m-top"><span class="m-tgl"></span>
+<span class="m-bc">%s</span>
+<span class="m-acts"><span class="m-b2">View summary</span><span class="m-b1">Download CSV</span></span></div>
+<div class="m-body">%s</div></div>""" % (unfold_nav(active), crumb, body)
+
+
+SPARK = ('<svg class="m-spark" viewBox="0 0 76 34" fill="none" preserveAspectRatio="none">'
+         '<polyline points="0,26 8,19 16,23 24,12 32,17 40,8 48,14 56,6 64,11 76,3" '
+         'stroke="#9333ea" stroke-width="1.6" fill="none"/></svg>')
+
+
+def unfold_cards():
+    out = []
+    for (k, v), up in zip(CARDS, ["+12.4%", "+3.1%", "+8.7%", "-4.2%"]):
+        out.append('<div class="m-stat"><span class="sc"><span class="m-k">%s</span>'
+                   '<div class="m-v">%s<span class="up">&#9650; %s</span></div></span>%s</div>'
+                   % (k, v, up, SPARK))
+    return '<div class="m-cards">%s</div>' % "".join(out)
+
+
+JAZZ_NAV = [
+    ("", [("Home", 0)]),
+    ("Activity log", [("Detail", 0), ("Summary", 0)]),
+    ("Master data", [("Users", 0), ("Royalty companies", 0), ("Guidelines", 0)]),
+    ("System", [("Scheduled tasks", 0)]),
+]
+
+
+def jazz_nav(active="Detail"):
+    out = []
+    for group, items in JAZZ_NAV:
+        if group:
+            out.append('<div class="m-grp">%s</div>' % group)
+        for label, _ in items:
+            out.append('<div class="m-nl%s"><i class="m-ico"></i>%s</div>'
+                       % (" on" if label == active else "", label))
+    return "".join(out)
+
+
+def jazz_shell(active, title, crumb, body):
+    """Dark sidebar + WHITE top navbar carrying horizontal links and a search
+    box, then a page-header strip with the title left and breadcrumbs right."""
+    return """<div class="m-nav">
+<div class="m-brand"><span class="lg">D</span>DCS</div>
+<div class="m-user"><span class="av"></span><div>admin@example.co.jp</div></div>
+%s</div>
+<div class="m-main">
+<div class="m-top"><span class="bars">&#9776;</span>
+<span class="t on">Home</span><span class="t">Activity log</span><span class="t">Master data &#9662;</span>
+<span class="m-nsearch"><span>Search users...</span><i>&#9906;</i></span>
+<span class="icons"><span>&#9638;</span><span>&#9634;</span><span>&#9712;</span></span></div>
+<div class="m-crumbbar"><h1>%s</h1><div class="c">%s</div></div>
+<div class="m-body">%s</div></div>""" % (jazz_nav(active), title, crumb, body)
+
 def rows_html(skin, pill=True):
     out = []
     for d, u, t, c, k, p in ROWS:
@@ -71,48 +163,50 @@ def list_stock(skin="stock"):
 
 
 def list_ai():
-    tools = ('<div class="m-tools"><a>View summary</a><a class="alt">Download CSV</a></div>')
+    """Stock Django structure with the two-tone coloured header that is this
+    package's signature; the right-hand filter rail is KEPT."""
     return """<div class="m-main">
-<div class="m-top"><span class="lg">D</span><span class="n">DCS Administration</span>
-<span class="r">admin@example.co.jp</span></div>
-<div class="m-crumb"><a>Home</a> › <a>Activity log</a> › Detail</div>
+<div class="m-top"><span class="n">DCS</span>
+<span class="ut"><span class="dot">&#9679;</span> PRODUCTION &mdash; WELCOME, <b>ADMIN</b>.
+<b>VIEW SITE</b> / <b>CHANGE PASSWORD</b> / <b>LOG OUT</b></span></div>
+<div class="m-crumb"><a>Home</a> &rsaquo; <a>Activity log</a> &rsaquo; Detail</div>
 <div class="m-body">
-<div class="m-hdrow"><h1 class="m-ttl">User activity log — Detail</h1>%s</div>
-<div class="m-flex"><div class="m-grow"><div class="m-card"><table>%s<tbody>%s</tbody></table></div></div>
+<div class="m-hdrow"><h1 class="m-ttl">Select activity event to view</h1>
+<div class="m-tools"><a>View summary</a><a class="alt">Download CSV</a></div></div>
+<div class="m-act">Action: <span class="m-sel">---------<i>&#9662;</i></span>
+<span class="m-gobtn">Go</span><span>0 of 18,432 selected</span></div>
+<div class="m-flex"><div class="m-grow"><table>%s<tbody>%s</tbody></table>
+<div class="m-ft">18,432 events</div></div>
 <div class="m-side"><h4>Filter</h4>%s</div></div>
-</div></div>""" % (tools, thead(), rows_html("ai"), filters("ai"))
+</div></div>""" % (thead(), rows_html("ai"), filters("ai"))
 
 
 def list_unfold():
-    return """<div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS Admin</div>%s</div>
-<div class="m-main">
-<div class="m-top"><div class="m-search">Search… ⌘K</div><div class="m-moon"></div><div class="m-av"></div></div>
-<div class="m-body">
-<div class="m-crumb">Home / Activity log / Detail</div>
-<h1 class="m-ttl">User activity log — Detail</h1>
-<div class="m-tools"><span class="m-b1">View summary</span><span class="m-b2">Download CSV</span></div>
-<div class="m-flex"><div class="m-grow"><div class="m-card"><table>%s<tbody>%s</tbody></table></div></div>
-<div class="m-side"><h4>Filter</h4>%s</div></div>
-</div></div>""" % (nav_html("unfold"), thead(), rows_html("unfold"), filters("unfold"))
+    body = """<div class="m-bar"><span class="cb"></span>
+<span class="ph">Search by user, key or path</span><span class="sl">/</span>
+<span class="fb">Filters</span></div>
+<div class="m-flex"><div class="m-grow"><div class="m-card"><table>%s<tbody>%s</tbody></table></div>
+<div class="m-pg"><b>1</b> 2 3 4 5 6 &middot; 18,432 events</div></div>
+<div class="m-side"><h4>Filters</h4>%s</div></div>""" % (
+        thead(), rows_html("unfold"), filters("unfold"))
+    return unfold_shell("Detail", "Activity log &rsaquo; <b>Detail</b>", "Detail", body)
 
 
 def list_jazz():
-    return """<div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS Admin</div>
-<div class="m-user"><span class="av"></span><div>admin@example.co.jp</div></div>
-<div class="m-grp">Menu</div>%s</div>
-<div class="m-main">
-<div class="m-top"><span class="t">Home</span><span class="t">View site</span><div class="m-av"></div></div>
-<div class="m-crumbbar"><h1>User activity log — Detail</h1>
-<div class="c"><a>Home</a> / <a>Activity log</a> / Detail</div></div>
-<div class="m-body">
-<div class="m-flex"><div class="m-grow"><div class="m-card">
-<div class="m-ch"><h3>Detail — 18,432 records</h3><div>
-<span class="m-b1">View summary</span> <span class="m-b2">Download CSV</span></div></div>
-<table>%s<tbody>%s</tbody></table></div></div>
-<div class="m-side"><div class="m-card"><h4>Filter</h4>%s</div></div></div>
-</div></div>""" % (nav_html("jazz"), thead(), rows_html("jazz"), filters("jazz"))
+    body = """<div class="m-card">
+<div class="m-ch"><h3>Select activity event to change</h3><span class="sp"></span>
+<span class="m-seg"><span class="on">All dates</span><span>2026-10-01</span><span>2026-10-14</span></span>
+<span class="m-sel">Type<i>&#9662;</i></span>
+<span class="m-sel">User<i>&#9662;</i></span>
+<span class="m-b1">Search</span></div>
+<div class="m-act"><span class="m-sel">---------<i>&#9662;</i></span><span class="m-b1">Go</span>
+<span>0 of 18,432 selected</span>
+<span class="sp"></span><span class="m-b2">View summary</span><span class="m-bg">Download CSV</span></div>
+<table>%s<tbody>%s</tbody></table>
+<div class="m-pg"><b>1</b> 2 3 4 5 6 &middot; 18,432 events</div></div>""" % (
+        thead(), rows_html("jazz"))
+    return jazz_shell("Detail", "User activity log",
+                      '<a>Home</a> / <a>Activity log</a> / Detail', body)
 
 
 # -------------------------------------------------------------- summary screens
@@ -131,34 +225,22 @@ def bars_html():
 
 
 def sum_unfold():
-    return """<div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS Admin</div>%s</div>
-<div class="m-main">
-<div class="m-top"><div class="m-search">Search… ⌘K</div><div class="m-moon"></div><div class="m-av"></div></div>
-<div class="m-body">
-<div class="m-crumb">Home / Activity log / Summary</div>
-<h1 class="m-ttl">User activity log — Summary</h1>
-<div class="m-tools"><span class="m-chipr on">Last 30 days</span><span class="m-chipr">Last 7 days</span>
-<span class="m-chipr">Custom range</span></div>
+    body = """<div class="m-tools" style="margin-bottom:14px"><span class="m-chipr on">Last 30 days</span>
+<span class="m-chipr">Last 7 days</span><span class="m-chipr">Custom range</span></div>
 %s
-<div class="m-card" style="padding:17px 19px">
-<div class="m-k" style="margin-bottom:11px">Most-viewed screens</div>%s</div>
-</div></div>""" % (nav_html("unfold", "Activity log — Summary"), cards_html("unfold"), bars_html())
+<div class="m-card" style="padding:16px 18px">
+<div style="font-size:12.5px;font-weight:700;color:#111827;margin-bottom:12px">Most-viewed screens</div>%s</div>""" % (
+        unfold_cards(), bars_html())
+    return unfold_shell("Summary", "Activity log &rsaquo; <b>Summary</b>", "Summary", body)
 
 
 def sum_jazz():
-    return """<div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS Admin</div>
-<div class="m-user"><span class="av"></span><div>admin@example.co.jp</div></div>
-<div class="m-grp">Menu</div>%s</div>
-<div class="m-main">
-<div class="m-top"><span class="t">Home</span><span class="t">View site</span><div class="m-av"></div></div>
-<div class="m-crumbbar"><h1>User activity log — Summary</h1>
-<div class="c"><a>Home</a> / <a>Activity log</a> / Summary</div></div>
-<div class="m-body">%s
-<div class="m-card"><div class="m-ch"><h3>Most-viewed screens</h3><span class="m-b2">Last 30 days</span></div>
-<div style="padding:15px 17px">%s</div></div>
-</div></div>""" % (nav_html("jazz", "Activity log — Summary"), cards_html("jazz"), bars_html())
+    body = """%s
+<div class="m-card"><div class="m-ch"><h3>Most-viewed screens</h3><span class="sp"></span>
+<span class="m-seg"><span class="on">Last 30 days</span><span>Last 7 days</span></span></div>
+<div style="padding:15px 17px">%s</div></div>""" % (cards_html("jazz"), bars_html())
+    return jazz_shell("Summary", "User activity log",
+                      '<a>Home</a> / <a>Activity log</a> / Summary', body)
 
 
 def sum_stock(skin="stock"):
@@ -179,17 +261,18 @@ Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</s
 
 def sum_ai():
     return """<div class="m-main">
-<div class="m-top"><span class="lg">D</span><span class="n">DCS Administration</span>
-<span class="r">admin@example.co.jp</span></div>
-<div class="m-crumb"><a>Home</a> › <a>Activity log</a> › Summary</div>
+<div class="m-top"><span class="n">DCS</span>
+<span class="ut"><span class="dot">&#9679;</span> PRODUCTION &mdash; WELCOME, <b>ADMIN</b>.
+<b>VIEW SITE</b> / <b>CHANGE PASSWORD</b> / <b>LOG OUT</b></span></div>
+<div class="m-crumb"><a>Home</a> &rsaquo; <a>Activity log</a> &rsaquo; Summary</div>
 <div class="m-body">
-<h1 class="m-ttl">User activity log — Summary</h1>
+<h1 class="m-ttl">User activity log &mdash; Summary</h1>
 <div style="margin:14px 0 16px;font-size:11.5px;color:#5a6276">
 Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</span>
-〜 <span class="m-in" style="display:inline-block;width:110px">2026-10-14</span>
+&ndash; <span class="m-in" style="display:inline-block;width:110px">2026-10-14</span>
 <span class="m-btn">Show</span></div>
 %s
-<div class="m-card" style="padding:14px 16px">
+<div style="border:1px solid #dfe3ec;border-radius:5px;padding:14px 16px">
 <div class="m-k" style="margin-bottom:11px">Most-viewed screens</div>%s</div>
 </div></div>""" % (cards_html("ai"), bars_html())
 

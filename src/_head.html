@@ -71,12 +71,12 @@ code{font-family:var(--mono);font-size:.875em;background:var(--line-2);
 
 /* ---- tables ---- */
 .tscroll{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
-table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
-th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-2);vertical-align:top}
-thead th{background:var(--line-2);font-weight:600;font-size:12.5px;color:var(--ink-2);
+.tscroll table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+.tscroll th,.tscroll td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-2);vertical-align:top}
+.tscroll thead th{background:var(--line-2);font-weight:600;font-size:12.5px;color:var(--ink-2);
   letter-spacing:.02em;white-space:nowrap}
-tbody tr:last-child td{border-bottom:0}
-td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
+.tscroll tbody tr:last-child td{border-bottom:0}
+.tscroll td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
 .tag{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:5px;white-space:nowrap}
 .tag.ok{background:var(--ok-soft);color:var(--ok)}
 .tag.warn{background:var(--warn-soft);color:var(--warn)}
@@ -119,7 +119,7 @@ td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
 
 /* the mock viewport: fixed design width, scaled down so layout never reflows */
 .vp{width:100%;overflow:hidden;background:#fff}
-.vp > .inner{width:1440px;transform-origin:0 0;font-size:13px;line-height:1.5;
+.vp > .inner{width:1600px;transform-origin:0 0;font-size:13px;line-height:1.5;
   font-family:'Inter','Noto Sans JP',-apple-system,sans-serif;color:#111}
 /* scale is set per-breakpoint via --s */
 /* --s is measured per element by the script at the end of <body>; this is the

@@ -254,10 +254,16 @@
     <li><b>Husen:</b> after approval, implement on <code>feat/z94amcqevr-modernize-admin-ui</code> and raise a PR against <code>dev</code>.</li>
     <li><b>After that:</b> charts and dashboards go in as a separate ticket, built on the approved option.</li>
   </ul>
-  <div class="note warn"><b>About the images on this page:</b> each screen above <b>recreates how that library
-  looks</b>, applied to DCS's real columns, buttons and filters. They are not screenshots of a running system.
-  Once an option is chosen we will replace them with <b>real screenshots</b> from a local install (for option C,
-  after confirming it runs on Python 3.9 at all).
+  <div class="note warn"><b>About the images on this page:</b> each screen above <b>recreates how that
+  library looks</b>, applied to DCS's real columns, buttons and filters. They are not screenshots of a running
+  DCS. All three were rebuilt against the real products rather than from memory: Option A against the live
+  <a href="https://demo.unfoldadmin.com/">unfold demo</a> (its colour palette and table styling were read out
+  of the running app), Option B against the
+  <a href="https://django-jazzmin.readthedocs.io/">jazzmin documentation screenshots</a>, and Option C against
+  the <a href="https://github.com/fabiocaccamo/django-admin-interface">admin-interface</a> project README.
+  <br><br><b>One caveat on Option A specifically:</b> that public demo runs unfold <b>0.108.0</b>, while Python
+  3.9 limits us to <b>0.67.0</b>. The design language has been stable across those releases, but small details
+  may differ. We will confirm against a real 0.67.0 install before anything is built.
   <br><br>Note also that the live DCS admin is in <b>Japanese</b>; the mockups are labelled in English for this
   document. And because this page is served from a public repository, the email addresses, hostname and account
   figures shown are <b>placeholders</b> — the real values are in the ClickUp ticket.</div>
@@ -269,11 +275,11 @@
 </div>
 
 <script>
-// Each mock screen is drawn at a fixed 1440px design width and scaled down to
+// Each mock screen is drawn at a fixed 1600px design width and scaled down to
 // whatever space it actually has, so the layout never reflows and nothing is
 // ever clipped. Breakpoints could not be exact at every width; measuring can.
 (function () {
-  var DESIGN = 1440;
+  var DESIGN = 1600;
   var vps = document.querySelectorAll('.vp');
   function fit() {
     for (var i = 0; i < vps.length; i++) {
