@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DCS 管理画面 UI 刷新 3案</title>
-<meta name="description" content="DCS の Django 管理画面を無償OSSのUIライブラリで刷新する3案の比較。">
+<title>DCS Admin UI — Three Proposals</title>
+<meta name="description" content="Three proposals for modernizing the DCS Django admin with free, commercially-licensed open-source UI libraries.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%239a3412%27/%3E%3Crect x=%277%27 y=%279%27 width=%2718%27 height=%273%27 rx=%271.5%27 fill=%27white%27/%3E%3Crect x=%277%27 y=%2715%27 width=%2712%27 height=%273%27 rx=%271.5%27 fill=%27white%27 opacity=%27.7%27/%3E%3Crect x=%277%27 y=%2721%27 width=%2715%27 height=%273%27 rx=%271.5%27 fill=%27white%27 opacity=%27.45%27/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -168,7 +168,7 @@ td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
 .m-bf{height:100%;display:block}
 .m-bn{width:44px;text-align:right;font-variant-numeric:tabular-nums;opacity:.7}
 
-/* ---------- 現状: stock Django 4.2 ---------- */
+/* ---------- today: stock Django 4.2 ---------- */
 .sk-stock{background:#fff;font-family:"Roboto","Helvetica Neue",sans-serif}
 .sk-stock .m-top{background:#417690;color:#fff;padding:11px 26px;font-size:17px;font-weight:300;letter-spacing:.4px}
 .sk-stock .m-crumb{background:#f8f8f8;border-bottom:1px solid #eaeaea;padding:9px 26px;font-size:11.5px;color:#999}
@@ -332,222 +332,227 @@ td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
 <body>
 <div class="wrap">
 <header class="top">
-  <p class="eyebrow">DCS / 管理画面 UI 刷新 · 提案</p>
-  <h1>Django 管理画面を<br>無償 OSS で刷新する 3 案</h1>
-  <p class="lede">ユーザー活動分析をやりやすくする土台として、管理画面（adminサイト）の UI をモダン化します。
-  3 案それぞれを <b>DCS の実際の画面</b>に当てはめた参考イメージ付きで比較しました。1 案をお選びください。</p>
+  <p class="eyebrow">DCS / Admin panel · Proposal</p>
+  <h1>Modernizing the Django<br>admin with free OSS</h1>
+  <p class="lede">We want to make user-activity analysis easier. The admin UI is the foundation that
+  has to be modernized first. Here are three options, each shown against <b>DCS's own screens</b>.
+  Please pick one.</p>
   <div class="meta">
     <span class="chip">ClickUp <b>z94amcqevr</b></span>
-    <span class="chip">担当 <b>Husen</b></span>
-    <span class="chip">確認 <b>Coco</b></span>
-    <span class="chip">作成 <b>2026-10-15</b></span>
-    <span class="chip">ライセンス <b>全案 MIT（商用可）</b></span>
+    <span class="chip">Owner <b>Husen</b></span>
+    <span class="chip">Approver <b>Coco</b></span>
+    <span class="chip">Drafted <b>2026-10-15</b></span>
+    <span class="chip">License <b>MIT (commercial use OK) — all three</b></span>
   </div>
 </header>
 
 <section>
   <h2>Summary</h2>
-  <p class="h2sub">3 行でいうと</p>
+  <p class="h2sub">The short version</p>
   <ul>
-    <li>管理画面を <b>無償・商用可（MIT）</b>の OSS ライブラリで刷新します。候補は <b>A: django-unfold</b> / <b>B: django-jazzmin</b> / <b>C: django-admin-interface</b> の 3 案です。</li>
-    <li>今回のゴールは <b>「見た目の刷新のみ」</b>。既存の管理機能はすべて現状どおり動くことを条件とし、グラフ・ダッシュボードの新規追加は<b>次チケット</b>に分けます。</li>
-    <li>DCS は <b>Python 3.9</b> のため、どの案も<b>最新版は使えず 1 つ前の版に固定</b>します。これが唯一の技術的な制約です（後述）。</li>
+    <li>We re-skin the admin with a <b>free, commercially-licensed (MIT)</b> OSS library.
+      The candidates are <b>A: django-unfold</b>, <b>B: django-jazzmin</b> and <b>C: django-admin-interface</b>.</li>
+    <li>The goal this time is <b>the look only</b>. Every existing admin feature must keep working exactly as it does
+      today; new charts and dashboards are deliberately split into a <b>follow-up ticket</b>.</li>
+    <li>DCS runs <b>Python 3.9</b>, so none of the three can use its latest release — each gets
+      <b>pinned one version back</b>. That is the only technical constraint, and it is covered below.</li>
   </ul>
-  <div class="note ok"><b>お願いしたいこと：</b>A / B / C のうち 1 案を選んでください。承認後に実装に入ります。
-  実装着手から UAT 依頼まで、A 案なら約 4 営業日、B 案なら約 2.5 営業日、C 案なら約 1.5 営業日を見込んでいます。</div>
+  <div class="note ok"><b>What we need from you:</b> choose one of A / B / C. Once it is approved we start
+  implementing. From approval to handing it over for UAT we estimate roughly <b>4 working days for A</b>,
+  <b>2.5 for B</b>, or <b>1.5 for C</b>.</div>
 </section>
 
 <section>
   <h2>Before</h2>
-  <p class="h2sub">いまの管理画面</p>
-  <p>刷新対象は Django 4.2 の標準管理画面です。いちばん使われていて、いちばん情報量が多いのが
-  <b>ユーザー活動ログ</b>の 2 画面なので、以降すべての比較はこの 2 画面で行います。</p>
+  <p class="h2sub">What the admin looks like today</p>
+  <p>What we are re-skinning is the stock Django 4.2 admin. The two <b>user activity log</b> screens are the
+  busiest and the most information-dense, so every comparison below uses those same two screens.</p>
   <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
 <div class="vp h-list"><div class="inner sk-stock"><div class="m-row"><div class="m-main">
-<div class="m-top">Django 管理サイト</div>
-<div class="m-crumb"><a>ホーム</a> › <a>活動ログ</a> › ユーザー活動ログ 明細</div>
+<div class="m-top">Django administration</div>
+<div class="m-crumb"><a>Home</a> › <a>Activity log</a> › Detail</div>
 <div class="m-body">
-<div class="m-hdrow"><h1 class="m-ttl">ユーザー活動ログ 明細</h1><div class="m-tools"><a>集計を見る</a><a>CSVダウンロード</a></div></div>
-<div class="m-flex"><div class="m-grow"><table><thead><tr><th>日時 (JST)</th><th>ユーザー</th><th>種別</th><th>内容</th><th>キー</th><th>パス</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td>画面閲覧</td><td>プロジェクト詳細</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td>操作</td><td>プロジェクト収支データ出力</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td>参照</td><td>契約書一覧</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td>画面閲覧</td><td>契約書管理</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td>ログイン</td><td>ログイン</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td>操作</td><td>支払明細書出力</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td>画面閲覧</td><td>ロイヤリティ売上管理</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div>
-<div class="m-side"><h4>絞り込み</h4><div class="g"><b>種別</b><a class="on">すべて</a><a>ログイン</a><a>画面閲覧</a><a>操作</a><a>参照</a></div><div class="g"><b>ユーザー</b><a class="on">すべて</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>期間 (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-btn">絞り込む</span></div></div></div>
+<div class="m-hdrow"><h1 class="m-ttl">User activity log — Detail</h1><div class="m-tools"><a>View summary</a><a>Download CSV</a></div></div>
+<div class="m-flex"><div class="m-grow"><table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td>Page view</td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td>Action</td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td>Query</td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td>Page view</td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td>Login</td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td>Action</td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td>Page view</td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div>
+<div class="m-side"><h4>Filter</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-btn">Apply</span></div></div></div>
 </div></div></div></div></div></div>
-<p class="cap"><b>現状</b> — Django 4.2 標準。右サイドバーの絞り込み、右上の 2 リンク（集計を見る / CSVダウンロード）はいま動いているものです。</p>
+<p class="cap"><b>Today</b> — stock Django 4.2. The filter rail on the right and the two links at the top (View summary / Download CSV) are what ships now.</p>
   <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
 <div class="vp h-sum"><div class="inner sk-stock"><div class="m-row"><div class="m-main">
-<div class="m-top">Django 管理サイト</div>
-<div class="m-crumb"><a>ホーム</a> › <a>活動ログ</a> › ユーザー活動ログ 集計</div>
+<div class="m-top">Django administration</div>
+<div class="m-crumb"><a>Home</a> › <a>Activity log</a> › Summary</div>
 <div class="m-body">
-<h1 class="m-ttl">ユーザー活動ログ 集計</h1>
+<h1 class="m-ttl">User activity log — Summary</h1>
 <div style="margin:14px 0 16px;font-size:11.5px;color:#666">
-期間 <span class="m-in" style="display:inline-block;width:110px">2026-09-15</span>
+Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</span>
 〜 <span class="m-in" style="display:inline-block;width:110px">2026-10-14</span>
-<span class="m-btn">表示</span></div>
-<div class="m-cards"><div class="m-stat"><div class="m-k">総イベント数</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">利用ユーザー</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">セッション</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">未使用の機能</div><div class="m-v">47</div></div></div>
+<span class="m-btn">Show</span></div>
+<div class="m-cards"><div class="m-stat"><div class="m-k">Total events</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">Active users</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">Sessions</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">Unused features</div><div class="m-v">47</div></div></div>
 <div style="border:1px solid #eee;padding:14px 16px">
-<div class="m-k" style="margin-bottom:11px">よく見られる画面</div><div class="m-bars"><div class="m-bl"><span>プロジェクト一覧</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>契約書管理</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>プロジェクト詳細</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>ロイヤリティ売上管理</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>支払明細</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div>
+<div class="m-k" style="margin-bottom:11px">Most-viewed screens</div><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div>
 </div></div></div></div></div></div>
-<p class="cap"><b>現状</b> — 集計ページ。棒グラフは CSS の <code>widthratio</code> 製で、JavaScript は 1 行もありません。</p>
-  <div class="note"><b>今回いじらない前提：</b>絞り込みの項目（種別・ユーザー・期間）、
-  CSV ダウンロードの中身、期間指定のパラメータ名（<code>start</code> / <code>end</code> / <code>user</code>）は
-  <b>すべて現状のまま</b>にします。明細 ↔ 集計 ↔ CSV の 3 画面がこのパラメータで繋がっているためです。</div>
+<p class="cap"><b>Today</b> — the summary page. The bar chart is pure CSS (<code>widthratio</code>); there is not one line of JavaScript on it.</p>
+  <div class="note"><b>Explicitly out of scope:</b> the filter fields (Type / User / Period), the contents of the
+  CSV export, and the query-parameter names (<code>start</code> / <code>end</code> / <code>user</code>) all
+  stay <b>exactly as they are</b> — those parameters are what link the Detail, Summary and CSV together.</div>
 </section>
 
 <section>
   <h2>Constraint</h2>
-  <p class="h2sub">Python 3.9 — 先に共有しておきたい唯一の制約</p>
-  <p>DCS は Python 3.9 / Django 4.2 で動いています。管理画面テーマの主要ライブラリは、ここ 1〜2 年で
-  いっせいに Python の下限を 3.10 以上に上げました。そのため <b>どの案でも最新版は入りません</b>。
-  本日 PyPI で実際に確認した結果です。</p>
+  <p class="h2sub">Python 3.9 — the one thing to know up front</p>
+  <p>DCS runs on Python 3.9 with Django 4.2. Over the last year or two, every major admin-theme library has
+  raised its Python floor to 3.10 or higher, which means <b>no option can use its latest release</b>.
+  Verified against PyPI today:</p>
   <div class="tscroll"><table>
-    <thead><tr><th>ライブラリ</th><th>最新版</th><th>最新版の要求</th><th>3.9 で使える最終版</th><th>ライセンス</th></tr></thead>
+    <thead><tr><th>Library</th><th>Latest</th><th>Latest requires</th><th>Last release usable on 3.9</th><th>License</th></tr></thead>
     <tbody>
-      <tr><td><b>django-unfold</b>（A 案）</td><td class="num">0.110.0</td><td>Python ≥ 3.12</td>
-          <td class="num">0.67.0 <span class="tag ok">3.9 対応明記</span></td><td>MIT</td></tr>
-      <tr><td><b>django-jazzmin</b>（B 案）</td><td class="num">3.0.5</td><td>Python ≥ 3.10</td>
-          <td class="num">3.0.1 <span class="tag ok">3.9 対応明記</span></td><td>MIT</td></tr>
-      <tr><td><b>django-admin-interface</b>（C 案）</td><td class="num">0.32.0</td><td>下限の記載なし</td>
-          <td class="num">0.32.0 <span class="tag warn">要検証</span></td><td>MIT</td></tr>
+      <tr><td><b>django-unfold</b> (A)</td><td class="num">0.110.0</td><td>Python ≥ 3.12</td>
+          <td class="num">0.67.0 <span class="tag ok">states 3.9 support</span></td><td>MIT</td></tr>
+      <tr><td><b>django-jazzmin</b> (B)</td><td class="num">3.0.5</td><td>Python ≥ 3.10</td>
+          <td class="num">3.0.1 <span class="tag ok">states 3.9 support</span></td><td>MIT</td></tr>
+      <tr><td><b>django-admin-interface</b> (C)</td><td class="num">0.32.0</td><td>no floor declared</td>
+          <td class="num">0.32.0 <span class="tag warn">needs verifying</span></td><td>MIT</td></tr>
       <tr><td>django-baton</td><td class="num">5.9.3</td><td>Python ≥ 3.10</td>
-          <td class="num">5.4.1 <span class="tag warn">要検証</span></td><td>MIT</td></tr>
+          <td class="num">5.4.1 <span class="tag warn">needs verifying</span></td><td>MIT</td></tr>
       <tr><td>django-jet-reboot</td><td class="num">1.3.10</td><td>—</td><td>—</td>
-          <td><span class="tag bad">AGPLv3 / 非商用</span></td></tr>
+          <td><span class="tag bad">AGPLv3 / non-commercial</span></td></tr>
     </tbody>
   </table></div>
-  <p><b>django-jet-reboot は候補から除外しました</b> — ライセンスが AGPLv3 かつ「非商用に限り無償」で、
-  今回の「商用利用できる無償ライセンス」という条件を満たしません。</p>
-  <div class="note warn"><b>意味するところ：</b>選んだライブラリは当面その版に固定され、
-  上流の修正を受け取れません。Python を 3.12 に上げれば解消しますが、
-  それは pandas / numpy / reportlab などの再固定と全テストのやり直しを伴うため
-  <b>別チケット</b>として切り出すのが安全です。今回はそこには触りません。</div>
+  <p><b>django-jet-reboot is ruled out</b> — it is AGPLv3 and licensed "free for non-commercial use", which
+  fails the requirement that the library be free <i>and</i> licensed for commercial use.</p>
+  <div class="note warn"><b>What this means in practice:</b> whichever library we choose stays pinned at that
+  version and stops receiving upstream fixes. Upgrading Python to 3.12 would clear this, but it also means
+  re-pinning pandas / numpy / reportlab and re-running the whole test suite — so it belongs in a
+  <b>separate ticket</b>. We are not touching it here.</div>
 </section>
 
 <section>
-  <h2>Option A</h2>
-  <p class="h2sub">3 案の比較</p>
+  <h2>Options</h2>
+  <p class="h2sub">The three candidates</p>
 
   <div class="cand">
     <div class="hd">
-      <div class="rank"><span class="dot">A</span>推奨案</div>
+      <div class="rank"><span class="dot">A</span>Recommended</div>
       <h3>django-unfold 0.67.0</h3>
-      <p class="sub">Tailwind CSS ベース。左サイドバー・ダークモード・⌘K コマンドパレット。
-      いちばんモダンで、いちばん将来に効く案。</p>
+      <p class="sub">Built on Tailwind CSS: left sidebar, dark mode, ⌘K command palette.
+      The most modern of the three, and the one that pays off later.</p>
       <div class="badges">
-        <span class="chip">MIT</span><span class="chip">依存パッケージ <b>0 個</b></span>
-        <span class="chip">Python <b>≥3.9 明記</b></span><span class="chip">2025-09 リリース</span>
-        <span class="chip">グラフ部品 <b>同梱</b></span>
+        <span class="chip">MIT</span><span class="chip">Dependencies <b>0</b></span>
+        <span class="chip">Python <b>≥3.9 declared</b></span><span class="chip">Released 2025-09</span>
+        <span class="chip">Chart components <b>included</b></span>
       </div>
     </div>
     <div class="body">
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
 <div class="vp h-list"><div class="inner sk-unfold"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS 管理</div><div class="m-nl"><i class="m-ico"></i>ホーム</div><div class="m-nl"><i class="m-ico"></i>ユーザー</div><div class="m-nl on"><i class="m-ico"></i>活動ログ 明細</div><div class="m-nl"><i class="m-ico"></i>活動ログ 集計</div><div class="m-nl"><i class="m-ico"></i>マスタデータ</div><div class="m-nl"><i class="m-ico"></i>ロイヤリティ会社</div><div class="m-nl"><i class="m-ico"></i>ガイドライン</div><div class="m-nl"><i class="m-ico"></i>定期実行タスク</div></div>
+<div class="m-brand"><span class="lg">D</span>DCS Admin</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl on"><i class="m-ico"></i>Activity log — Detail</div><div class="m-nl"><i class="m-ico"></i>Activity log — Summary</div><div class="m-nl"><i class="m-ico"></i>Master data</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
 <div class="m-main">
-<div class="m-top"><div class="m-search">検索… ⌘K</div><div class="m-moon"></div><div class="m-av"></div></div>
+<div class="m-top"><div class="m-search">Search… ⌘K</div><div class="m-moon"></div><div class="m-av"></div></div>
 <div class="m-body">
-<div class="m-crumb">ホーム / 活動ログ / 明細</div>
-<h1 class="m-ttl">ユーザー活動ログ 明細</h1>
-<div class="m-tools"><span class="m-b1">集計を見る</span><span class="m-b2">CSVダウンロード</span></div>
-<div class="m-flex"><div class="m-grow"><div class="m-card"><table><thead><tr><th>日時 (JST)</th><th>ユーザー</th><th>種別</th><th>内容</th><th>キー</th><th>パス</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">画面閲覧</span></td><td>プロジェクト詳細</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">操作</span></td><td>プロジェクト収支データ出力</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">参照</span></td><td>契約書一覧</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">画面閲覧</span></td><td>契約書管理</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">ログイン</span></td><td>ログイン</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">操作</span></td><td>支払明細書出力</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">画面閲覧</span></td><td>ロイヤリティ売上管理</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div></div>
-<div class="m-side"><h4>絞り込み</h4><div class="g"><b>種別</b><a class="on">すべて</a><a>ログイン</a><a>画面閲覧</a><a>操作</a><a>参照</a></div><div class="g"><b>ユーザー</b><a class="on">すべて</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>期間 (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-b1">絞り込む</span></div></div></div>
+<div class="m-crumb">Home / Activity log / Detail</div>
+<h1 class="m-ttl">User activity log — Detail</h1>
+<div class="m-tools"><span class="m-b1">View summary</span><span class="m-b2">Download CSV</span></div>
+<div class="m-flex"><div class="m-grow"><div class="m-card"><table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div></div>
+<div class="m-side"><h4>Filter</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-b1">Apply</span></div></div></div>
 </div></div></div></div></div></div>
-<p class="cap"><b>A 案 / django-unfold</b> — 左サイドバー、⌘K コマンドパレット、ダークモード切替。絞り込みの項目名と挙動は現状のまま。</p>
+<p class="cap"><b>Option A / django-unfold</b> — left sidebar, ⌘K command palette, dark-mode toggle. The filter names and behaviour stay exactly as they are.</p>
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
 <div class="vp h-sum"><div class="inner sk-unfold"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS 管理</div><div class="m-nl"><i class="m-ico"></i>ホーム</div><div class="m-nl"><i class="m-ico"></i>ユーザー</div><div class="m-nl"><i class="m-ico"></i>活動ログ 明細</div><div class="m-nl on"><i class="m-ico"></i>活動ログ 集計</div><div class="m-nl"><i class="m-ico"></i>マスタデータ</div><div class="m-nl"><i class="m-ico"></i>ロイヤリティ会社</div><div class="m-nl"><i class="m-ico"></i>ガイドライン</div><div class="m-nl"><i class="m-ico"></i>定期実行タスク</div></div>
+<div class="m-brand"><span class="lg">D</span>DCS Admin</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Activity log — Detail</div><div class="m-nl on"><i class="m-ico"></i>Activity log — Summary</div><div class="m-nl"><i class="m-ico"></i>Master data</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
 <div class="m-main">
-<div class="m-top"><div class="m-search">検索… ⌘K</div><div class="m-moon"></div><div class="m-av"></div></div>
+<div class="m-top"><div class="m-search">Search… ⌘K</div><div class="m-moon"></div><div class="m-av"></div></div>
 <div class="m-body">
-<div class="m-crumb">ホーム / 活動ログ / 集計</div>
-<h1 class="m-ttl">ユーザー活動ログ 集計</h1>
-<div class="m-tools"><span class="m-chipr on">過去30日</span><span class="m-chipr">過去7日</span>
-<span class="m-chipr">期間を指定</span></div>
-<div class="m-cards"><div class="m-stat"><div class="m-k">総イベント数</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">利用ユーザー</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">セッション</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">未使用の機能</div><div class="m-v">47</div></div></div>
+<div class="m-crumb">Home / Activity log / Summary</div>
+<h1 class="m-ttl">User activity log — Summary</h1>
+<div class="m-tools"><span class="m-chipr on">Last 30 days</span><span class="m-chipr">Last 7 days</span>
+<span class="m-chipr">Custom range</span></div>
+<div class="m-cards"><div class="m-stat"><div class="m-k">Total events</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">Active users</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">Sessions</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">Unused features</div><div class="m-v">47</div></div></div>
 <div class="m-card" style="padding:17px 19px">
-<div class="m-k" style="margin-bottom:11px">よく見られる画面</div><div class="m-bars"><div class="m-bl"><span>プロジェクト一覧</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>契約書管理</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>プロジェクト詳細</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>ロイヤリティ売上管理</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>支払明細</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div>
+<div class="m-k" style="margin-bottom:11px">Most-viewed screens</div><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div>
 </div></div></div></div></div></div>
-<p class="cap"><b>A 案 / django-unfold</b> — 集計ページ。数値カードと表は unfold のコンポーネントで組み直せます。</p>
+<p class="cap"><b>Option A / django-unfold</b> — the summary page. The stat cards and tables can be rebuilt from unfold's own components.</p>
       <div class="pros">
-        <div><h4>良いところ</h4><ul>
-          <li>3 案で唯一、<b>ライブラリ自身が Python 3.9 対応を明記</b>している</li>
-          <li>グラフ・表・カードの<b>部品が最初から入っている</b>ので、次の「ダッシュボード」チケットがそのまま乗る</li>
-          <li>追加の依存パッケージが <b>0 個</b>。入れて壊れる範囲がいちばん狭い</li>
-          <li>ダークモード、絞り込みの高機能化、⌘K 検索</li>
+        <div><h4>Strengths</h4><ul>
+          <li>The only one of the three whose <b>own metadata declares Python 3.9 support</b></li>
+          <li>Ships <b>chart, table and card components</b>, so the follow-up dashboard ticket lands straight on top of it</li>
+          <li><b>Zero</b> additional dependencies — the smallest possible blast radius</li>
+          <li>Dark mode, richer filters, ⌘K search</li>
         </ul></div>
-        <div><h4>コスト・注意点</h4><ul>
-          <li>登録済みの管理クラス <b>13 個すべて</b>を unfold 版に書き換える必要がある</li>
-          <li>ユーザー・グループ・定期実行タスクの画面は<b>再登録が必要</b>（やらないと見た目が崩れる）</li>
-          <li>テーマ独自の文言に<b>日本語訳が付かない</b>箇所が出る見込み</li>
-          <li>実装は 3 案で最長（約 4 営業日）</li>
+        <div><h4>Cost and caveats</h4><ul>
+          <li>All <b>13 registered admin classes</b> must be switched to unfold's base class</li>
+          <li>The user, group and scheduled-task screens need <b>re-registering</b>, or they render unstyled</li>
+          <li>Some of the theme's own labels will have <b>no Japanese translation</b></li>
+          <li>Longest implementation of the three (~4 working days)</li>
         </ul></div>
       </div>
-      <div class="rec"><b>これを推す理由：</b>「Python 3.9 で確実に動く」と
-      「次の分析ダッシュボードの土台になる」を同時に満たすのは A 案だけです。
-      移行コストが一番高いぶん、次のチケットで回収できます。</div>
+      <div class="rec"><b>Why we recommend it:</b> it is the only option that both <b>provably runs on Python 3.9</b>
+      and <b>gives us the foundation for the analytics dashboard</b> that prompted this ticket. The higher
+      migration cost is recovered by the next ticket.</div>
     </div>
   </div>
 
   <div class="cand">
     <div class="hd">
-      <div class="rank"><span class="dot">B</span>安全策</div>
+      <div class="rank"><span class="dot">B</span>Safe choice</div>
       <h3>django-jazzmin 3.0.1</h3>
-      <p class="sub">AdminLTE 3 / Bootstrap 5 ベース。設定ファイルを書くだけで切り替わり、
-      既存のコードをほぼ触りません。</p>
+      <p class="sub">Built on AdminLTE 3 / Bootstrap 5. Switched on with a settings block —
+      it barely touches existing code.</p>
       <div class="badges">
-        <span class="chip">MIT</span><span class="chip">依存 <b>Django のみ</b></span>
-        <span class="chip">Python <b>3.9 対応明記</b></span><span class="chip">2024-10 リリース</span>
-        <span class="chip">コード変更 <b>ほぼ無し</b></span>
+        <span class="chip">MIT</span><span class="chip">Dependencies <b>Django only</b></span>
+        <span class="chip">Python <b>3.9 declared</b></span><span class="chip">Released 2024-10</span>
+        <span class="chip">Code changes <b>almost none</b></span>
       </div>
     </div>
     <div class="body">
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
 <div class="vp h-list"><div class="inner sk-jazz"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS 管理</div>
+<div class="m-brand"><span class="lg">D</span>DCS Admin</div>
 <div class="m-user"><span class="av"></span><div>admin@example.co.jp</div></div>
-<div class="m-grp">メニュー</div><div class="m-nl"><i class="m-ico"></i>ホーム</div><div class="m-nl"><i class="m-ico"></i>ユーザー</div><div class="m-nl on"><i class="m-ico"></i>活動ログ 明細</div><div class="m-nl"><i class="m-ico"></i>活動ログ 集計</div><div class="m-nl"><i class="m-ico"></i>マスタデータ</div><div class="m-nl"><i class="m-ico"></i>ロイヤリティ会社</div><div class="m-nl"><i class="m-ico"></i>ガイドライン</div><div class="m-nl"><i class="m-ico"></i>定期実行タスク</div></div>
+<div class="m-grp">Menu</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl on"><i class="m-ico"></i>Activity log — Detail</div><div class="m-nl"><i class="m-ico"></i>Activity log — Summary</div><div class="m-nl"><i class="m-ico"></i>Master data</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
 <div class="m-main">
-<div class="m-top"><span class="t">ホーム</span><span class="t">サイトを表示</span><div class="m-av"></div></div>
-<div class="m-crumbbar"><h1>ユーザー活動ログ 明細</h1>
-<div class="c"><a>ホーム</a> / <a>活動ログ</a> / 明細</div></div>
+<div class="m-top"><span class="t">Home</span><span class="t">View site</span><div class="m-av"></div></div>
+<div class="m-crumbbar"><h1>User activity log — Detail</h1>
+<div class="c"><a>Home</a> / <a>Activity log</a> / Detail</div></div>
 <div class="m-body">
 <div class="m-flex"><div class="m-grow"><div class="m-card">
-<div class="m-ch"><h3>明細 — 全 18,432 件</h3><div>
-<span class="m-b1">集計を見る</span> <span class="m-b2">CSVダウンロード</span></div></div>
-<table><thead><tr><th>日時 (JST)</th><th>ユーザー</th><th>種別</th><th>内容</th><th>キー</th><th>パス</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">画面閲覧</span></td><td>プロジェクト詳細</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">操作</span></td><td>プロジェクト収支データ出力</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">参照</span></td><td>契約書一覧</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">画面閲覧</span></td><td>契約書管理</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">ログイン</span></td><td>ログイン</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">操作</span></td><td>支払明細書出力</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">画面閲覧</span></td><td>ロイヤリティ売上管理</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div></div>
-<div class="m-side"><div class="m-card"><h4>絞り込み</h4><div class="g"><b>種別</b><a class="on">すべて</a><a>ログイン</a><a>画面閲覧</a><a>操作</a><a>参照</a></div><div class="g"><b>ユーザー</b><a class="on">すべて</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>期間 (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-b1">絞り込む</span></div></div></div></div>
+<div class="m-ch"><h3>Detail — 18,432 records</h3><div>
+<span class="m-b1">View summary</span> <span class="m-b2">Download CSV</span></div></div>
+<table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div></div>
+<div class="m-side"><div class="m-card"><h4>Filter</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-b1">Apply</span></div></div></div></div>
 </div></div></div></div></div></div>
-<p class="cap"><b>B 案 / django-jazzmin</b> — AdminLTE 3 / Bootstrap 5。カード見出しに件数、濃紺のサイドバー。</p>
+<p class="cap"><b>Option B / django-jazzmin</b> — AdminLTE 3 / Bootstrap 5, with a record count in the card header and a dark navy sidebar.</p>
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
 <div class="vp h-sum"><div class="inner sk-jazz"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS 管理</div>
+<div class="m-brand"><span class="lg">D</span>DCS Admin</div>
 <div class="m-user"><span class="av"></span><div>admin@example.co.jp</div></div>
-<div class="m-grp">メニュー</div><div class="m-nl"><i class="m-ico"></i>ホーム</div><div class="m-nl"><i class="m-ico"></i>ユーザー</div><div class="m-nl"><i class="m-ico"></i>活動ログ 明細</div><div class="m-nl on"><i class="m-ico"></i>活動ログ 集計</div><div class="m-nl"><i class="m-ico"></i>マスタデータ</div><div class="m-nl"><i class="m-ico"></i>ロイヤリティ会社</div><div class="m-nl"><i class="m-ico"></i>ガイドライン</div><div class="m-nl"><i class="m-ico"></i>定期実行タスク</div></div>
+<div class="m-grp">Menu</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Activity log — Detail</div><div class="m-nl on"><i class="m-ico"></i>Activity log — Summary</div><div class="m-nl"><i class="m-ico"></i>Master data</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
 <div class="m-main">
-<div class="m-top"><span class="t">ホーム</span><span class="t">サイトを表示</span><div class="m-av"></div></div>
-<div class="m-crumbbar"><h1>ユーザー活動ログ 集計</h1>
-<div class="c"><a>ホーム</a> / <a>活動ログ</a> / 集計</div></div>
-<div class="m-body"><div class="m-cards"><div class="m-stat"><div class="m-k">総イベント数</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">利用ユーザー</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">セッション</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">未使用の機能</div><div class="m-v">47</div></div></div>
-<div class="m-card"><div class="m-ch"><h3>よく見られる画面</h3><span class="m-b2">過去30日</span></div>
-<div style="padding:15px 17px"><div class="m-bars"><div class="m-bl"><span>プロジェクト一覧</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>契約書管理</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>プロジェクト詳細</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>ロイヤリティ売上管理</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>支払明細</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div></div>
+<div class="m-top"><span class="t">Home</span><span class="t">View site</span><div class="m-av"></div></div>
+<div class="m-crumbbar"><h1>User activity log — Summary</h1>
+<div class="c"><a>Home</a> / <a>Activity log</a> / Summary</div></div>
+<div class="m-body"><div class="m-cards"><div class="m-stat"><div class="m-k">Total events</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">Active users</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">Sessions</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">Unused features</div><div class="m-v">47</div></div></div>
+<div class="m-card"><div class="m-ch"><h3>Most-viewed screens</h3><span class="m-b2">Last 30 days</span></div>
+<div style="padding:15px 17px"><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div></div>
 </div></div></div></div></div></div>
-<p class="cap"><b>B 案 / django-jazzmin</b> — 集計ページ。Bootstrap のカードに収まります。</p>
+<p class="cap"><b>Option B / django-jazzmin</b> — the summary page, inside a Bootstrap card.</p>
       <div class="pros">
-        <div><h4>良いところ</h4><ul>
-          <li><b>設定を書くだけ</b>。管理クラスの書き換えが不要で、既存機能が壊れるリスクが最小</li>
-          <li>画面上で色やレイアウトを調整できる UI カスタマイザ付き</li>
-          <li>Bootstrap なので、見慣れた管理画面らしい安心感がある</li>
-          <li>実装は約 2.5 営業日</li>
+        <div><h4>Strengths</h4><ul>
+          <li><b>Configuration only</b> — no admin classes to rewrite, so the least risk of breaking a working feature</li>
+          <li>Includes a visual UI customizer for colours and layout</li>
+          <li>Bootstrap keeps it looking like a familiar admin panel</li>
+          <li>~2.5 working days to implement</li>
         </ul></div>
-        <div><h4>コスト・注意点</h4><ul>
-          <li>3.9 で使える最終版が <b>2024 年 10 月</b>と、3 案でいちばん古い</li>
-          <li>グラフ用の API が無いので、次のダッシュボードは<b>自前で作ることになる</b></li>
-          <li>日本語の翻訳ファイルが<b>同梱されていない</b>（8 言語あるが日本語は無し）</li>
-          <li>見た目は「Bootstrap らしさ」が強く、A 案ほど今風ではない</li>
+        <div><h4>Cost and caveats</h4><ul>
+          <li>Its last 3.9-compatible release is from <b>October 2024</b> — the oldest of the three</li>
+          <li>No charting API, so the follow-up dashboard would be <b>built from scratch</b></li>
+          <li>Ships <b>no Japanese translation</b> (8 locales, none of them Japanese)</li>
+          <li>Looks distinctly "Bootstrap"; less contemporary than A</li>
         </ul></div>
       </div>
     </div>
@@ -555,58 +560,58 @@ td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
 
   <div class="cand">
     <div class="hd">
-      <div class="rank"><span class="dot">C</span>最小変更</div>
+      <div class="rank"><span class="dot">C</span>Minimal change</div>
       <h3>django-admin-interface 0.32.0</h3>
-      <p class="sub">Django の画面構造はそのまま、配色・ロゴ・角丸だけを差し替える案。
-      「使い方が変わらない」ことを最優先する選択。</p>
+      <p class="sub">Keeps Django's layout exactly as it is and changes only the colours, logo and corners.
+      The option that prioritises "nothing people know how to use moves".</p>
       <div class="badges">
-        <span class="chip">MIT</span><span class="chip">依存 <b>2 個</b></span>
-        <span class="chip warn">Python 3.9 <b>要検証</b></span><span class="chip">2025-12 リリース</span>
-        <span class="chip">移行コスト <b>最小</b></span>
+        <span class="chip">MIT</span><span class="chip">Dependencies <b>2</b></span>
+        <span class="chip warn">Python 3.9 <b>needs verifying</b></span><span class="chip">Released 2025-12</span>
+        <span class="chip">Migration cost <b>lowest</b></span>
       </div>
     </div>
     <div class="body">
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
 <div class="vp h-list"><div class="inner sk-ai"><div class="m-row"><div class="m-main">
-<div class="m-top"><span class="lg">D</span><span class="n">DCS 管理サイト</span>
+<div class="m-top"><span class="lg">D</span><span class="n">DCS Administration</span>
 <span class="r">admin@example.co.jp</span></div>
-<div class="m-crumb"><a>ホーム</a> › <a>活動ログ</a> › ユーザー活動ログ 明細</div>
+<div class="m-crumb"><a>Home</a> › <a>Activity log</a> › Detail</div>
 <div class="m-body">
-<div class="m-hdrow"><h1 class="m-ttl">ユーザー活動ログ 明細</h1><div class="m-tools"><a>集計を見る</a><a class="alt">CSVダウンロード</a></div></div>
-<div class="m-flex"><div class="m-grow"><div class="m-card"><table><thead><tr><th>日時 (JST)</th><th>ユーザー</th><th>種別</th><th>内容</th><th>キー</th><th>パス</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">画面閲覧</span></td><td>プロジェクト詳細</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">操作</span></td><td>プロジェクト収支データ出力</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">参照</span></td><td>契約書一覧</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">画面閲覧</span></td><td>契約書管理</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">ログイン</span></td><td>ログイン</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">操作</span></td><td>支払明細書出力</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">画面閲覧</span></td><td>ロイヤリティ売上管理</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div></div>
-<div class="m-side"><h4>絞り込み</h4><div class="g"><b>種別</b><a class="on">すべて</a><a>ログイン</a><a>画面閲覧</a><a>操作</a><a>参照</a></div><div class="g"><b>ユーザー</b><a class="on">すべて</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>期間 (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-btn">絞り込む</span></div></div></div>
+<div class="m-hdrow"><h1 class="m-ttl">User activity log — Detail</h1><div class="m-tools"><a>View summary</a><a class="alt">Download CSV</a></div></div>
+<div class="m-flex"><div class="m-grow"><div class="m-card"><table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div></div>
+<div class="m-side"><h4>Filter</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-btn">Apply</span></div></div></div>
 </div></div></div></div></div></div>
-<p class="cap"><b>C 案 / django-admin-interface</b> — Django の構造はそのまま、配色とロゴだけを差し替え。移行コストは最小。</p>
+<p class="cap"><b>Option C / django-admin-interface</b> — Django's structure is untouched; only the colours and the logo change. The smallest migration of the three.</p>
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
 <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
 <div class="vp h-sum"><div class="inner sk-ai"><div class="m-row"><div class="m-main">
-<div class="m-top"><span class="lg">D</span><span class="n">DCS 管理サイト</span>
+<div class="m-top"><span class="lg">D</span><span class="n">DCS Administration</span>
 <span class="r">admin@example.co.jp</span></div>
-<div class="m-crumb"><a>ホーム</a> › <a>活動ログ</a> › ユーザー活動ログ 集計</div>
+<div class="m-crumb"><a>Home</a> › <a>Activity log</a> › Summary</div>
 <div class="m-body">
-<h1 class="m-ttl">ユーザー活動ログ 集計</h1>
+<h1 class="m-ttl">User activity log — Summary</h1>
 <div style="margin:14px 0 16px;font-size:11.5px;color:#5a6276">
-期間 <span class="m-in" style="display:inline-block;width:110px">2026-09-15</span>
+Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</span>
 〜 <span class="m-in" style="display:inline-block;width:110px">2026-10-14</span>
-<span class="m-btn">表示</span></div>
-<div class="m-cards"><div class="m-stat"><div class="m-k">総イベント数</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">利用ユーザー</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">セッション</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">未使用の機能</div><div class="m-v">47</div></div></div>
+<span class="m-btn">Show</span></div>
+<div class="m-cards"><div class="m-stat"><div class="m-k">Total events</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">Active users</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">Sessions</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">Unused features</div><div class="m-v">47</div></div></div>
 <div class="m-card" style="padding:14px 16px">
-<div class="m-k" style="margin-bottom:11px">よく見られる画面</div><div class="m-bars"><div class="m-bl"><span>プロジェクト一覧</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>契約書管理</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>プロジェクト詳細</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>ロイヤリティ売上管理</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>支払明細</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div>
+<div class="m-k" style="margin-bottom:11px">Most-viewed screens</div><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div>
 </div></div></div></div></div></div>
-<p class="cap"><b>C 案 / django-admin-interface</b> — 集計ページ。レイアウトは現状と同一です。</p>
+<p class="cap"><b>Option C / django-admin-interface</b> — the summary page. The layout is identical to today's.</p>
       <div class="pros">
-        <div><h4>良いところ</h4><ul>
-          <li>レイアウトが変わらないので、<b>いまの操作手順がそのまま通じる</b></li>
-          <li>色やロゴを<b>管理画面上から</b>変更でき、変更のたびにデプロイが要らない</li>
-          <li>既存のカスタム画面（集計ページなど）への影響がいちばん小さい</li>
-          <li>実装は約 1.5 営業日</li>
+        <div><h4>Strengths</h4><ul>
+          <li>The layout does not move, so <b>every existing workflow still applies</b></li>
+          <li>Colours and logo are editable <b>from inside the admin</b> — no deploy per tweak</li>
+          <li>Smallest impact on our existing custom pages, such as the summary screen</li>
+          <li>~1.5 working days to implement</li>
         </ul></div>
-        <div><h4>コスト・注意点</h4><ul>
-          <li><b>Python 3.9 対応が未確認</b>。最新版は 3.10 以上を想定した表記になっており、まず動作確認が必要</li>
-          <li>追加の依存パッケージが 2 個（<code>django-colorfield</code>, <code>python-slugify</code>）</li>
-          <li>テーマ情報を DB に持つため、<b>マイグレーションが増える</b></li>
-          <li>「モダン化」としてのインパクトは 3 案で最も小さい</li>
+        <div><h4>Cost and caveats</h4><ul>
+          <li><b>Python 3.9 support is unconfirmed</b> — its metadata assumes 3.10+, so this needs testing first</li>
+          <li>Two extra dependencies (<code>django-colorfield</code>, <code>python-slugify</code>)</li>
+          <li>Stores the theme in the database, so it <b>adds a migration</b></li>
+          <li>The weakest answer to "modernize the UI" of the three</li>
         </ul></div>
       </div>
     </div>
@@ -615,91 +620,95 @@ td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
 
 <section>
   <h2>At a glance</h2>
-  <p class="h2sub">一覧で比較</p>
+  <p class="h2sub">Side by side</p>
   <div class="tscroll"><table>
     <thead><tr><th></th><th>A — unfold</th><th>B — jazzmin</th><th>C — admin-interface</th></tr></thead>
     <tbody>
-      <tr><td><b>見た目</b></td><td>Tailwind・ダークモード対応</td><td>AdminLTE / Bootstrap</td><td>Django 標準＋新しい配色</td></tr>
-      <tr><td><b>ライセンス</b></td><td>MIT</td><td>MIT</td><td>MIT</td></tr>
-      <tr><td><b>追加依存</b></td><td><span class="tag ok">0 個</span></td><td><span class="tag ok">0 個</span></td><td>2 個</td></tr>
-      <tr><td><b>Python 3.9</b></td><td><span class="tag ok">対応明記</span></td><td><span class="tag ok">対応明記</span></td><td><span class="tag warn">要検証</span></td></tr>
-      <tr><td><b>必要なコード変更</b></td><td>管理クラス 13 個＋第三者画面の再登録</td><td><span class="tag ok">設定のみ</span></td><td>設定＋マイグレーション 1 本</td></tr>
-      <tr><td><b>日本語訳の同梱</b></td><td>無し</td><td>無し</td><td>構造が変わらないため影響小</td></tr>
-      <tr><td><b>次のダッシュボードへの効き</b></td><td><span class="tag ok">グラフ部品あり</span></td><td>自前実装</td><td>効果なし</td></tr>
-      <tr><td><b>実装期間の見込み</b></td><td>約 4 営業日</td><td>約 2.5 営業日</td><td>約 1.5 営業日</td></tr>
-      <tr><td><b>リリースの新しさ</b></td><td>2025-09</td><td>2024-10</td><td>2025-12</td></tr>
+      <tr><td><b>Look</b></td><td>Tailwind, dark mode</td><td>AdminLTE / Bootstrap</td><td>Stock Django, repainted</td></tr>
+      <tr><td><b>License</b></td><td>MIT</td><td>MIT</td><td>MIT</td></tr>
+      <tr><td><b>Extra dependencies</b></td><td><span class="tag ok">0</span></td><td><span class="tag ok">0</span></td><td>2</td></tr>
+      <tr><td><b>Python 3.9</b></td><td><span class="tag ok">declared</span></td><td><span class="tag ok">declared</span></td><td><span class="tag warn">unverified</span></td></tr>
+      <tr><td><b>Code changes needed</b></td><td>13 admin classes + re-register third-party screens</td><td><span class="tag ok">settings only</span></td><td>settings + 1 migration</td></tr>
+      <tr><td><b>Japanese translation</b></td><td>not bundled</td><td>not bundled</td><td>layout unchanged, so minimal impact</td></tr>
+      <tr><td><b>Value for the dashboard follow-up</b></td><td><span class="tag ok">chart components</span></td><td>build our own</td><td>none</td></tr>
+      <tr><td><b>Estimated implementation</b></td><td>~4 working days</td><td>~2.5 working days</td><td>~1.5 working days</td></tr>
+      <tr><td><b>Release recency</b></td><td>2025-09</td><td>2024-10</td><td>2025-12</td></tr>
     </tbody>
   </table></div>
 </section>
 
 <section>
   <h2>Audience</h2>
-  <p class="h2sub">この変更が見える人</p>
-  <p>どの案でも UI が変わるのは <code>/admin/</code> だけで、DCS 本体（SPA）の画面は<b>一切変わりません</b>。
-  ただし管理画面を見られるアカウントには<b>社外の方が含まれます</b>ので、先に共有しておきます。</p>
+  <p class="h2sub">Who sees this change</p>
+  <p>In every option, the only UI that changes is <code>/admin/</code>. The DCS product itself (the SPA) is
+  <b>completely untouched</b>. One thing worth flagging first, though: the admin is not purely internal.</p>
   <ul>
-    <li>本番で管理画面に入れるアカウントには、<b>社内だけでなく取引先側の管理者アカウントも含まれます</b>（具体的な件数・アドレスは ClickUp 側に記載しています）。</li>
-    <li>そのため <b>ユーザー活動ログの 2 画面だけは社内限定</b>のまま維持します（メールアドレスの許可リストによる制限で、今回これは変更しません）。</li>
-    <li>それ以外の管理画面は<b>現状すでに取引先側にも見えている</b>ため、見た目の変更も同様に見えます。</li>
+    <li>The accounts that can reach the production admin include <b>administrator accounts belonging to the
+      client</b>, not only our own staff (exact figures and addresses are in the ClickUp ticket).</li>
+    <li>Because of that, the <b>two activity-log screens stay internal-only</b> — they are gated by an email
+      allowlist, and we are not changing that gate in this work.</li>
+    <li>Every other admin screen is <b>already visible to the client side</b>, so the visual change will be too.</li>
   </ul>
-  <div class="note"><b>ご判断いただきたい点：</b>取引先への事前連絡が必要かどうか。
-  必要であればリリース前のタスクとして組み込みます。</div>
+  <div class="note"><b>Decision needed:</b> whether the client should be notified in advance. If so, we will
+  add it to the pre-release checklist.</div>
 </section>
 
 <section>
   <h2>Schedule</h2>
-  <p class="h2sub">スケジュール</p>
+  <p class="h2sub">Timeline</p>
   <div class="tscroll"><table>
-    <thead><tr><th>フェーズ</th><th>内容</th><th>工数</th></tr></thead>
+    <thead><tr><th>Phase</th><th>What happens</th><th>Effort</th></tr></thead>
     <tbody>
-      <tr><td>1. 調査・提案</td><td>ライブラリ調査、動作確認、本資料の作成</td><td class="num">2 営業日 <span class="tag ok">完了</span></td></tr>
-      <tr><td>2. ご確認</td><td><b>Coco による 1 案の選定</b></td><td class="num">1〜3 日</td></tr>
-      <tr><td>3. 実装</td><td>テストの markup 依存の解消 → 導入 → 管理クラス移行 → カスタム画面 3 本の移植</td><td class="num">A:4 / B:2.5 / C:1.5 営業日</td></tr>
-      <tr><td>4. 検証</td><td>全テスト（約 41,500 行・11 アプリ）＋ 全管理画面のブラウザ確認</td><td class="num">1 営業日</td></tr>
-      <tr><td>5. UAT</td><td>staging へデプロイ、UAT 担当による確認</td><td class="num">1〜2 日</td></tr>
+      <tr><td>1. Research &amp; proposal</td><td>Library research, compatibility checks, this document</td><td class="num">2 days <span class="tag ok">done</span></td></tr>
+      <tr><td>2. Review</td><td><b>Coco picks one option</b></td><td class="num">1–3 days</td></tr>
+      <tr><td>3. Implementation</td><td>De-couple tests from markup → install → migrate admin classes → port the 3 custom templates</td><td class="num">A:4 / B:2.5 / C:1.5 days</td></tr>
+      <tr><td>4. Verification</td><td>Full test suite (~41,500 lines across 11 apps) + a pass over every admin screen</td><td class="num">1 day</td></tr>
+      <tr><td>5. UAT</td><td>Deploy to staging, reviewed by the UAT owner</td><td class="num">1–2 days</td></tr>
     </tbody>
   </table></div>
-  <p>A 案の場合、<b>ご承認から約 2 週間</b>でリリースまで到達する見込みです
-  （うち当方の作業は約 6 営業日、残りは確認・UAT の待ち時間）。</p>
+  <p>For option A that is roughly <b>two calendar weeks from approval</b> to release — about 6 working days of
+  our effort, with the rest being review and UAT time.</p>
 </section>
 
 <section>
   <h2>Risks</h2>
-  <p class="h2sub">想定しているリスクと対策</p>
+  <p class="h2sub">What we are watching for</p>
   <div class="tscroll"><table>
-    <thead><tr><th>リスク</th><th>対策</th></tr></thead>
+    <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
     <tbody>
-      <tr><td>ユーザー編集画面が壊れる（DCS は所属グループの持ち方が Django 標準と違う）</td>
-          <td>画面を開くだけでなく<b>実際に保存まで</b>確認する。A 案で最も注意が必要な箇所。</td></tr>
-      <tr><td>テーマ変更でテストが「空振り」し、見た目は通るのに保証が消える</td>
-          <td>先に<b>標準テーマのままテストを HTML 非依存に書き換え</b>、緑であることを確認してから導入する。</td></tr>
-      <tr><td>活動ログの社内限定制限が外れる</td>
-          <td>許可リスト外のアカウントでログインし、一覧に出ないこと・403 になることを毎回確認する。</td></tr>
-      <tr><td>静的ファイル（CSS/JS）が本番で配信されない</td>
-          <td>デプロイ後に staging と本番の<b>両方</b>で実際に確認する（サーバ設定はリポジトリ外のため片方の修正が他方に届かない）。</td></tr>
-      <tr><td>定期実行タスクの 1 画面が staging では確認できない（本番のみ存在）</td>
-          <td>テストで担保し、本番リリース後に目視確認する。</td></tr>
+      <tr><td>The user edit form breaks — DCS stores group membership differently from stock Django</td>
+          <td>Don't just open the form; <b>save it</b> as part of the verification pass. The riskiest single edit in option A.</td></tr>
+      <tr><td>Tests silently stop asserting anything once the theme renames the HTML they look for</td>
+          <td><b>Rewrite those tests first, on the current theme</b>, and confirm they are green before the theme goes in.</td></tr>
+      <tr><td>The internal-only gate on the activity log comes loose</td>
+          <td>Log in as a non-allowlisted account every time and confirm the section is absent and both pages return 403.</td></tr>
+      <tr><td>Static files (CSS/JS) are not served in production</td>
+          <td>Verify on <b>both</b> staging and production after deploy — the web-server config lives outside the repo, so fixing one box does not fix the other.</td></tr>
+      <tr><td>One scheduled-task screen exists only in production and cannot be checked on staging</td>
+          <td>Cover it with tests and confirm visually right after the production release.</td></tr>
     </tbody>
   </table></div>
 </section>
 
 <section style="border-bottom:0">
   <h2>Next</h2>
-  <p class="h2sub">次のアクション</p>
+  <p class="h2sub">Next steps</p>
   <ul>
-    <li><b>Coco：</b>A / B / C から 1 案を選択。気になる点があればこのページの該当箇所を指定してご指摘ください。</li>
-    <li><b>Husen：</b>承認後、<code>feat/z94amcqevr-modernize-admin-ui</code> ブランチで実装し、<code>dev</code> へ PR を出します。</li>
-    <li><b>その後：</b>グラフ・ダッシュボードの追加は別チケットとして、承認された案の上に積みます。</li>
+    <li><b>Coco:</b> pick A, B or C. If something needs changing, point at the section on this page.</li>
+    <li><b>Husen:</b> after approval, implement on <code>feat/z94amcqevr-modernize-admin-ui</code> and raise a PR against <code>dev</code>.</li>
+    <li><b>After that:</b> charts and dashboards go in as a separate ticket, built on the approved option.</li>
   </ul>
-  <div class="note warn"><b>この資料の参考イメージについて：</b>
-  上の各画面は、DCS の実際のデータ項目・列構成・ボタン配置に合わせて<b>各ライブラリの見た目を再現したもの</b>です。
-  実機のスクリーンショットではありません。1 案が決まり次第、ローカル環境に実際に導入した
-  <b>本物のスクリーンショット</b>に差し替えます（C 案を選ばれた場合は、その前に Python 3.9 での動作確認を行います）。</div>
+  <div class="note warn"><b>About the images on this page:</b> each screen above <b>recreates how that library
+  looks</b>, applied to DCS's real columns, buttons and filters. They are not screenshots of a running system.
+  Once an option is chosen we will replace them with <b>real screenshots</b> from a local install (for option C,
+  after confirming it runs on Python 3.9 at all).
+  <br><br>Note also that the live DCS admin is in <b>Japanese</b>; the mockups are labelled in English for this
+  document. And because this page is served from a public repository, the email addresses, hostname and account
+  figures shown are <b>placeholders</b> — the real values are in the ClickUp ticket.</div>
 </section>
 
 <footer style="padding:40px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)">
-  <p style="margin:0">DCS 管理画面 UI 刷新 提案 · ClickUp z94amcqevr · 2026-10-15 ·
-  作成 Husen Efendi</p>
+  <p style="margin:0">DCS admin UI modernization proposal · ClickUp z94amcqevr · 2026-10-15 · Husen Efendi</p>
 </footer>
 </div>
 

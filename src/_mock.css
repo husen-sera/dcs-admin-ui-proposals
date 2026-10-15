@@ -33,7 +33,7 @@
 .m-bf{height:100%;display:block}
 .m-bn{width:44px;text-align:right;font-variant-numeric:tabular-nums;opacity:.7}
 
-/* ---------- 現状: stock Django 4.2 ---------- */
+/* ---------- today: stock Django 4.2 ---------- */
 .sk-stock{background:#fff;font-family:"Roboto","Helvetica Neue",sans-serif}
 .sk-stock .m-top{background:#417690;color:#fff;padding:11px 26px;font-size:17px;font-weight:300;letter-spacing:.4px}
 .sk-stock .m-crumb{background:#f8f8f8;border-bottom:1px solid #eaeaea;padding:9px 26px;font-size:11.5px;color:#999}

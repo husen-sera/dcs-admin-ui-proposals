@@ -1,17 +1,19 @@
-# DCS 管理画面 UI 刷新 — 3 案の比較
+# DCS Admin UI — Three Proposals
 
-Django の管理画面（admin サイト）を無償 OSS の UI ライブラリで刷新する 3 案の比較資料です。
+A comparison of three options for modernizing the DCS Django admin panel using free,
+commercially-licensed (MIT) open-source UI libraries.
 
-**👉 [提案ページを開く](https://husen-sera.github.io/dcs-admin-ui-proposals/)**
+**👉 [Open the proposal page](https://husen-sera.github.io/dcs-admin-ui-proposals/)**
 
-- **A — django-unfold**（推奨）: Tailwind ベース。グラフ部品を同梱し、今後のダッシュボードの土台になる
-- **B — django-jazzmin**: AdminLTE / Bootstrap。設定のみで切り替わり、移行リスクが最小
-- **C — django-admin-interface**: Django の構造はそのまま、配色だけ刷新
+- **A — django-unfold** (recommended): Tailwind-based; ships chart components, so it also becomes the
+  foundation for the analytics dashboard planned as a follow-up
+- **B — django-jazzmin**: AdminLTE / Bootstrap; enabled through configuration alone, lowest migration risk
+- **C — django-admin-interface**: keeps Django's structure untouched and changes only the colour scheme
 
-各案は DCS の実際の画面（ユーザー活動ログ 明細 / 集計）に当てはめた参考イメージ付きです。
+Each option is shown applied to DCS's own screens (the user activity log Detail and Summary pages).
 
-> ⚠️ 参考イメージは各ライブラリの見た目を再現したもので、実機のスクリーンショットではありません。
-> 1 案が決まり次第、ローカル環境に実際に導入した本物のスクリーンショットに差し替えます。
+> ⚠️ The images recreate how each library looks — they are not screenshots of a running system.
+> Once an option is chosen they will be replaced with real screenshots from a local install.
 >
-> ℹ️ このページは公開リポジトリで配信しているため、実際のメールアドレス・ホスト名・
-> アカウント件数はダミー値に置き換えています。実値は ClickUp のタスク側に記載しています。
+> ℹ️ This page is served from a public repository, so the email addresses, hostname and account
+> figures shown are placeholders. The real values are in the ClickUp ticket.

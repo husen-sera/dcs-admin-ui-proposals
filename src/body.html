@@ -1,136 +1,141 @@
 <header class="top">
-  <p class="eyebrow">DCS / 管理画面 UI 刷新 · 提案</p>
-  <h1>Django 管理画面を<br>無償 OSS で刷新する 3 案</h1>
-  <p class="lede">ユーザー活動分析をやりやすくする土台として、管理画面（adminサイト）の UI をモダン化します。
-  3 案それぞれを <b>DCS の実際の画面</b>に当てはめた参考イメージ付きで比較しました。1 案をお選びください。</p>
+  <p class="eyebrow">DCS / Admin panel · Proposal</p>
+  <h1>Modernizing the Django<br>admin with free OSS</h1>
+  <p class="lede">We want to make user-activity analysis easier. The admin UI is the foundation that
+  has to be modernized first. Here are three options, each shown against <b>DCS's own screens</b>.
+  Please pick one.</p>
   <div class="meta">
     <span class="chip">ClickUp <b>z94amcqevr</b></span>
-    <span class="chip">担当 <b>Husen</b></span>
-    <span class="chip">確認 <b>Coco</b></span>
-    <span class="chip">作成 <b>2026-10-15</b></span>
-    <span class="chip">ライセンス <b>全案 MIT（商用可）</b></span>
+    <span class="chip">Owner <b>Husen</b></span>
+    <span class="chip">Approver <b>Coco</b></span>
+    <span class="chip">Drafted <b>2026-10-15</b></span>
+    <span class="chip">License <b>MIT (commercial use OK) — all three</b></span>
   </div>
 </header>
 
 <section>
   <h2>Summary</h2>
-  <p class="h2sub">3 行でいうと</p>
+  <p class="h2sub">The short version</p>
   <ul>
-    <li>管理画面を <b>無償・商用可（MIT）</b>の OSS ライブラリで刷新します。候補は <b>A: django-unfold</b> / <b>B: django-jazzmin</b> / <b>C: django-admin-interface</b> の 3 案です。</li>
-    <li>今回のゴールは <b>「見た目の刷新のみ」</b>。既存の管理機能はすべて現状どおり動くことを条件とし、グラフ・ダッシュボードの新規追加は<b>次チケット</b>に分けます。</li>
-    <li>DCS は <b>Python 3.9</b> のため、どの案も<b>最新版は使えず 1 つ前の版に固定</b>します。これが唯一の技術的な制約です（後述）。</li>
+    <li>We re-skin the admin with a <b>free, commercially-licensed (MIT)</b> OSS library.
+      The candidates are <b>A: django-unfold</b>, <b>B: django-jazzmin</b> and <b>C: django-admin-interface</b>.</li>
+    <li>The goal this time is <b>the look only</b>. Every existing admin feature must keep working exactly as it does
+      today; new charts and dashboards are deliberately split into a <b>follow-up ticket</b>.</li>
+    <li>DCS runs <b>Python 3.9</b>, so none of the three can use its latest release — each gets
+      <b>pinned one version back</b>. That is the only technical constraint, and it is covered below.</li>
   </ul>
-  <div class="note ok"><b>お願いしたいこと：</b>A / B / C のうち 1 案を選んでください。承認後に実装に入ります。
-  実装着手から UAT 依頼まで、A 案なら約 4 営業日、B 案なら約 2.5 営業日、C 案なら約 1.5 営業日を見込んでいます。</div>
+  <div class="note ok"><b>What we need from you:</b> choose one of A / B / C. Once it is approved we start
+  implementing. From approval to handing it over for UAT we estimate roughly <b>4 working days for A</b>,
+  <b>2.5 for B</b>, or <b>1.5 for C</b>.</div>
 </section>
 
 <section>
   <h2>Before</h2>
-  <p class="h2sub">いまの管理画面</p>
-  <p>刷新対象は Django 4.2 の標準管理画面です。いちばん使われていて、いちばん情報量が多いのが
-  <b>ユーザー活動ログ</b>の 2 画面なので、以降すべての比較はこの 2 画面で行います。</p>
+  <p class="h2sub">What the admin looks like today</p>
+  <p>What we are re-skinning is the stock Django 4.2 admin. The two <b>user activity log</b> screens are the
+  busiest and the most information-dense, so every comparison below uses those same two screens.</p>
   __STOCK_LIST__
   __STOCK_SUM__
-  <div class="note"><b>今回いじらない前提：</b>絞り込みの項目（種別・ユーザー・期間）、
-  CSV ダウンロードの中身、期間指定のパラメータ名（<code>start</code> / <code>end</code> / <code>user</code>）は
-  <b>すべて現状のまま</b>にします。明細 ↔ 集計 ↔ CSV の 3 画面がこのパラメータで繋がっているためです。</div>
+  <div class="note"><b>Explicitly out of scope:</b> the filter fields (Type / User / Period), the contents of the
+  CSV export, and the query-parameter names (<code>start</code> / <code>end</code> / <code>user</code>) all
+  stay <b>exactly as they are</b> — those parameters are what link the Detail, Summary and CSV together.</div>
 </section>
 
 <section>
   <h2>Constraint</h2>
-  <p class="h2sub">Python 3.9 — 先に共有しておきたい唯一の制約</p>
-  <p>DCS は Python 3.9 / Django 4.2 で動いています。管理画面テーマの主要ライブラリは、ここ 1〜2 年で
-  いっせいに Python の下限を 3.10 以上に上げました。そのため <b>どの案でも最新版は入りません</b>。
-  本日 PyPI で実際に確認した結果です。</p>
+  <p class="h2sub">Python 3.9 — the one thing to know up front</p>
+  <p>DCS runs on Python 3.9 with Django 4.2. Over the last year or two, every major admin-theme library has
+  raised its Python floor to 3.10 or higher, which means <b>no option can use its latest release</b>.
+  Verified against PyPI today:</p>
   <div class="tscroll"><table>
-    <thead><tr><th>ライブラリ</th><th>最新版</th><th>最新版の要求</th><th>3.9 で使える最終版</th><th>ライセンス</th></tr></thead>
+    <thead><tr><th>Library</th><th>Latest</th><th>Latest requires</th><th>Last release usable on 3.9</th><th>License</th></tr></thead>
     <tbody>
-      <tr><td><b>django-unfold</b>（A 案）</td><td class="num">0.110.0</td><td>Python ≥ 3.12</td>
-          <td class="num">0.67.0 <span class="tag ok">3.9 対応明記</span></td><td>MIT</td></tr>
-      <tr><td><b>django-jazzmin</b>（B 案）</td><td class="num">3.0.5</td><td>Python ≥ 3.10</td>
-          <td class="num">3.0.1 <span class="tag ok">3.9 対応明記</span></td><td>MIT</td></tr>
-      <tr><td><b>django-admin-interface</b>（C 案）</td><td class="num">0.32.0</td><td>下限の記載なし</td>
-          <td class="num">0.32.0 <span class="tag warn">要検証</span></td><td>MIT</td></tr>
+      <tr><td><b>django-unfold</b> (A)</td><td class="num">0.110.0</td><td>Python ≥ 3.12</td>
+          <td class="num">0.67.0 <span class="tag ok">states 3.9 support</span></td><td>MIT</td></tr>
+      <tr><td><b>django-jazzmin</b> (B)</td><td class="num">3.0.5</td><td>Python ≥ 3.10</td>
+          <td class="num">3.0.1 <span class="tag ok">states 3.9 support</span></td><td>MIT</td></tr>
+      <tr><td><b>django-admin-interface</b> (C)</td><td class="num">0.32.0</td><td>no floor declared</td>
+          <td class="num">0.32.0 <span class="tag warn">needs verifying</span></td><td>MIT</td></tr>
       <tr><td>django-baton</td><td class="num">5.9.3</td><td>Python ≥ 3.10</td>
-          <td class="num">5.4.1 <span class="tag warn">要検証</span></td><td>MIT</td></tr>
+          <td class="num">5.4.1 <span class="tag warn">needs verifying</span></td><td>MIT</td></tr>
       <tr><td>django-jet-reboot</td><td class="num">1.3.10</td><td>—</td><td>—</td>
-          <td><span class="tag bad">AGPLv3 / 非商用</span></td></tr>
+          <td><span class="tag bad">AGPLv3 / non-commercial</span></td></tr>
     </tbody>
   </table></div>
-  <p><b>django-jet-reboot は候補から除外しました</b> — ライセンスが AGPLv3 かつ「非商用に限り無償」で、
-  今回の「商用利用できる無償ライセンス」という条件を満たしません。</p>
-  <div class="note warn"><b>意味するところ：</b>選んだライブラリは当面その版に固定され、
-  上流の修正を受け取れません。Python を 3.12 に上げれば解消しますが、
-  それは pandas / numpy / reportlab などの再固定と全テストのやり直しを伴うため
-  <b>別チケット</b>として切り出すのが安全です。今回はそこには触りません。</div>
+  <p><b>django-jet-reboot is ruled out</b> — it is AGPLv3 and licensed "free for non-commercial use", which
+  fails the requirement that the library be free <i>and</i> licensed for commercial use.</p>
+  <div class="note warn"><b>What this means in practice:</b> whichever library we choose stays pinned at that
+  version and stops receiving upstream fixes. Upgrading Python to 3.12 would clear this, but it also means
+  re-pinning pandas / numpy / reportlab and re-running the whole test suite — so it belongs in a
+  <b>separate ticket</b>. We are not touching it here.</div>
 </section>
 
 <section>
-  <h2>Option A</h2>
-  <p class="h2sub">3 案の比較</p>
+  <h2>Options</h2>
+  <p class="h2sub">The three candidates</p>
 
   <div class="cand">
     <div class="hd">
-      <div class="rank"><span class="dot">A</span>推奨案</div>
+      <div class="rank"><span class="dot">A</span>Recommended</div>
       <h3>django-unfold 0.67.0</h3>
-      <p class="sub">Tailwind CSS ベース。左サイドバー・ダークモード・⌘K コマンドパレット。
-      いちばんモダンで、いちばん将来に効く案。</p>
+      <p class="sub">Built on Tailwind CSS: left sidebar, dark mode, ⌘K command palette.
+      The most modern of the three, and the one that pays off later.</p>
       <div class="badges">
-        <span class="chip">MIT</span><span class="chip">依存パッケージ <b>0 個</b></span>
-        <span class="chip">Python <b>≥3.9 明記</b></span><span class="chip">2025-09 リリース</span>
-        <span class="chip">グラフ部品 <b>同梱</b></span>
+        <span class="chip">MIT</span><span class="chip">Dependencies <b>0</b></span>
+        <span class="chip">Python <b>≥3.9 declared</b></span><span class="chip">Released 2025-09</span>
+        <span class="chip">Chart components <b>included</b></span>
       </div>
     </div>
     <div class="body">
       __UNFOLD_LIST__
       __UNFOLD_SUM__
       <div class="pros">
-        <div><h4>良いところ</h4><ul>
-          <li>3 案で唯一、<b>ライブラリ自身が Python 3.9 対応を明記</b>している</li>
-          <li>グラフ・表・カードの<b>部品が最初から入っている</b>ので、次の「ダッシュボード」チケットがそのまま乗る</li>
-          <li>追加の依存パッケージが <b>0 個</b>。入れて壊れる範囲がいちばん狭い</li>
-          <li>ダークモード、絞り込みの高機能化、⌘K 検索</li>
+        <div><h4>Strengths</h4><ul>
+          <li>The only one of the three whose <b>own metadata declares Python 3.9 support</b></li>
+          <li>Ships <b>chart, table and card components</b>, so the follow-up dashboard ticket lands straight on top of it</li>
+          <li><b>Zero</b> additional dependencies — the smallest possible blast radius</li>
+          <li>Dark mode, richer filters, ⌘K search</li>
         </ul></div>
-        <div><h4>コスト・注意点</h4><ul>
-          <li>登録済みの管理クラス <b>13 個すべて</b>を unfold 版に書き換える必要がある</li>
-          <li>ユーザー・グループ・定期実行タスクの画面は<b>再登録が必要</b>（やらないと見た目が崩れる）</li>
-          <li>テーマ独自の文言に<b>日本語訳が付かない</b>箇所が出る見込み</li>
-          <li>実装は 3 案で最長（約 4 営業日）</li>
+        <div><h4>Cost and caveats</h4><ul>
+          <li>All <b>13 registered admin classes</b> must be switched to unfold's base class</li>
+          <li>The user, group and scheduled-task screens need <b>re-registering</b>, or they render unstyled</li>
+          <li>Some of the theme's own labels will have <b>no Japanese translation</b></li>
+          <li>Longest implementation of the three (~4 working days)</li>
         </ul></div>
       </div>
-      <div class="rec"><b>これを推す理由：</b>「Python 3.9 で確実に動く」と
-      「次の分析ダッシュボードの土台になる」を同時に満たすのは A 案だけです。
-      移行コストが一番高いぶん、次のチケットで回収できます。</div>
+      <div class="rec"><b>Why we recommend it:</b> it is the only option that both <b>provably runs on Python 3.9</b>
+      and <b>gives us the foundation for the analytics dashboard</b> that prompted this ticket. The higher
+      migration cost is recovered by the next ticket.</div>
     </div>
   </div>
 
   <div class="cand">
     <div class="hd">
-      <div class="rank"><span class="dot">B</span>安全策</div>
+      <div class="rank"><span class="dot">B</span>Safe choice</div>
       <h3>django-jazzmin 3.0.1</h3>
-      <p class="sub">AdminLTE 3 / Bootstrap 5 ベース。設定ファイルを書くだけで切り替わり、
-      既存のコードをほぼ触りません。</p>
+      <p class="sub">Built on AdminLTE 3 / Bootstrap 5. Switched on with a settings block —
+      it barely touches existing code.</p>
       <div class="badges">
-        <span class="chip">MIT</span><span class="chip">依存 <b>Django のみ</b></span>
-        <span class="chip">Python <b>3.9 対応明記</b></span><span class="chip">2024-10 リリース</span>
-        <span class="chip">コード変更 <b>ほぼ無し</b></span>
+        <span class="chip">MIT</span><span class="chip">Dependencies <b>Django only</b></span>
+        <span class="chip">Python <b>3.9 declared</b></span><span class="chip">Released 2024-10</span>
+        <span class="chip">Code changes <b>almost none</b></span>
       </div>
     </div>
     <div class="body">
       __JAZZ_LIST__
       __JAZZ_SUM__
       <div class="pros">
-        <div><h4>良いところ</h4><ul>
-          <li><b>設定を書くだけ</b>。管理クラスの書き換えが不要で、既存機能が壊れるリスクが最小</li>
-          <li>画面上で色やレイアウトを調整できる UI カスタマイザ付き</li>
-          <li>Bootstrap なので、見慣れた管理画面らしい安心感がある</li>
-          <li>実装は約 2.5 営業日</li>
+        <div><h4>Strengths</h4><ul>
+          <li><b>Configuration only</b> — no admin classes to rewrite, so the least risk of breaking a working feature</li>
+          <li>Includes a visual UI customizer for colours and layout</li>
+          <li>Bootstrap keeps it looking like a familiar admin panel</li>
+          <li>~2.5 working days to implement</li>
         </ul></div>
-        <div><h4>コスト・注意点</h4><ul>
-          <li>3.9 で使える最終版が <b>2024 年 10 月</b>と、3 案でいちばん古い</li>
-          <li>グラフ用の API が無いので、次のダッシュボードは<b>自前で作ることになる</b></li>
-          <li>日本語の翻訳ファイルが<b>同梱されていない</b>（8 言語あるが日本語は無し）</li>
-          <li>見た目は「Bootstrap らしさ」が強く、A 案ほど今風ではない</li>
+        <div><h4>Cost and caveats</h4><ul>
+          <li>Its last 3.9-compatible release is from <b>October 2024</b> — the oldest of the three</li>
+          <li>No charting API, so the follow-up dashboard would be <b>built from scratch</b></li>
+          <li>Ships <b>no Japanese translation</b> (8 locales, none of them Japanese)</li>
+          <li>Looks distinctly "Bootstrap"; less contemporary than A</li>
         </ul></div>
       </div>
     </div>
@@ -138,31 +143,31 @@
 
   <div class="cand">
     <div class="hd">
-      <div class="rank"><span class="dot">C</span>最小変更</div>
+      <div class="rank"><span class="dot">C</span>Minimal change</div>
       <h3>django-admin-interface 0.32.0</h3>
-      <p class="sub">Django の画面構造はそのまま、配色・ロゴ・角丸だけを差し替える案。
-      「使い方が変わらない」ことを最優先する選択。</p>
+      <p class="sub">Keeps Django's layout exactly as it is and changes only the colours, logo and corners.
+      The option that prioritises "nothing people know how to use moves".</p>
       <div class="badges">
-        <span class="chip">MIT</span><span class="chip">依存 <b>2 個</b></span>
-        <span class="chip warn">Python 3.9 <b>要検証</b></span><span class="chip">2025-12 リリース</span>
-        <span class="chip">移行コスト <b>最小</b></span>
+        <span class="chip">MIT</span><span class="chip">Dependencies <b>2</b></span>
+        <span class="chip warn">Python 3.9 <b>needs verifying</b></span><span class="chip">Released 2025-12</span>
+        <span class="chip">Migration cost <b>lowest</b></span>
       </div>
     </div>
     <div class="body">
       __AI_LIST__
       __AI_SUM__
       <div class="pros">
-        <div><h4>良いところ</h4><ul>
-          <li>レイアウトが変わらないので、<b>いまの操作手順がそのまま通じる</b></li>
-          <li>色やロゴを<b>管理画面上から</b>変更でき、変更のたびにデプロイが要らない</li>
-          <li>既存のカスタム画面（集計ページなど）への影響がいちばん小さい</li>
-          <li>実装は約 1.5 営業日</li>
+        <div><h4>Strengths</h4><ul>
+          <li>The layout does not move, so <b>every existing workflow still applies</b></li>
+          <li>Colours and logo are editable <b>from inside the admin</b> — no deploy per tweak</li>
+          <li>Smallest impact on our existing custom pages, such as the summary screen</li>
+          <li>~1.5 working days to implement</li>
         </ul></div>
-        <div><h4>コスト・注意点</h4><ul>
-          <li><b>Python 3.9 対応が未確認</b>。最新版は 3.10 以上を想定した表記になっており、まず動作確認が必要</li>
-          <li>追加の依存パッケージが 2 個（<code>django-colorfield</code>, <code>python-slugify</code>）</li>
-          <li>テーマ情報を DB に持つため、<b>マイグレーションが増える</b></li>
-          <li>「モダン化」としてのインパクトは 3 案で最も小さい</li>
+        <div><h4>Cost and caveats</h4><ul>
+          <li><b>Python 3.9 support is unconfirmed</b> — its metadata assumes 3.10+, so this needs testing first</li>
+          <li>Two extra dependencies (<code>django-colorfield</code>, <code>python-slugify</code>)</li>
+          <li>Stores the theme in the database, so it <b>adds a migration</b></li>
+          <li>The weakest answer to "modernize the UI" of the three</li>
         </ul></div>
       </div>
     </div>
@@ -171,91 +176,95 @@
 
 <section>
   <h2>At a glance</h2>
-  <p class="h2sub">一覧で比較</p>
+  <p class="h2sub">Side by side</p>
   <div class="tscroll"><table>
     <thead><tr><th></th><th>A — unfold</th><th>B — jazzmin</th><th>C — admin-interface</th></tr></thead>
     <tbody>
-      <tr><td><b>見た目</b></td><td>Tailwind・ダークモード対応</td><td>AdminLTE / Bootstrap</td><td>Django 標準＋新しい配色</td></tr>
-      <tr><td><b>ライセンス</b></td><td>MIT</td><td>MIT</td><td>MIT</td></tr>
-      <tr><td><b>追加依存</b></td><td><span class="tag ok">0 個</span></td><td><span class="tag ok">0 個</span></td><td>2 個</td></tr>
-      <tr><td><b>Python 3.9</b></td><td><span class="tag ok">対応明記</span></td><td><span class="tag ok">対応明記</span></td><td><span class="tag warn">要検証</span></td></tr>
-      <tr><td><b>必要なコード変更</b></td><td>管理クラス 13 個＋第三者画面の再登録</td><td><span class="tag ok">設定のみ</span></td><td>設定＋マイグレーション 1 本</td></tr>
-      <tr><td><b>日本語訳の同梱</b></td><td>無し</td><td>無し</td><td>構造が変わらないため影響小</td></tr>
-      <tr><td><b>次のダッシュボードへの効き</b></td><td><span class="tag ok">グラフ部品あり</span></td><td>自前実装</td><td>効果なし</td></tr>
-      <tr><td><b>実装期間の見込み</b></td><td>約 4 営業日</td><td>約 2.5 営業日</td><td>約 1.5 営業日</td></tr>
-      <tr><td><b>リリースの新しさ</b></td><td>2025-09</td><td>2024-10</td><td>2025-12</td></tr>
+      <tr><td><b>Look</b></td><td>Tailwind, dark mode</td><td>AdminLTE / Bootstrap</td><td>Stock Django, repainted</td></tr>
+      <tr><td><b>License</b></td><td>MIT</td><td>MIT</td><td>MIT</td></tr>
+      <tr><td><b>Extra dependencies</b></td><td><span class="tag ok">0</span></td><td><span class="tag ok">0</span></td><td>2</td></tr>
+      <tr><td><b>Python 3.9</b></td><td><span class="tag ok">declared</span></td><td><span class="tag ok">declared</span></td><td><span class="tag warn">unverified</span></td></tr>
+      <tr><td><b>Code changes needed</b></td><td>13 admin classes + re-register third-party screens</td><td><span class="tag ok">settings only</span></td><td>settings + 1 migration</td></tr>
+      <tr><td><b>Japanese translation</b></td><td>not bundled</td><td>not bundled</td><td>layout unchanged, so minimal impact</td></tr>
+      <tr><td><b>Value for the dashboard follow-up</b></td><td><span class="tag ok">chart components</span></td><td>build our own</td><td>none</td></tr>
+      <tr><td><b>Estimated implementation</b></td><td>~4 working days</td><td>~2.5 working days</td><td>~1.5 working days</td></tr>
+      <tr><td><b>Release recency</b></td><td>2025-09</td><td>2024-10</td><td>2025-12</td></tr>
     </tbody>
   </table></div>
 </section>
 
 <section>
   <h2>Audience</h2>
-  <p class="h2sub">この変更が見える人</p>
-  <p>どの案でも UI が変わるのは <code>/admin/</code> だけで、DCS 本体（SPA）の画面は<b>一切変わりません</b>。
-  ただし管理画面を見られるアカウントには<b>社外の方が含まれます</b>ので、先に共有しておきます。</p>
+  <p class="h2sub">Who sees this change</p>
+  <p>In every option, the only UI that changes is <code>/admin/</code>. The DCS product itself (the SPA) is
+  <b>completely untouched</b>. One thing worth flagging first, though: the admin is not purely internal.</p>
   <ul>
-    <li>本番で管理画面に入れるアカウントには、<b>社内だけでなく取引先側の管理者アカウントも含まれます</b>（具体的な件数・アドレスは ClickUp 側に記載しています）。</li>
-    <li>そのため <b>ユーザー活動ログの 2 画面だけは社内限定</b>のまま維持します（メールアドレスの許可リストによる制限で、今回これは変更しません）。</li>
-    <li>それ以外の管理画面は<b>現状すでに取引先側にも見えている</b>ため、見た目の変更も同様に見えます。</li>
+    <li>The accounts that can reach the production admin include <b>administrator accounts belonging to the
+      client</b>, not only our own staff (exact figures and addresses are in the ClickUp ticket).</li>
+    <li>Because of that, the <b>two activity-log screens stay internal-only</b> — they are gated by an email
+      allowlist, and we are not changing that gate in this work.</li>
+    <li>Every other admin screen is <b>already visible to the client side</b>, so the visual change will be too.</li>
   </ul>
-  <div class="note"><b>ご判断いただきたい点：</b>取引先への事前連絡が必要かどうか。
-  必要であればリリース前のタスクとして組み込みます。</div>
+  <div class="note"><b>Decision needed:</b> whether the client should be notified in advance. If so, we will
+  add it to the pre-release checklist.</div>
 </section>
 
 <section>
   <h2>Schedule</h2>
-  <p class="h2sub">スケジュール</p>
+  <p class="h2sub">Timeline</p>
   <div class="tscroll"><table>
-    <thead><tr><th>フェーズ</th><th>内容</th><th>工数</th></tr></thead>
+    <thead><tr><th>Phase</th><th>What happens</th><th>Effort</th></tr></thead>
     <tbody>
-      <tr><td>1. 調査・提案</td><td>ライブラリ調査、動作確認、本資料の作成</td><td class="num">2 営業日 <span class="tag ok">完了</span></td></tr>
-      <tr><td>2. ご確認</td><td><b>Coco による 1 案の選定</b></td><td class="num">1〜3 日</td></tr>
-      <tr><td>3. 実装</td><td>テストの markup 依存の解消 → 導入 → 管理クラス移行 → カスタム画面 3 本の移植</td><td class="num">A:4 / B:2.5 / C:1.5 営業日</td></tr>
-      <tr><td>4. 検証</td><td>全テスト（約 41,500 行・11 アプリ）＋ 全管理画面のブラウザ確認</td><td class="num">1 営業日</td></tr>
-      <tr><td>5. UAT</td><td>staging へデプロイ、UAT 担当による確認</td><td class="num">1〜2 日</td></tr>
+      <tr><td>1. Research &amp; proposal</td><td>Library research, compatibility checks, this document</td><td class="num">2 days <span class="tag ok">done</span></td></tr>
+      <tr><td>2. Review</td><td><b>Coco picks one option</b></td><td class="num">1–3 days</td></tr>
+      <tr><td>3. Implementation</td><td>De-couple tests from markup → install → migrate admin classes → port the 3 custom templates</td><td class="num">A:4 / B:2.5 / C:1.5 days</td></tr>
+      <tr><td>4. Verification</td><td>Full test suite (~41,500 lines across 11 apps) + a pass over every admin screen</td><td class="num">1 day</td></tr>
+      <tr><td>5. UAT</td><td>Deploy to staging, reviewed by the UAT owner</td><td class="num">1–2 days</td></tr>
     </tbody>
   </table></div>
-  <p>A 案の場合、<b>ご承認から約 2 週間</b>でリリースまで到達する見込みです
-  （うち当方の作業は約 6 営業日、残りは確認・UAT の待ち時間）。</p>
+  <p>For option A that is roughly <b>two calendar weeks from approval</b> to release — about 6 working days of
+  our effort, with the rest being review and UAT time.</p>
 </section>
 
 <section>
   <h2>Risks</h2>
-  <p class="h2sub">想定しているリスクと対策</p>
+  <p class="h2sub">What we are watching for</p>
   <div class="tscroll"><table>
-    <thead><tr><th>リスク</th><th>対策</th></tr></thead>
+    <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
     <tbody>
-      <tr><td>ユーザー編集画面が壊れる（DCS は所属グループの持ち方が Django 標準と違う）</td>
-          <td>画面を開くだけでなく<b>実際に保存まで</b>確認する。A 案で最も注意が必要な箇所。</td></tr>
-      <tr><td>テーマ変更でテストが「空振り」し、見た目は通るのに保証が消える</td>
-          <td>先に<b>標準テーマのままテストを HTML 非依存に書き換え</b>、緑であることを確認してから導入する。</td></tr>
-      <tr><td>活動ログの社内限定制限が外れる</td>
-          <td>許可リスト外のアカウントでログインし、一覧に出ないこと・403 になることを毎回確認する。</td></tr>
-      <tr><td>静的ファイル（CSS/JS）が本番で配信されない</td>
-          <td>デプロイ後に staging と本番の<b>両方</b>で実際に確認する（サーバ設定はリポジトリ外のため片方の修正が他方に届かない）。</td></tr>
-      <tr><td>定期実行タスクの 1 画面が staging では確認できない（本番のみ存在）</td>
-          <td>テストで担保し、本番リリース後に目視確認する。</td></tr>
+      <tr><td>The user edit form breaks — DCS stores group membership differently from stock Django</td>
+          <td>Don't just open the form; <b>save it</b> as part of the verification pass. The riskiest single edit in option A.</td></tr>
+      <tr><td>Tests silently stop asserting anything once the theme renames the HTML they look for</td>
+          <td><b>Rewrite those tests first, on the current theme</b>, and confirm they are green before the theme goes in.</td></tr>
+      <tr><td>The internal-only gate on the activity log comes loose</td>
+          <td>Log in as a non-allowlisted account every time and confirm the section is absent and both pages return 403.</td></tr>
+      <tr><td>Static files (CSS/JS) are not served in production</td>
+          <td>Verify on <b>both</b> staging and production after deploy — the web-server config lives outside the repo, so fixing one box does not fix the other.</td></tr>
+      <tr><td>One scheduled-task screen exists only in production and cannot be checked on staging</td>
+          <td>Cover it with tests and confirm visually right after the production release.</td></tr>
     </tbody>
   </table></div>
 </section>
 
 <section style="border-bottom:0">
   <h2>Next</h2>
-  <p class="h2sub">次のアクション</p>
+  <p class="h2sub">Next steps</p>
   <ul>
-    <li><b>Coco：</b>A / B / C から 1 案を選択。気になる点があればこのページの該当箇所を指定してご指摘ください。</li>
-    <li><b>Husen：</b>承認後、<code>feat/z94amcqevr-modernize-admin-ui</code> ブランチで実装し、<code>dev</code> へ PR を出します。</li>
-    <li><b>その後：</b>グラフ・ダッシュボードの追加は別チケットとして、承認された案の上に積みます。</li>
+    <li><b>Coco:</b> pick A, B or C. If something needs changing, point at the section on this page.</li>
+    <li><b>Husen:</b> after approval, implement on <code>feat/z94amcqevr-modernize-admin-ui</code> and raise a PR against <code>dev</code>.</li>
+    <li><b>After that:</b> charts and dashboards go in as a separate ticket, built on the approved option.</li>
   </ul>
-  <div class="note warn"><b>この資料の参考イメージについて：</b>
-  上の各画面は、DCS の実際のデータ項目・列構成・ボタン配置に合わせて<b>各ライブラリの見た目を再現したもの</b>です。
-  実機のスクリーンショットではありません。1 案が決まり次第、ローカル環境に実際に導入した
-  <b>本物のスクリーンショット</b>に差し替えます（C 案を選ばれた場合は、その前に Python 3.9 での動作確認を行います）。</div>
+  <div class="note warn"><b>About the images on this page:</b> each screen above <b>recreates how that library
+  looks</b>, applied to DCS's real columns, buttons and filters. They are not screenshots of a running system.
+  Once an option is chosen we will replace them with <b>real screenshots</b> from a local install (for option C,
+  after confirming it runs on Python 3.9 at all).
+  <br><br>Note also that the live DCS admin is in <b>Japanese</b>; the mockups are labelled in English for this
+  document. And because this page is served from a public repository, the email addresses, hostname and account
+  figures shown are <b>placeholders</b> — the real values are in the ClickUp ticket.</div>
 </section>
 
 <footer style="padding:40px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)">
-  <p style="margin:0">DCS 管理画面 UI 刷新 提案 · ClickUp z94amcqevr · 2026-10-15 ·
-  作成 Husen Efendi</p>
+  <p style="margin:0">DCS admin UI modernization proposal · ClickUp z94amcqevr · 2026-10-15 · Husen Efendi</p>
 </footer>
 </div>
 
