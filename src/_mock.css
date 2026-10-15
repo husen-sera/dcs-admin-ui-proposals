@@ -1,0 +1,193 @@
+/* ===========================================================
+   Mock admin screens. Scoped under .vp .inner so none of this
+   leaks into the page chrome. Four skins: stock / A / B / C.
+   =========================================================== */
+.vp .inner *{box-sizing:border-box}
+.vp .inner table{min-width:0;border-collapse:collapse;width:100%}
+.vp .inner th,.vp .inner td{padding:0;border:0;font-size:inherit;background:none;white-space:normal;word-break:break-word}
+.vp .inner table{table-layout:fixed}
+.vp .inner th:first-child,.vp .inner td:first-child{white-space:nowrap;width:17%}
+.vp .inner th:nth-child(2),.vp .inner td:nth-child(2){width:19%}
+.vp .inner th:nth-child(3),.vp .inner td:nth-child(3){width:10%}
+.vp .inner th:nth-child(4),.vp .inner td:nth-child(4){width:20%}
+.vp .inner th:nth-child(5),.vp .inner td:nth-child(5){width:19%}
+.vp .inner th:nth-child(6),.vp .inner td:nth-child(6){width:15%}
+.vp .inner thead th{letter-spacing:0;text-transform:none}
+.m-row{display:flex;height:100%}
+.m-main{flex:1;min-width:0;display:flex;flex-direction:column}
+.m-body{flex:1;padding:22px 26px;overflow:hidden}
+.m-ttl{font-size:21px;font-weight:700;margin:0 0 16px}
+.m-hdrow{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px}
+.m-hdrow .m-ttl{margin:0}
+.m-flex{display:flex;gap:20px;align-items:flex-start}
+.m-grow{flex:1;min-width:0}
+.m-ico{display:inline-block;width:14px;height:14px;border-radius:3px;background:currentColor;
+  opacity:.4;vertical-align:-2px;margin-right:9px;flex:none}
+.m-cards{display:flex;gap:12px;margin-bottom:18px}
+.m-k{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.62}
+.m-v{font-size:25px;font-weight:700;line-height:1.2;margin-top:3px}
+.m-bars{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.m-bl{display:flex;align-items:center;gap:10px;font-size:12px}
+.m-bl span:first-child{width:150px;overflow:hidden;text-overflow:ellipsis}
+.m-bt{flex:1;height:9px;border-radius:3px;overflow:hidden}
+.m-bf{height:100%;display:block}
+.m-bn{width:44px;text-align:right;font-variant-numeric:tabular-nums;opacity:.7}
+
+/* ---------- 現状: stock Django 4.2 ---------- */
+.sk-stock{background:#fff;font-family:"Roboto","Helvetica Neue",sans-serif}
+.sk-stock .m-top{background:#417690;color:#fff;padding:11px 26px;font-size:17px;font-weight:300;letter-spacing:.4px}
+.sk-stock .m-crumb{background:#f8f8f8;border-bottom:1px solid #eaeaea;padding:9px 26px;font-size:11.5px;color:#999}
+.sk-stock .m-crumb a{color:#447e9b;text-decoration:none}
+.sk-stock .m-ttl{font-size:18px;font-weight:300;color:#666;border-bottom:1px solid #eee;padding-bottom:9px}
+.sk-stock .m-tools{flex:none}
+.sk-stock .m-tools a{display:inline-block;background:#f8f8f8;border:1px solid #ccc;color:#447e9b;
+  font-size:11px;padding:4px 10px;border-radius:4px;margin-left:5px;text-decoration:none}
+.sk-stock table{font-size:12px;border:1px solid #eee}
+.sk-stock thead th{background:#f6f6f6;color:#666;font-weight:600;font-size:11px;
+  padding:8px 11px;border-bottom:1px solid #eee;border-right:1px solid #eee}
+.sk-stock td{padding:8px 11px;border-bottom:1px solid #eee;color:#333}
+.sk-stock tbody tr:nth-child(even){background:#f9f9f9}
+.sk-stock .m-side{width:220px;flex:none;background:#f8f8f8;border:1px solid #eee;padding:0 0 10px}
+.sk-stock .m-side h4{margin:0;padding:9px 12px;background:#fff;border-bottom:1px solid #eee;
+  font-size:11px;color:#666;font-weight:600}
+.sk-stock .m-side .g{padding:9px 12px;border-bottom:1px solid #eee;font-size:11.5px;color:#666}
+.sk-stock .m-side .g b{display:block;font-size:10.5px;color:#999;font-weight:600;margin-bottom:5px}
+.sk-stock .m-side .g a{display:block;color:#447e9b;text-decoration:none;padding:1px 0}
+.sk-stock .m-side .g a.on{font-weight:700;color:#333}
+.sk-stock .m-in{display:block;width:100%;border:1px solid #ccc;border-radius:3px;padding:3px 5px;
+  font-size:11px;margin-bottom:6px;color:#555;background:#fff}
+.sk-stock .m-btn{background:#79aec8;color:#fff;border:0;border-radius:3px;padding:4px 10px;font-size:11px}
+
+/* ---------- A: django-unfold (Tailwind) ---------- */
+.sk-unfold{background:#fafafa;font-family:"Inter","Noto Sans JP",sans-serif;color:#18181b}
+.sk-unfold .m-nav{width:238px;flex:none;background:#fff;border-right:1px solid #e4e4e7;padding:17px 13px}
+.sk-unfold .m-brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14px;
+  padding:0 7px 17px;color:#18181b}
+.sk-unfold .m-brand .lg{width:25px;height:25px;border-radius:7px;background:#2563eb;color:#fff;
+  display:grid;place-items:center;font-size:11px;font-weight:700}
+.sk-unfold .m-grp{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#a1a1aa;
+  font-weight:600;padding:13px 8px 6px}
+.sk-unfold .m-nl{display:flex;align-items:center;border-radius:7px;padding:7px 9px;font-size:12.5px;
+  color:#52525b;margin-bottom:1px}
+.sk-unfold .m-nl.on{background:#eff6ff;color:#1d4ed8;font-weight:600}
+.sk-unfold .m-nl.on .m-ico{opacity:.85}
+.sk-unfold .m-top{background:#fff;border-bottom:1px solid #e4e4e7;padding:11px 24px;display:flex;
+  align-items:center;gap:14px}
+.sk-unfold .m-search{flex:1;max-width:330px;background:#f4f4f5;border:1px solid #e4e4e7;border-radius:999px;
+  padding:6px 14px;font-size:11.5px;color:#a1a1aa}
+.sk-unfold .m-av{width:27px;height:27px;border-radius:50%;background:#e4e4e7;flex:none}
+.sk-unfold .m-moon{width:27px;height:27px;border-radius:7px;border:1px solid #e4e4e7;flex:none;margin-left:auto}
+.sk-unfold .m-crumb{font-size:11.5px;color:#a1a1aa;margin-bottom:5px}
+.sk-unfold .m-tools{display:flex;gap:8px;margin-bottom:15px}
+.sk-unfold .m-b1{background:#2563eb;color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600}
+.sk-unfold .m-b2{background:#fff;border:1px solid #e4e4e7;color:#3f3f46;border-radius:7px;
+  padding:7px 14px;font-size:12px;font-weight:600}
+.sk-unfold .m-card{background:#fff;border:1px solid #e4e4e7;border-radius:11px;overflow:hidden}
+.sk-unfold thead th{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#a1a1aa;
+  font-weight:600;padding:11px 15px;border-bottom:1px solid #f4f4f5}
+.sk-unfold td{padding:11px 15px;border-bottom:1px solid #f4f4f5;font-size:12.5px;color:#3f3f46}
+.sk-unfold tbody tr:last-child td{border-bottom:0}
+.sk-unfold .m-pill{display:inline-block;background:#f4f4f5;color:#52525b;border-radius:999px;
+  padding:2px 9px;font-size:11px;font-weight:600}
+.sk-unfold .m-pill.b{background:#eff6ff;color:#1d4ed8}
+.sk-unfold .m-pill.g{background:#f0fdf4;color:#15803d}
+.sk-unfold .m-side{width:232px;flex:none;background:#fff;border:1px solid #e4e4e7;border-radius:11px;padding:15px}
+.sk-unfold .m-side h4{margin:0 0 12px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#a1a1aa}
+.sk-unfold .m-side .g{margin-bottom:14px}
+.sk-unfold .m-side .g b{display:block;font-size:11.5px;color:#3f3f46;margin-bottom:6px;font-weight:600}
+.sk-unfold .m-side .g a{display:block;color:#2563eb;text-decoration:none;padding:1.5px 0;font-size:11.5px}
+.sk-unfold .m-side .g a.on{font-weight:700;color:#18181b}
+.sk-unfold .m-in{display:block;width:100%;background:#fff;border:1px solid #e4e4e7;border-radius:7px;
+  padding:6px 10px;font-size:11.5px;color:#71717a;margin-bottom:7px}
+.sk-unfold .m-chipr{display:inline-block;background:#f4f4f5;border-radius:6px;padding:4px 9px;
+  font-size:11px;color:#52525b;margin:0 4px 4px 0}
+.sk-unfold .m-chipr.on{background:#2563eb;color:#fff;font-weight:600}
+.sk-unfold .m-stat{flex:1;background:#fff;border:1px solid #e4e4e7;border-radius:11px;padding:14px 16px}
+.sk-unfold .m-bt{background:#f4f4f5}.sk-unfold .m-bf{background:#2563eb}
+
+/* ---------- B: django-jazzmin (AdminLTE / Bootstrap) ---------- */
+.sk-jazz{background:#f4f6f9;font-family:"Source Sans Pro","Noto Sans JP",sans-serif;color:#212529}
+.sk-jazz .m-nav{width:245px;flex:none;background:#343a40;color:#c2c7d0;padding:0}
+.sk-jazz .m-brand{display:flex;align-items:center;gap:10px;padding:13px 16px;font-size:15px;
+  font-weight:600;color:#fff;border-bottom:1px solid #4b545c}
+.sk-jazz .m-brand .lg{width:26px;height:26px;border-radius:50%;background:#007bff;display:grid;
+  place-items:center;font-size:11px;color:#fff;font-weight:700}
+.sk-jazz .m-user{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #4b545c}
+.sk-jazz .m-user .av{width:30px;height:30px;border-radius:50%;background:#6c757d;flex:none}
+.sk-jazz .m-user div{font-size:12px;color:#fff;overflow:hidden;text-overflow:ellipsis}
+.sk-jazz .m-grp{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:#869099;padding:13px 16px 5px}
+.sk-jazz .m-nl{display:flex;align-items:center;padding:8px 16px;font-size:12.5px;color:#c2c7d0;border-radius:4px;margin:0 7px 2px}
+.sk-jazz .m-nl.on{background:#007bff;color:#fff;font-weight:600}
+.sk-jazz .m-top{background:#fff;border-bottom:1px solid #dee2e6;padding:11px 20px;display:flex;align-items:center;gap:14px}
+.sk-jazz .m-top .t{font-size:12.5px;color:#495057}
+.sk-jazz .m-av{width:28px;height:28px;border-radius:50%;background:#dee2e6;margin-left:auto;flex:none}
+.sk-jazz .m-crumbbar{background:#fff;border-bottom:1px solid #dee2e6;padding:12px 20px;display:flex;
+  align-items:center;justify-content:space-between}
+.sk-jazz .m-crumbbar h1{margin:0;font-size:20px;font-weight:400;color:#212529}
+.sk-jazz .m-crumbbar .c{font-size:12px;color:#6c757d}
+.sk-jazz .m-crumbbar .c a{color:#007bff;text-decoration:none}
+.sk-jazz .m-body{padding:18px 20px}
+.sk-jazz .m-card{background:#fff;border-radius:4px;box-shadow:0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2)}
+.sk-jazz .m-ch{display:flex;align-items:center;justify-content:space-between;
+  padding:11px 15px;border-bottom:1px solid rgba(0,0,0,.125)}
+.sk-jazz .m-ch h3{margin:0;font-size:15px;font-weight:400;color:#212529}
+.sk-jazz .m-b1{background:#007bff;color:#fff;border-radius:4px;padding:5px 12px;font-size:12px}
+.sk-jazz .m-b2{background:#fff;border:1px solid #6c757d;color:#6c757d;border-radius:4px;padding:5px 12px;font-size:12px}
+.sk-jazz thead th{background:#f8f9fa;font-size:11.5px;font-weight:600;color:#495057;
+  padding:9px 14px;border-bottom:2px solid #dee2e6}
+.sk-jazz td{padding:9px 14px;border-top:1px solid #dee2e6;font-size:12.5px;color:#212529}
+.sk-jazz tbody tr:nth-child(odd){background:rgba(0,0,0,.025)}
+.sk-jazz .m-pill{display:inline-block;border-radius:10rem;padding:2px 8px;font-size:10.5px;
+  font-weight:700;background:#17a2b8;color:#fff}
+.sk-jazz .m-pill.b{background:#007bff}.sk-jazz .m-pill.g{background:#28a745}
+.sk-jazz .m-side{width:228px;flex:none}
+.sk-jazz .m-side .m-card{margin-bottom:0}
+.sk-jazz .m-side h4{margin:0;padding:11px 14px;font-size:13px;font-weight:400;
+  border-bottom:1px solid rgba(0,0,0,.125);color:#212529}
+.sk-jazz .m-side .g{padding:11px 14px;border-bottom:1px solid rgba(0,0,0,.075);font-size:12px}
+.sk-jazz .m-side .g b{display:block;font-size:11px;color:#6c757d;font-weight:600;margin-bottom:6px}
+.sk-jazz .m-side .g a{display:block;color:#007bff;text-decoration:none;padding:1px 0}
+.sk-jazz .m-side .g a.on{font-weight:700;color:#212529}
+.sk-jazz .m-in{display:block;width:100%;border:1px solid #ced4da;border-radius:4px;padding:5px 9px;
+  font-size:11.5px;margin-bottom:7px;color:#495057;background:#fff}
+.sk-jazz .m-stat{flex:1;background:#fff;border-radius:4px;padding:13px 15px;
+  box-shadow:0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2);border-left:3px solid #007bff}
+.sk-jazz .m-bt{background:#e9ecef}.sk-jazz .m-bf{background:#007bff}
+
+/* ---------- C: django-admin-interface (stock structure, repainted) ---------- */
+.sk-ai{background:#fff;font-family:"Noto Sans JP","Helvetica Neue",sans-serif;color:#2c3038}
+.sk-ai .m-top{background:#2b3a67;color:#fff;padding:12px 26px;display:flex;align-items:center;gap:11px}
+.sk-ai .m-top .lg{width:24px;height:24px;border-radius:6px;background:#f4a261;color:#2b3a67;
+  display:grid;place-items:center;font-size:11px;font-weight:700}
+.sk-ai .m-top .n{font-size:16px;font-weight:600;letter-spacing:.2px}
+.sk-ai .m-top .r{margin-left:auto;font-size:11.5px;opacity:.85}
+.sk-ai .m-crumb{background:#f0f2f7;border-bottom:1px solid #dfe3ec;padding:9px 26px;font-size:11.5px;color:#7a8194}
+.sk-ai .m-crumb a{color:#2b3a67;text-decoration:none;font-weight:500}
+.sk-ai .m-ttl{font-size:19px;font-weight:600;color:#2c3038;border-bottom:2px solid #f4a261;
+  padding-bottom:8px;display:inline-block}
+.sk-ai .m-tools{flex:none}
+.sk-ai .m-tools a{display:inline-block;background:#2b3a67;border:0;color:#fff;font-size:11px;
+  padding:6px 13px;border-radius:5px;margin-left:6px;text-decoration:none;font-weight:500}
+.sk-ai .m-tools a.alt{background:#fff;border:1px solid #c8cedd;color:#2b3a67}
+.sk-ai .m-card{border:1px solid #dfe3ec;border-radius:7px;overflow:hidden}
+.sk-ai thead th{background:#f0f2f7;color:#5a6276;font-weight:600;font-size:11px;
+  padding:9px 13px;border-bottom:1px solid #dfe3ec}
+.sk-ai td{padding:9px 13px;border-bottom:1px solid #eef0f5;font-size:12.5px}
+.sk-ai tbody tr:nth-child(even){background:#fafbfd}
+.sk-ai tbody tr:last-child td{border-bottom:0}
+.sk-ai .m-pill{display:inline-block;background:#e8ecf6;color:#2b3a67;border-radius:4px;
+  padding:2px 8px;font-size:11px;font-weight:600}
+.sk-ai .m-pill.b{background:#2b3a67;color:#fff}
+.sk-ai .m-pill.g{background:#fdeadb;color:#b4580f}
+.sk-ai .m-side{width:224px;flex:none;border:1px solid #dfe3ec;border-radius:7px;overflow:hidden}
+.sk-ai .m-side h4{margin:0;padding:10px 13px;background:#f0f2f7;border-bottom:1px solid #dfe3ec;
+  font-size:11px;color:#5a6276;font-weight:600}
+.sk-ai .m-side .g{padding:10px 13px;border-bottom:1px solid #eef0f5;font-size:11.5px;color:#5a6276}
+.sk-ai .m-side .g b{display:block;font-size:10.5px;color:#8a91a3;font-weight:600;margin-bottom:5px}
+.sk-ai .m-side .g a{display:block;color:#2b3a67;text-decoration:none;padding:1px 0}
+.sk-ai .m-side .g a.on{font-weight:700;border-left:2px solid #f4a261;padding-left:6px;margin-left:-8px}
+.sk-ai .m-in{display:block;width:100%;border:1px solid #c8cedd;border-radius:5px;padding:5px 8px;
+  font-size:11.5px;margin-bottom:6px;color:#5a6276;background:#fff}
+.sk-ai .m-btn{background:#2b3a67;color:#fff;border:0;border-radius:5px;padding:5px 12px;font-size:11px}
+.sk-ai .m-stat{flex:1;border:1px solid #dfe3ec;border-radius:7px;padding:13px 15px;background:#fafbfd}
+.sk-ai .m-bt{background:#e8ecf6}.sk-ai .m-bf{background:#2b3a67}
