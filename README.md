@@ -11,9 +11,9 @@ admin and photographed on our own screens**. Every figure is a screenshot of a r
 - **B — [django-daisy](https://hypy13.github.io/django-daisy-docs/)** 2.0.15 — runs its *current*
   release on our Python, and needed no admin code changes.
   ([demo](https://hypy13-django-daisy.hf.space/admin/) · [repo](https://github.com/hypy13/django-daisy))
-- **C — [django-admin-interface](https://github.com/fabiocaccamo/django-admin-interface)** 0.32.0 —
-  keeps Django's layout and repaints it. The only option where **none of our custom screens need
-  reworking**. Lowest risk, least visual change.
+- **C — [django-jazzmin](https://github.com/farridav/django-jazzmin)** 3.0.1 — AdminLTE 3 / Bootstrap 5,
+  the most conventional admin-panel look, configuration only. Pinned to an Oct-2024 release and ships
+  no Japanese translation. ([docs](https://django-jazzmin.readthedocs.io/))
 
 **django-jet-reboot was evaluated and dropped**: it is AGPLv3 and its own packaging declares
 "free for non-commercial use", which fails the requirement that libraries be free *and* licensed
