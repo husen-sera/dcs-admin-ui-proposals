@@ -1,7 +1,7 @@
 <header class="top">
   <p class="eyebrow">DCS / Admin panel · Proposal</p>
   <h1>Modernizing the Django<br>admin with free OSS</h1>
-  <p class="lede">Two candidate themes, both installed against <b>the real DCS admin</b> and
+  <p class="lede">Three candidate themes, each installed against <b>the real DCS admin</b> and
   photographed on our own screens. Everything below is a screenshot of a running system, not a mockup.
   Please pick one.</p>
   <div class="meta">
@@ -9,7 +9,7 @@
     <span class="chip">Owner <b>Husen</b></span>
     <span class="chip">Approver <b>Coco</b></span>
     <span class="chip">Updated <b>2026-10-15</b></span>
-    <span class="chip">Both options <b>MIT · commercial use OK</b></span>
+    <span class="chip">All three <b>MIT · commercial use OK</b></span>
   </div>
 </header>
 
@@ -17,18 +17,18 @@
   <h2>Summary</h2>
   <p class="h2sub">The short version</p>
   <ul>
-    <li>Three libraries were shortlisted. <b>django-jet-reboot had to be dropped</b> — it is AGPLv3 and
-      its own packaging says <i>"free for non-commercial use"</i>, which fails this project's licensing
-      requirement outright. That leaves two.</li>
-    <li><b>A — django-unfold</b> is the more polished product and the better foundation for the analytics
-      dashboard we want next. It must be <b>pinned to an older release</b> to run on our Python.</li>
-    <li><b>B — django-daisy</b> is the only candidate that runs its <b>current</b> release on our Python,
-      and it needed <b>no code changes at all</b> to work.</li>
-    <li>Both were installed and driven for real. In both, the user edit form <b>saved correctly</b> — the
-      single thing most likely to have broken. In both, one custom screen needs restyling.</li>
+    <li><b>A — django-unfold</b> is the most polished, and the best foundation for the analytics dashboard
+      we want next. It must be <b>pinned to an older release</b> to run on our Python.</li>
+    <li><b>B — django-daisy</b> runs its <b>current</b> release on our Python and needed <b>no admin code
+      changes</b> at all.</li>
+    <li><b>C — django-admin-interface</b> keeps Django's layout and repaints it. It is the only one where
+      <b>none of our custom screens need reworking</b> — the lowest-risk option, and the least visual change.</li>
+    <li>All three were installed and driven for real. In all three the user edit form <b>saved correctly</b> —
+      the thing most likely to have broken. <b>django-jet-reboot was dropped</b>: it is AGPLv3 and its own
+      packaging says <i>"free for non-commercial use"</i>, failing our licensing requirement.</li>
   </ul>
-  <div class="note ok"><b>What we need from you:</b> choose A or B. From approval to UAT we estimate
-  <b>~4 working days for A</b> or <b>~2 days for B</b>.</div>
+  <div class="note ok"><b>What we need from you:</b> choose A, B or C. From approval to UAT we estimate
+  <b>~4 working days for A</b>, <b>~2 for B</b> or <b>~1.5 for C</b>.</div>
 </section>
 
 <section>
@@ -198,35 +198,123 @@
 </section>
 
 <section>
+  <h2>Option C</h2>
+  <p class="h2sub">django-admin-interface</p>
+
+  <div class="cand">
+    <div class="hd">
+      <div class="rank"><span class="dot">C</span>Lowest risk</div>
+      <h3>django-admin-interface 0.32.0</h3>
+      <p class="sub">Keeps Django's layout exactly as it is and repaints it. Colours, logo and header are
+      edited <b>from inside the admin itself</b>, with no deploy.</p>
+      <div class="badges">
+        <span class="chip">MIT</span><span class="chip">Dependencies <b>2</b></span>
+        <span class="chip ok">Latest release <b>usable</b></span><span class="chip">Django <b>4.0–6.0</b></span>
+        <span class="chip ok">Custom screens <b>need no rework</b></span>
+      </div>
+      <div class="links">
+        <a href="https://github.com/fabiocaccamo/django-admin-interface#readme"><b>Docs</b></a>
+        <a href="https://github.com/fabiocaccamo/django-admin-interface#demo"><b>Demo</b> (screencast)</a>
+        <a href="https://github.com/fabiocaccamo/django-admin-interface"><b>GitHub</b></a>
+        <a href="https://pypi.org/project/django-admin-interface/"><b>PyPI</b></a>
+      </div>
+    </div>
+    <div class="body">
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
+        <img src="images/ai-list.png" alt="DCS activity log list rendered by django-admin-interface"></div>
+      <p class="cap"><b>Activity log list.</b> ✅ This is the one that matters: our custom <b>期間</b> filter and
+      both custom buttons (集計を見る / CSVダウンロード) render <b>correctly and in theme</b>, because this package
+      keeps Django's own markup instead of replacing it. Under A and B, all three of those need reworking.
+      The standard filters also become proper dropdowns. ⚠️ With both side panels open the table is narrower,
+      so the パス column is cut off at this width.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
+        <img src="images/ai-summary.png" alt="The activity log summary page under django-admin-interface"></div>
+      <p class="cap"><b>Summary page.</b> Carries over with its date controls and buttons properly styled —
+      again because the markup contract is unchanged.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/user/user/1/change/</div></div>
+        <img src="images/ai-userform.png" alt="The user edit form under django-admin-interface"></div>
+      <p class="cap"><b>User edit form.</b> Renders and <b>saves correctly</b> — verified, as with the other two.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/</div></div>
+        <img src="images/ai-index.png" alt="The admin home page under django-admin-interface"></div>
+      <p class="cap"><b>Admin home.</b> Familiar Django layout with a collapsible app list.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/login/</div></div>
+        <img src="images/ai-login.png" alt="The login screen under django-admin-interface"></div>
+      <p class="cap"><b>Login.</b></p>
+
+      <div class="pros">
+        <div><h4>Strengths</h4><ul>
+          <li><b>Nothing of ours needs reworking</b> — the custom filter, the custom buttons and the custom
+            summary page all keep working and keep their styling</li>
+          <li>No admin classes to change, and no <code>urls.py</code> change</li>
+          <li>Runs its <b>current</b> release; Django 4.0–6.0 explicitly supported, actively maintained</li>
+          <li>Colours and branding are edited <b>in the admin</b>, so changing them needs no deploy</li>
+          <li>The layout does not move, so existing habits and any internal documentation stay valid</li>
+        </ul></div>
+        <div><h4>Cost and caveats</h4><ul>
+          <li><b>The least visually ambitious</b> of the three — it is a repaint, not a new interface</li>
+          <li>Adds two dependencies (<code>django-colorfield</code>, <code>python-slugify</code>) and a database migration</li>
+          <li>Its packaging does not declare Python 3.9 support — we <b>verified it works</b> by installing and
+            running it on our Python, but we would be using it outside its stated support range</li>
+          <li>No chart components, so the dashboard follow-up is built from scratch</li>
+          <li>With both panels open the dense activity-log table is cut off; it needs a column trim or a wider screen</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
   <h2>At a glance</h2>
   <p class="h2sub">Side by side</p>
   <div class="tscroll"><table>
-    <thead><tr><th></th><th>A — django-unfold</th><th>B — django-daisy</th></tr></thead>
+    <thead><tr><th></th><th>A — unfold</th><th>B — daisy</th><th>C — admin-interface</th></tr></thead>
     <tbody>
-      <tr><td><b>Version we'd run</b></td><td>0.67.0 <span class="tag warn">pinned, Sep 2025</span></td>
-          <td>2.0.15 <span class="tag ok">current</span></td></tr>
-      <tr><td><b>Why pinned?</b></td><td>latest needs Python 3.12</td><td><span class="tag ok">not pinned</span></td></tr>
-      <tr><td><b>License</b></td><td>MIT</td><td>MIT / Apache-2.0</td></tr>
-      <tr><td><b>Extra dependencies</b></td><td><span class="tag ok">0</span></td><td><span class="tag ok">0</span></td></tr>
+      <tr><td><b>Version we'd run</b></td><td>0.67.0 <span class="tag warn">pinned</span></td>
+          <td>2.0.15 <span class="tag ok">current</span></td><td>0.32.0 <span class="tag ok">current</span></td></tr>
+      <tr><td><b>License</b></td><td>MIT</td><td>MIT / Apache-2.0</td><td>MIT</td></tr>
+      <tr><td><b>Extra dependencies</b></td><td><span class="tag ok">0</span></td>
+          <td><span class="tag ok">0</span></td><td>2 + a migration</td></tr>
+      <tr><td><b>Python 3.9</b></td><td><span class="tag ok">declared</span></td>
+          <td><span class="tag ok">declared</span></td><td><span class="tag warn">works, not declared</span></td></tr>
       <tr><td><b>Changes to our admin code</b></td><td>13 classes + auth re-registration</td>
-          <td><span class="tag ok">none</span></td></tr>
-      <tr><td><b>User form saves correctly</b></td><td><span class="tag ok">verified</span></td>
-          <td><span class="tag ok">verified</span></td></tr>
-      <tr><td><b>Custom 期間 filter</b></td><td>needs restyling</td><td>needs restyling</td></tr>
-      <tr><td><b>Custom summary page</b></td><td>carries over</td><td>carries over</td></tr>
-      <tr><td><b>Dark mode / theming</b></td><td>dark mode built in</td><td>theme switcher built in</td></tr>
-      <tr><td><b>Dashboard follow-up</b></td><td><span class="tag ok">chart components</span></td><td>build our own</td></tr>
-      <tr><td><b>Project size</b></td><td>large, very active</td><td>smaller, newer</td></tr>
-      <tr><td><b>Estimated effort</b></td><td>~4 working days</td><td>~2 working days</td></tr>
+          <td><span class="tag ok">none</span></td><td><span class="tag ok">none</span></td></tr>
+      <tr><td><b>Our custom 期間 filter</b></td><td>needs restyling</td><td>needs restyling</td>
+          <td><span class="tag ok">works as-is</span></td></tr>
+      <tr><td><b>Our custom buttons</b></td><td>needs moving</td><td>minor</td>
+          <td><span class="tag ok">works as-is</span></td></tr>
+      <tr><td><b>Custom 集計 page</b></td><td>carries over</td><td>carries over</td>
+          <td><span class="tag ok">carries over, styled</span></td></tr>
+      <tr><td><b>User form saves</b></td><td><span class="tag ok">verified</span></td>
+          <td><span class="tag ok">verified</span></td><td><span class="tag ok">verified</span></td></tr>
+      <tr><td><b>Visual change</b></td><td>large</td><td>large</td><td>moderate — layout unchanged</td></tr>
+      <tr><td><b>Theming without a deploy</b></td><td>no</td><td>theme switcher</td>
+          <td><span class="tag ok">edited in the admin</span></td></tr>
+      <tr><td><b>Dashboard follow-up</b></td><td><span class="tag ok">chart components</span></td>
+          <td>build our own</td><td>build our own</td></tr>
+      <tr><td><b>Project size</b></td><td>large, very active</td><td>smaller, newer</td><td>established, active</td></tr>
+      <tr><td><b>Estimated effort</b></td><td>~4 days</td><td>~2 days</td><td>~1.5 days</td></tr>
     </tbody>
   </table></div>
 
-  <div class="verdict">
-    <div><div class="k">Pick A if</div>the priority is the most polished result and the analytics
-    dashboard we want next, and we accept running a pinned release until Python is upgraded.</div>
-    <div><div class="k">Pick B if</div>the priority is staying current and low-risk — no admin code
-    changes, no frozen dependency, and roughly half the work.</div>
+  <div class="verdict" style="grid-template-columns:repeat(3,1fr)">
+    <div><div class="k">Pick A if</div>the priority is the best-looking result and a head start on the
+    analytics dashboard, and we accept a pinned release and the largest code change.</div>
+    <div><div class="k">Pick B if</div>the priority is a modern look while staying on current releases,
+    with no admin code to change.</div>
+    <div><div class="k">Pick C if</div>the priority is minimum risk and minimum disruption — nothing of
+    ours needs reworking and nobody has to relearn the screens.</div>
   </div>
+  <p>Our recommendation is <b>A</b> if the dashboard work is going ahead soon, and <b>C</b> if it is not —
+  C delivers a visible refresh for the least work and the least risk. B sits between them.</p>
 </section>
 
 <section>
@@ -243,14 +331,15 @@
           original project's demo site is offline and its screenshots are from the predecessor project.
           <a href="https://github.com/assem-ch/django-jet-reboot">repo</a> ·
           <a href="https://django-jet-reboot.readthedocs.io/">docs</a></td></tr>
+      <tr><td><b>django-simpleui</b> · <b>django-baton</b></td>
+          <td>Both permissively licensed and both run on our Python, but neither fits as well: simpleui
+          replaces the admin with an iframe-and-tabs shell and showed console errors plus mixed-language
+          chrome on our screens; baton additionally requires a <code>urls.py</code> change and its
+          3.9-compatible release is pinned.</td></tr>
       <tr><td><b>django-jazzmin</b> 3.0.1</td>
           <td>Permissively licensed, but its last release compatible with our Python is from
           <b>October 2024</b>, and it moves list filters into header dropdowns, so our custom filter would
           need porting anyway. Daisy covers the same ground while staying current.</td></tr>
-      <tr><td><b>django-admin-interface</b> 0.32.0</td>
-          <td>Permissively licensed, but declares no Python floor and its metadata targets 3.10+, so
-          support for our Python is unverified. Adds two dependencies and a database migration, and
-          changes the least visually.</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -293,9 +382,9 @@
   <div class="tscroll"><table>
     <thead><tr><th>Phase</th><th>What happens</th><th>Effort</th></tr></thead>
     <tbody>
-      <tr><td>1. Research &amp; proposal</td><td>Licensing and compatibility checks, both themes installed and photographed, this document</td><td class="num">done</td></tr>
-      <tr><td>2. Review</td><td><b>Coco picks A or B</b></td><td class="num">1–3 days</td></tr>
-      <tr><td>3. Implementation</td><td>De-couple tests from markup → install → (A only: migrate admin classes) → restyle the custom buttons and 期間 filter</td><td class="num">A: ~4 / B: ~2 days</td></tr>
+      <tr><td>1. Research &amp; proposal</td><td>Licensing and compatibility checks, all three themes installed and photographed, this document</td><td class="num">done</td></tr>
+      <tr><td>2. Review</td><td><b>Coco picks A, B or C</b></td><td class="num">1–3 days</td></tr>
+      <tr><td>3. Implementation</td><td>De-couple tests from markup → install → (A only: migrate admin classes) → (A/B only: restyle the custom buttons and 期間 filter)</td><td class="num">A ~4 / B ~2 / C ~1.5 days</td></tr>
       <tr><td>4. Verification</td><td>Full test suite + a pass over every admin screen</td><td class="num">1 day</td></tr>
       <tr><td>5. UAT</td><td>Deploy to staging, reviewed by the UAT owner</td><td class="num">1–2 days</td></tr>
     </tbody>
@@ -306,7 +395,7 @@
   <h2>Next</h2>
   <p class="h2sub">Next steps</p>
   <ul>
-    <li><b>Coco:</b> pick A or B. If something needs changing, point at the section on this page.</li>
+    <li><b>Coco:</b> pick A, B or C. If something needs changing, point at the section on this page.</li>
     <li><b>Husen:</b> after approval, implement and raise a PR against <code>dev</code>.</li>
     <li><b>After that:</b> charts and dashboards go in as a separate ticket, built on the approved option.</li>
   </ul>
