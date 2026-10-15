@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DCS Admin UI — Three Proposals</title>
-<meta name="description" content="Three proposals for modernizing the DCS Django admin with free, commercially-licensed open-source UI libraries.">
+<title>DCS Admin UI — Two Proposals</title>
+<meta name="description" content="Two proposals for modernizing the DCS Django admin with free, commercially-licensed open-source UI libraries, shown on real DCS screens.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%239a3412%27/%3E%3Crect x=%277%27 y=%279%27 width=%2718%27 height=%273%27 rx=%271.5%27 fill=%27white%27/%3E%3Crect x=%277%27 y=%2715%27 width=%2712%27 height=%273%27 rx=%271.5%27 fill=%27white%27 opacity=%27.7%27/%3E%3Crect x=%277%27 y=%2721%27 width=%2715%27 height=%273%27 rx=%271.5%27 fill=%27white%27 opacity=%27.45%27/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -103,333 +103,37 @@ code{font-family:var(--mono);font-size:.875em;background:var(--line-2);
 .rec b{color:var(--accent)}
 
 /* =======================================================
-   MOCKUP FRAME — the browser shell every example sits in
+   SCREENSHOT FIGURES — real captures, not mockups
    ======================================================= */
 .shot{margin:22px 0 6px;border:1px solid var(--line);border-radius:12px;overflow:hidden;
   box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px -12px rgba(0,0,0,.18);background:#fff}
 .shot .bar{display:flex;align-items:center;gap:8px;padding:9px 13px;background:#e9e8e4;
   border-bottom:1px solid #d7d6d1}
-.shot .bar i{width:10px;height:10px;border-radius:50%;background:#c5c4bf;display:block}
+.shot .bar i{width:10px;height:10px;border-radius:50%;background:#c5c4bf;display:block;flex:none}
 .shot .bar .url{flex:1;background:#fff;border-radius:5px;font-family:var(--mono);font-size:10.5px;
   color:#6d6c66;padding:3.5px 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cap{font-size:12.5px;color:var(--ink-3);margin:0 0 26px;padding-left:2px}
+.shot img{display:block;width:100%;height:auto}
+.cap{font-size:12.5px;color:var(--ink-3);margin:0 0 26px;padding-left:2px;line-height:1.6}
+.cap b{color:var(--ink-2);font-weight:600}
 .cand .body > .shot{margin-left:-24px;margin-right:-24px;border-left:0;border-right:0;border-radius:0}
 @media(max-width:640px){.cand .body{padding-left:14px;padding-right:14px}
  .cand .body > .shot{margin-left:-14px;margin-right:-14px}}
-.cap b{color:var(--ink-2);font-weight:600}
 
-/* the mock viewport: fixed design width, scaled down so layout never reflows */
-.vp{width:100%;overflow:hidden;background:#fff}
-.vp > .inner{width:1600px;transform-origin:0 0;font-size:13px;line-height:1.5;
-  font-family:'Inter','Noto Sans JP',-apple-system,sans-serif;color:#111}
-/* scale is set per-breakpoint via --s */
-/* --s is measured per element by the script at the end of <body>; this is the
-   no-JS fallback, deliberately small enough to fit the narrowest phone. */
-.vp{--s:.19}
-.vp > .inner{transform:scale(var(--s))}
-.vp.h-list{height:calc(620px * var(--s))}
-.vp.h-sum{height:calc(560px * var(--s))}
-.vp.h-list > .inner{height:620px}
-.vp.h-sum > .inner{height:560px}
+/* link row under each option heading */
+.links{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.links a{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);
+  background:var(--panel);border-radius:999px;padding:5px 13px;font-size:12.5px;
+  text-decoration:none;color:var(--ink-2);white-space:nowrap}
+.links a:hover{border-color:var(--accent);color:var(--accent)}
+.links a b{color:var(--ink);font-weight:600}
 
-/* ==== mock screens ==== */
-/* ===========================================================
-   Mock admin screens. Scoped under .vp .inner so none of this
-   leaks into the page chrome. Four skins: stock / A / B / C.
-   =========================================================== */
-.vp .inner *{box-sizing:border-box}
-.vp .inner table{min-width:0;border-collapse:collapse;width:100%;table-layout:fixed}
-.vp .inner th,.vp .inner td{text-align:left;vertical-align:top;border:0;
-  white-space:normal;overflow-wrap:break-word}
-.vp .inner th:first-child,.vp .inner td:first-child{white-space:nowrap;width:16%}
-.vp .inner th:nth-child(2),.vp .inner td:nth-child(2){width:17%}
-.vp .inner th:nth-child(3),.vp .inner td:nth-child(3){width:9%}
-.vp .inner th:nth-child(4),.vp .inner td:nth-child(4){width:20%}
-.vp .inner th:nth-child(5),.vp .inner td:nth-child(5){width:21%}
-.vp .inner th:nth-child(6),.vp .inner td:nth-child(6){width:17%}
-.m-row{display:flex;height:100%}
-.m-main{flex:1;min-width:0;display:flex;flex-direction:column}
-.m-body{flex:1;padding:22px 26px;overflow:hidden}
-.m-ttl{font-size:21px;font-weight:700;margin:0 0 16px}
-.m-hdrow{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px}
-.m-hdrow .m-ttl{margin:0}
-.m-flex{display:flex;gap:20px;align-items:flex-start}
-.m-grow{flex:1;min-width:0}
-.m-pill{white-space:nowrap}
-.m-ico{display:inline-block;width:14px;height:14px;border-radius:3px;background:currentColor;
-  opacity:.4;vertical-align:-2px;margin-right:9px;flex:none}
-.m-cards{display:flex;gap:12px;margin-bottom:18px}
-.m-k{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.62}
-.m-v{font-size:25px;font-weight:700;line-height:1.2;margin-top:3px}
-.m-bars{display:flex;flex-direction:column;gap:7px;margin-top:4px}
-.m-bl{display:flex;align-items:center;gap:10px;font-size:12px}
-.m-bl span:first-child{width:150px;overflow:hidden;text-overflow:ellipsis}
-.m-bt{flex:1;height:9px;border-radius:3px;overflow:hidden}
-.m-bf{height:100%;display:block}
-.m-bn{width:44px;text-align:right;font-variant-numeric:tabular-nums;opacity:.7}
-
-/* ---------- today: stock Django 4.2 ---------- */
-.sk-stock{background:#fff;font-family:"Roboto","Helvetica Neue",sans-serif}
-.sk-stock .m-top{background:#417690;color:#fff;padding:11px 26px;font-size:17px;font-weight:300;letter-spacing:.4px}
-.sk-stock .m-crumb{background:#f8f8f8;border-bottom:1px solid #eaeaea;padding:9px 26px;font-size:11.5px;color:#999}
-.sk-stock .m-crumb a{color:#447e9b;text-decoration:none}
-.sk-stock .m-ttl{font-size:18px;font-weight:300;color:#666;border-bottom:1px solid #eee;padding-bottom:9px}
-.sk-stock .m-tools{flex:none}
-.sk-stock .m-tools a{display:inline-block;background:#f8f8f8;border:1px solid #ccc;color:#447e9b;
-  font-size:11px;padding:4px 10px;border-radius:4px;margin-left:5px;text-decoration:none}
-.sk-stock table{font-size:12px;border:1px solid #eee}
-.sk-stock thead th{background:#f6f6f6;color:#666;font-weight:600;font-size:11px;
-  padding:8px 11px;border-bottom:1px solid #eee;border-right:1px solid #eee}
-.sk-stock td{padding:8px 11px;border-bottom:1px solid #eee;color:#333}
-.sk-stock tbody tr:nth-child(even){background:#f9f9f9}
-.sk-stock .m-side{width:220px;flex:none;background:#f8f8f8;border:1px solid #eee;padding:0 0 10px}
-.sk-stock .m-side h4{margin:0;padding:9px 12px;background:#fff;border-bottom:1px solid #eee;
-  font-size:11px;color:#666;font-weight:600}
-.sk-stock .m-side .g{padding:9px 12px;border-bottom:1px solid #eee;font-size:11.5px;color:#666}
-.sk-stock .m-side .g b{display:block;font-size:10.5px;color:#999;font-weight:600;margin-bottom:5px}
-.sk-stock .m-side .g a{display:block;color:#447e9b;text-decoration:none;padding:1px 0}
-.sk-stock .m-side .g a.on{font-weight:700;color:#333}
-.sk-stock .m-in{display:block;width:100%;border:1px solid #ccc;border-radius:3px;padding:3px 5px;
-  font-size:11px;margin-bottom:6px;color:#555;background:#fff}
-.sk-stock .m-btn{background:#79aec8;color:#fff;border:0;border-radius:3px;padding:4px 10px;font-size:11px}
-
-/* ---------- A: django-unfold (Tailwind) ----------
-   Rebuilt 2026-10-15 against the live demo at demo.unfoldadmin.com.
-   Palette taken from the running app's own CSS variables:
-   --color-primary-600 = Tailwind purple-600, --color-base-* = Tailwind gray.
-   Earlier version of this skin was guessed (blue, tiny uppercase headers,
-   top-bar search) and was wrong on all three counts.                     */
-.sk-unfold{background:#f8fafc;font-family:"Inter","Noto Sans JP",sans-serif;color:#111827}
-
-/* sidebar ------------------------------------------------------------- */
-.sk-unfold .m-nav{width:286px;flex:none;background:#fff;border-right:1px solid #e5e7eb;
-  display:flex;flex-direction:column;padding:0}
-.sk-unfold .m-brand{display:flex;align-items:center;gap:11px;padding:14px 16px;
-  border-bottom:1px solid #e5e7eb}
-.sk-unfold .m-brand .lg{width:30px;height:30px;border-radius:8px;flex:none;
-  background:linear-gradient(140deg,#a855f7,#7e22ce);color:#fff;display:grid;place-items:center;
-  font-size:12px;font-weight:700}
-.sk-unfold .m-brand .bt{flex:1;min-width:0;line-height:1.3}
-.sk-unfold .m-brand .bn{display:block;font-size:13.5px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sk-unfold .m-brand .bn i{font-style:normal;font-size:10.5px;font-weight:500;color:#9ca3af;margin-left:5px}
-.sk-unfold .m-brand .bs{display:block;font-size:11px;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sk-unfold .m-brand .ch{color:#9ca3af;font-size:11px;flex:none}
-.sk-unfold .m-sbox{margin:13px 16px 4px;display:flex;align-items:center;gap:7px;
-  border:1px solid #e5e7eb;border-radius:8px;padding:7px 10px;font-size:12.5px;color:#9ca3af}
-.sk-unfold .m-sbox .kbd{margin-left:auto;font-size:10px;color:#9ca3af;background:#f3f4f6;
-  border-radius:4px;padding:1px 5px}
-.sk-unfold .m-grp{font-size:12.5px;font-weight:700;color:#111827;padding:15px 16px 5px}
-.sk-unfold .m-nl{display:flex;align-items:center;gap:10px;padding:7px 10px;margin:0 10px 1px;
-  font-size:13.5px;color:#4b5563;border-radius:7px}
-.sk-unfold .m-nl .m-ico{margin:0;opacity:.45}
-.sk-unfold .m-nl .nb{margin-left:auto;font-size:10.5px;font-weight:600;color:#fff;
-  background:#f97316;border-radius:3px;padding:1px 6px}
-.sk-unfold .m-nl .nb.b{background:#3b82f6}
-.sk-unfold .m-nl .ch{margin-left:auto;color:#9ca3af;font-size:10px}
-.sk-unfold .m-nl.on{background:#faf5ff;color:#9333ea;font-weight:600}
-.sk-unfold .m-nl.on .m-ico{opacity:1}
-.sk-unfold .m-me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 16px;
-  border-top:1px solid #e5e7eb}
-.sk-unfold .m-me .av{width:32px;height:32px;border-radius:50%;background:#e5e7eb;flex:none}
-.sk-unfold .m-me .mt{flex:1;min-width:0;line-height:1.3}
-.sk-unfold .m-me .mn{display:block;font-size:12.5px;font-weight:700;color:#111827}
-.sk-unfold .m-me .mm{display:block;font-size:11px;color:#9ca3af}
-
-/* top bar: a breadcrumb and actions — NOT a search field ---------------- */
-.sk-unfold .m-top{background:#fff;border-bottom:1px solid #e5e7eb;padding:13px 22px;
-  display:flex;align-items:center;gap:13px}
-.sk-unfold .m-tgl{width:17px;height:15px;border:1.5px solid #9ca3af;border-radius:3px;flex:none}
-.sk-unfold .m-bc{font-size:13.5px;color:#9ca3af}
-.sk-unfold .m-bc b{color:#111827;font-weight:700}
-.sk-unfold .m-acts{margin-left:auto;display:flex;align-items:center;gap:9px}
-.sk-unfold .m-b1{background:#9333ea;color:#fff;border-radius:7px;padding:7px 14px;
-  font-size:12.5px;font-weight:600}
-.sk-unfold .m-b2{background:#fff;border:1px solid #e5e7eb;color:#374151;border-radius:7px;
-  padding:7px 14px;font-size:12.5px;font-weight:600}
-.sk-unfold .m-body{padding:18px 22px}
-
-/* toolbar above the table ---------------------------------------------- */
-.sk-unfold .m-bar{background:#fff;border:1px solid #e5e7eb;border-radius:9px;padding:9px 13px;
-  display:flex;align-items:center;gap:11px;margin-bottom:14px}
-.sk-unfold .m-bar .cb{width:16px;height:16px;border-radius:4px;background:#9333ea;flex:none}
-.sk-unfold .m-bar .ph{font-size:12.5px;color:#9ca3af;flex:1}
-.sk-unfold .m-bar .sl{font-size:10.5px;color:#9ca3af;border:1px solid #e5e7eb;border-radius:4px;padding:1px 6px}
-.sk-unfold .m-bar .fb{font-size:12.5px;font-weight:600;color:#374151;border:1px solid #e5e7eb;
-  border-radius:7px;padding:6px 12px}
-
-/* table: bold dark headers, striped rows -------------------------------- */
-.sk-unfold .m-card{background:#fff;border:1px solid #e5e7eb;border-radius:9px;overflow:hidden}
-.sk-unfold thead th{font-size:13px;font-weight:700;color:#4b5563;padding:11px 15px;
-  border-bottom:1px solid #e5e7eb;text-transform:none;letter-spacing:0}
-.sk-unfold td{padding:11px 15px;font-size:13px;color:#374151;border-bottom:1px solid #f3f4f6}
-.sk-unfold tbody tr:nth-child(even){background:#f8fafc}
-.sk-unfold tbody tr:last-child td{border-bottom:0}
-.sk-unfold .m-pill{display:inline-block;background:#f3f4f6;color:#4b5563;border-radius:4px;
-  padding:2px 7px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
-.sk-unfold .m-pill.b{background:#f3e8ff;color:#7e22ce}
-.sk-unfold .m-pill.g{background:#dcfce7;color:#15803d}
-.sk-unfold .m-pg{display:flex;align-items:center;gap:11px;padding:11px 3px 0;font-size:12.5px;color:#6b7280}
-.sk-unfold .m-pg b{color:#9333ea;font-weight:700}
-
-/* filter rail (what the Filters button reveals) ------------------------- */
-.sk-unfold .m-side{width:252px;flex:none;background:#fff;border:1px solid #e5e7eb;
-  border-radius:9px;padding:15px 16px}
-.sk-unfold .m-side h4{margin:0 0 13px;font-size:12.5px;font-weight:700;color:#111827}
-.sk-unfold .m-side .g{margin-bottom:15px}
-.sk-unfold .m-side .g b{display:block;font-size:12px;color:#111827;margin-bottom:6px;font-weight:700}
-.sk-unfold .m-side .g a{display:block;color:#4b5563;text-decoration:none;padding:2px 0;font-size:12.5px}
-.sk-unfold .m-side .g a.on{color:#9333ea;font-weight:600}
-.sk-unfold .m-in{display:block;width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:7px;
-  padding:7px 10px;font-size:12px;color:#6b7280;margin-bottom:7px}
-.sk-unfold .m-chipr{display:inline-block;border:1px solid #e5e7eb;border-radius:7px;padding:5px 11px;
-  font-size:12px;color:#4b5563;margin:0 5px 5px 0;background:#fff}
-.sk-unfold .m-chipr.on{background:#9333ea;border-color:#9333ea;color:#fff;font-weight:600}
-
-/* stat cards with sparklines ------------------------------------------- */
-.sk-unfold .m-stat{flex:1;background:#fff;border:1px solid #e5e7eb;border-radius:9px;
-  padding:14px 16px;display:flex;align-items:flex-end;gap:10px}
-.sk-unfold .m-stat .sc{flex:1;min-width:0}
-.sk-unfold .m-stat .m-k{font-size:12.5px;color:#4b5563;text-transform:none;letter-spacing:0;opacity:1}
-.sk-unfold .m-stat .m-v{font-size:26px;font-weight:700;color:#111827;white-space:nowrap}
-.sk-unfold .m-stat .up{font-size:11.5px;color:#16a34a;font-weight:600;margin-left:7px}
-.sk-unfold .m-spark{flex:none;width:76px;height:34px}
-.sk-unfold .m-bt{background:#f3f4f6}
-.sk-unfold .m-bf{background:#9333ea}
-
-/* ---------- B: django-jazzmin (AdminLTE / Bootstrap) ----------
-   Rebuilt 2026-10-15 against the project's own documentation screenshots
-   (django-jazzmin.readthedocs.io/img/list_view.png and dashboard.png).
-   Key correction: jazzmin renders list_filter as INLINE DROPDOWNS in the
-   card header, not as Django's right-hand filter rail.                  */
-.sk-jazz{background:#f4f6f9;font-family:"Source Sans Pro","Noto Sans JP",sans-serif;color:#212529}
-
-/* sidebar -------------------------------------------------------------- */
-.sk-jazz .m-nav{width:250px;flex:none;background:#343a40;color:#c2c7d0;padding:0}
-.sk-jazz .m-brand{display:flex;align-items:center;gap:11px;padding:12px 15px;font-size:15px;
-  font-weight:400;color:#fff;border-bottom:1px solid #4b545c}
-.sk-jazz .m-brand .lg{width:28px;height:28px;border-radius:50%;background:#495057;display:grid;
-  place-items:center;font-size:11px;color:#fff;font-weight:700;flex:none}
-.sk-jazz .m-user{display:flex;align-items:center;gap:11px;padding:11px 15px;border-bottom:1px solid #4b545c}
-.sk-jazz .m-user .av{width:30px;height:30px;border-radius:50%;background:#6c757d;flex:none}
-.sk-jazz .m-user div{font-size:12.5px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sk-jazz .m-grp{font-size:11.5px;color:#869099;padding:14px 15px 5px}
-.sk-jazz .m-nl{display:flex;align-items:center;gap:10px;padding:8px 13px;font-size:13px;
-  color:#c2c7d0;border-radius:4px;margin:0 7px 2px}
-.sk-jazz .m-nl .m-ico{margin:0;border-radius:50%;opacity:.55}
-.sk-jazz .m-nl.on{background:#007bff;color:#fff;font-weight:400}
-.sk-jazz .m-nl.on .m-ico{opacity:1}
-
-/* white top navbar with horizontal links and a search box --------------- */
-.sk-jazz .m-top{background:#fff;border-bottom:1px solid #dee2e6;padding:10px 18px;
-  display:flex;align-items:center;gap:17px}
-.sk-jazz .m-top .bars{font-size:15px;color:#495057;flex:none}
-.sk-jazz .m-top .t{font-size:13px;color:#495057}
-.sk-jazz .m-top .t.on{color:#212529;font-weight:600}
-.sk-jazz .m-nsearch{display:flex;align-items:center;border:1px solid #ced4da;border-radius:4px;
-  overflow:hidden;font-size:12px}
-.sk-jazz .m-nsearch span{padding:4px 10px;color:#adb5bd;width:132px}
-.sk-jazz .m-nsearch i{font-style:normal;padding:4px 9px;border-left:1px solid #ced4da;color:#6c757d}
-.sk-jazz .m-top .icons{margin-left:auto;display:flex;gap:13px;color:#6c757d;font-size:12px}
-
-/* page header: title left, breadcrumbs right --------------------------- */
-.sk-jazz .m-crumbbar{background:#f4f6f9;padding:13px 18px;display:flex;
-  align-items:center;justify-content:space-between}
-.sk-jazz .m-crumbbar h1{margin:0;font-size:21px;font-weight:400;color:#212529}
-.sk-jazz .m-crumbbar .c{font-size:12.5px;color:#6c757d}
-.sk-jazz .m-crumbbar .c a{color:#007bff;text-decoration:none}
-.sk-jazz .m-body{padding:0 18px 18px}
-
-/* card with the blue top accent --------------------------------------- */
-.sk-jazz .m-card{background:#fff;border-radius:4px;border-top:3px solid #007bff;
-  box-shadow:0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2)}
-.sk-jazz .m-ch{display:flex;align-items:center;gap:9px;padding:11px 14px;
-  border-bottom:1px solid rgba(0,0,0,.125);flex-wrap:nowrap}
-.sk-jazz .m-ch h3{margin:0;font-size:15px;font-weight:400;color:#212529;flex:none}
-.sk-jazz .m-ch .sp{margin-left:auto}
-.sk-jazz .m-seg{display:flex;border-radius:4px;overflow:hidden;border:1px solid #007bff;flex:none}
-.sk-jazz .m-seg span{font-size:11.5px;padding:4px 10px;color:#007bff;background:#fff}
-.sk-jazz .m-seg span.on{background:#6c757d;color:#fff;border-color:#6c757d}
-.sk-jazz .m-sel{border:1px solid #ced4da;border-radius:4px;padding:4px 9px;font-size:11.5px;
-  color:#495057;background:#fff;flex:none}
-.sk-jazz .m-sel i{font-style:normal;margin-left:14px;color:#6c757d;font-size:9px}
-.sk-jazz .m-b1{background:#007bff;color:#fff;border-radius:4px;padding:4px 12px;font-size:12px;flex:none}
-.sk-jazz .m-b2{background:#fff;border:1px solid #6c757d;color:#6c757d;border-radius:4px;
-  padding:4px 12px;font-size:12px;flex:none}
-.sk-jazz .m-bg{background:#28a745;color:#fff;border-radius:4px;padding:4px 12px;font-size:12px;flex:none}
-.sk-jazz .m-act{display:flex;align-items:center;gap:9px;padding:11px 14px;font-size:12px;color:#6c757d}
-
-/* table: blue bold headers, striped rows ------------------------------- */
-.sk-jazz thead th{background:#fff;font-size:12.5px;font-weight:700;color:#007bff;
-  padding:10px 14px;border-bottom:1px solid #dee2e6}
-.sk-jazz td{padding:10px 14px;border-top:1px solid #dee2e6;font-size:12.5px;color:#212529}
-.sk-jazz tbody tr:nth-child(even){background:#f8f9fa}
-.sk-jazz .m-pill{display:inline-block;border-radius:10rem;padding:2px 8px;font-size:10.5px;
-  font-weight:700;background:#17a2b8;color:#fff}
-.sk-jazz .m-pill.b{background:#007bff}
-.sk-jazz .m-pill.g{background:#28a745}
-.sk-jazz .m-pg{padding:11px 14px;font-size:12px;color:#6c757d}
-.sk-jazz .m-pg b{color:#212529}
-.sk-jazz .m-stat{flex:1;background:#fff;border-radius:4px;padding:13px 15px;
-  box-shadow:0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2);border-top:3px solid #007bff}
-.sk-jazz .m-bt{background:#e9ecef}
-.sk-jazz .m-bf{background:#007bff}
-
-/* ---------- C: django-admin-interface (stock structure, repainted) ----------
-   Rebuilt 2026-10-15 against the project's own README screencast. Its
-   signature is a TWO-TONE header: a brand bar carrying a large wordmark and a
-   small user-tools row, then a breadcrumb bar in a lighter tint of the same
-   colour with white text. Table headers stay uppercase as in stock Django,
-   and the right-hand filter rail is kept (unlike jazzmin).                  */
-.sk-ai{background:#fff;font-family:"Noto Sans JP","Helvetica Neue",sans-serif;color:#2c3038}
-.sk-ai .m-top{background:#2b3a67;color:#fff;padding:13px 26px 9px}
-.sk-ai .m-top .n{font-size:25px;font-weight:700;letter-spacing:-.5px;display:block;line-height:1.1}
-.sk-ai .m-top .ut{display:block;margin-top:7px;font-size:10px;letter-spacing:.07em;
-  text-transform:uppercase;color:rgba(255,255,255,.72);font-weight:600}
-.sk-ai .m-top .ut .dot{color:#f4a261}
-.sk-ai .m-top .ut b{color:#fff;font-weight:700}
-.sk-ai .m-crumb{background:#4a5a8a;padding:8px 26px;font-size:11.5px;color:#fff;font-weight:600}
-.sk-ai .m-crumb a{color:#fff;text-decoration:none}
-.sk-ai .m-body{padding:18px 26px}
-.sk-ai .m-ttl{font-size:19px;font-weight:400;color:#6b7280}
-.sk-ai .m-tools{flex:none}
-.sk-ai .m-tools a{display:inline-block;background:#e9ebf2;border:0;color:#2b3a67;font-size:10.5px;
-  padding:6px 14px;border-radius:999px;margin-left:7px;text-decoration:none;font-weight:700;
-  letter-spacing:.04em;text-transform:uppercase}
-.sk-ai .m-tools a.alt{background:#2b3a67;color:#fff}
-.sk-ai .m-act{display:flex;align-items:center;gap:9px;margin:4px 0 13px;font-size:11.5px;color:#6b7280}
-.sk-ai .m-sel{border:1px solid #c8cedd;border-radius:4px;padding:4px 9px;font-size:11px;
-  color:#5a6276;background:#fff}
-.sk-ai .m-sel i{font-style:normal;margin-left:16px;color:#8a91a3;font-size:9px}
-.sk-ai .m-gobtn{border:1px solid #c8cedd;border-radius:4px;padding:4px 11px;font-size:11px;
-  background:#f0f2f7;color:#2c3038}
-.sk-ai .m-card{border:0}
-.sk-ai thead th{background:#f0f2f7;color:#5a6276;font-weight:700;font-size:10px;
-  text-transform:uppercase;letter-spacing:.05em;padding:9px 13px;border-bottom:1px solid #dfe3ec}
-.sk-ai td{padding:9px 13px;border-bottom:1px solid #eef0f5;font-size:12.5px}
-.sk-ai tbody tr:nth-child(even){background:#fafbfd}
-.sk-ai td:nth-child(2){color:#2b3a67;font-weight:700}
-.sk-ai .m-pill{display:inline-block;background:#e8ecf6;color:#2b3a67;border-radius:4px;
-  padding:2px 8px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
-.sk-ai .m-pill.b{background:#2b3a67;color:#fff}
-.sk-ai .m-pill.g{background:#fdeadb;color:#b4580f}
-.sk-ai .m-ft{display:flex;align-items:center;padding:12px 0 0;font-size:11.5px;color:#6b7280}
-.sk-ai .m-ft .m-btn{margin-left:auto}
-.sk-ai .m-side{width:224px;flex:none;border:1px solid #dfe3ec;border-radius:5px;overflow:hidden}
-.sk-ai .m-side h4{margin:0;padding:10px 13px;background:#f0f2f7;border-bottom:1px solid #dfe3ec;
-  font-size:10px;color:#5a6276;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
-.sk-ai .m-side .g{padding:10px 13px;border-bottom:1px solid #eef0f5;font-size:11.5px;color:#5a6276}
-.sk-ai .m-side .g b{display:block;font-size:10.5px;color:#8a91a3;font-weight:700;margin-bottom:5px;
-  text-transform:uppercase;letter-spacing:.04em}
-.sk-ai .m-side .g a{display:block;color:#2b3a67;text-decoration:none;padding:1px 0}
-.sk-ai .m-side .g a.on{font-weight:700;border-left:2px solid #f4a261;padding-left:6px;margin-left:-8px}
-.sk-ai .m-in{display:block;width:100%;border:1px solid #c8cedd;border-radius:4px;padding:5px 8px;
-  font-size:11.5px;margin-bottom:6px;color:#5a6276;background:#fff}
-.sk-ai .m-btn{background:#2b3a67;color:#fff;border:0;border-radius:4px;padding:6px 15px;
-  font-size:11px;font-weight:600}
-.sk-ai .m-stat{flex:1;border:1px solid #dfe3ec;border-radius:5px;padding:13px 15px;background:#fafbfd}
-.sk-ai .m-bt{background:#e8ecf6}
-.sk-ai .m-bf{background:#2b3a67}
-
+/* verdict strip */
+.verdict{display:grid;gap:10px;grid-template-columns:1fr 1fr;margin:22px 0}
+@media(max-width:640px){.verdict{grid-template-columns:1fr}}
+.verdict div{border:1px solid var(--line);border-radius:var(--radius);padding:13px 16px;
+  background:var(--panel);font-size:14px}
+.verdict .k{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:600;margin-bottom:5px}
 </style>
 </head>
 <body>
@@ -437,15 +141,15 @@ code{font-family:var(--mono);font-size:.875em;background:var(--line-2);
 <header class="top">
   <p class="eyebrow">DCS / Admin panel · Proposal</p>
   <h1>Modernizing the Django<br>admin with free OSS</h1>
-  <p class="lede">We want to make user-activity analysis easier. The admin UI is the foundation that
-  has to be modernized first. Here are three options, each shown against <b>DCS's own screens</b>.
+  <p class="lede">Two candidate themes, both installed against <b>the real DCS admin</b> and
+  photographed on our own screens. Everything below is a screenshot of a running system, not a mockup.
   Please pick one.</p>
   <div class="meta">
     <span class="chip">ClickUp <b>z94amcqevr</b></span>
     <span class="chip">Owner <b>Husen</b></span>
     <span class="chip">Approver <b>Coco</b></span>
-    <span class="chip">Drafted <b>2026-10-15</b></span>
-    <span class="chip">License <b>MIT (commercial use OK) — all three</b></span>
+    <span class="chip">Updated <b>2026-10-15</b></span>
+    <span class="chip">Both options <b>MIT · commercial use OK</b></span>
   </div>
 </header>
 
@@ -453,297 +157,180 @@ code{font-family:var(--mono);font-size:.875em;background:var(--line-2);
   <h2>Summary</h2>
   <p class="h2sub">The short version</p>
   <ul>
-    <li>We re-skin the admin with a <b>free, commercially-licensed (MIT)</b> OSS library.
-      The candidates are <b>A: django-unfold</b>, <b>B: django-jazzmin</b> and <b>C: django-admin-interface</b>.</li>
-    <li>The goal this time is <b>the look only</b>. Every existing admin feature must keep working exactly as it does
-      today; new charts and dashboards are deliberately split into a <b>follow-up ticket</b>.</li>
-    <li>DCS runs <b>Python 3.9</b>, so none of the three can use its latest release — each gets
-      <b>pinned one version back</b>. That is the only technical constraint, and it is covered below.</li>
+    <li>Three libraries were shortlisted. <b>django-jet-reboot had to be dropped</b> — it is AGPLv3 and
+      its own packaging says <i>"free for non-commercial use"</i>, which fails this project's licensing
+      requirement outright. That leaves two.</li>
+    <li><b>A — django-unfold</b> is the more polished product and the better foundation for the analytics
+      dashboard we want next. It must be <b>pinned to an older release</b> to run on our Python.</li>
+    <li><b>B — django-daisy</b> is the only candidate that runs its <b>current</b> release on our Python,
+      and it needed <b>no code changes at all</b> to work.</li>
+    <li>Both were installed and driven for real. In both, the user edit form <b>saved correctly</b> — the
+      single thing most likely to have broken. In both, one custom screen needs restyling.</li>
   </ul>
-  <div class="note ok"><b>What we need from you:</b> choose one of A / B / C. Once it is approved we start
-  implementing. From approval to handing it over for UAT we estimate roughly <b>4 working days for A</b>,
-  <b>2.5 for B</b>, or <b>1.5 for C</b>.</div>
+  <div class="note ok"><b>What we need from you:</b> choose A or B. From approval to UAT we estimate
+  <b>~4 working days for A</b> or <b>~2 days for B</b>.</div>
 </section>
 
 <section>
   <h2>Before</h2>
-  <p class="h2sub">What the admin looks like today</p>
-  <p>What we are re-skinning is the stock Django 4.2 admin. The two <b>user activity log</b> screens are the
-  busiest and the most information-dense, so every comparison below uses those same two screens.</p>
+  <p class="h2sub">The admin as it is today</p>
+  <p>Stock Django 4.2. The busiest admin screen we have is the user activity log, so every comparison
+  below uses that same screen.</p>
   <div class="shot"><div class="bar"><i></i><i></i><i></i>
-<div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
-<div class="vp h-list"><div class="inner sk-stock"><div class="m-row"><div class="m-main">
-<div class="m-top">Django administration</div>
-<div class="m-crumb"><a>Home</a> › <a>Activity log</a> › Detail</div>
-<div class="m-body">
-<div class="m-hdrow"><h1 class="m-ttl">User activity log — Detail</h1><div class="m-tools"><a>View summary</a><a>Download CSV</a></div></div>
-<div class="m-flex"><div class="m-grow"><table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td>Page view</td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td>Action</td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td>Query</td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td>Page view</td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td>Login</td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td>Action</td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td>Page view</td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div>
-<div class="m-side"><h4>Filter</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-btn">Apply</span></div></div></div>
-</div></div></div></div></div></div>
-<p class="cap"><b>Today</b> — stock Django 4.2. The filter rail on the right and the two links at the top (View summary / Download CSV) are what ships now.</p>
-  <div class="shot"><div class="bar"><i></i><i></i><i></i>
-<div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
-<div class="vp h-sum"><div class="inner sk-stock"><div class="m-row"><div class="m-main">
-<div class="m-top">Django administration</div>
-<div class="m-crumb"><a>Home</a> › <a>Activity log</a> › Summary</div>
-<div class="m-body">
-<h1 class="m-ttl">User activity log — Summary</h1>
-<div style="margin:14px 0 16px;font-size:11.5px;color:#666">
-Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</span>
-〜 <span class="m-in" style="display:inline-block;width:110px">2026-10-14</span>
-<span class="m-btn">Show</span></div>
-<div class="m-cards"><div class="m-stat"><div class="m-k">Total events</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">Active users</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">Sessions</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">Unused features</div><div class="m-v">47</div></div></div>
-<div style="border:1px solid #eee;padding:14px 16px">
-<div class="m-k" style="margin-bottom:11px">Most-viewed screens</div><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div>
-</div></div></div></div></div></div>
-<p class="cap"><b>Today</b> — the summary page. The bar chart is pure CSS (<code>widthratio</code>); there is not one line of JavaScript on it.</p>
-  <div class="note"><b>Explicitly out of scope:</b> the filter fields (Type / User / Period), the contents of the
-  CSV export, and the query-parameter names (<code>start</code> / <code>end</code> / <code>user</code>) all
-  stay <b>exactly as they are</b> — those parameters are what link the Detail, Summary and CSV together.</div>
+    <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
+    <img src="images/stock-list.png" alt="The current stock Django admin showing the user activity log list"></div>
+  <p class="cap"><b>Today</b> — stock Django. Note the filter rail on the right: the 種別 and ユーザー filters
+  are standard Django, while 期間 is a custom widget we wrote to match Django's own markup. That is exactly
+  why it stops matching once a theme is applied.</p>
 </section>
 
 <section>
-  <h2>Constraint</h2>
-  <p class="h2sub">Python 3.9 — the one thing to know up front</p>
-  <p>DCS runs on Python 3.9 with Django 4.2. Over the last year or two, every major admin-theme library has
-  raised its Python floor to 3.10 or higher, which means <b>no option can use its latest release</b>.
-  Verified against PyPI today:</p>
-  <div class="tscroll"><table>
-    <thead><tr><th>Library</th><th>Latest</th><th>Latest requires</th><th>Last release usable on 3.9</th><th>License</th></tr></thead>
-    <tbody>
-      <tr><td><b>django-unfold</b> (A)</td><td class="num">0.110.0</td><td>Python ≥ 3.12</td>
-          <td class="num">0.67.0 <span class="tag ok">states 3.9 support</span></td><td>MIT</td></tr>
-      <tr><td><b>django-jazzmin</b> (B)</td><td class="num">3.0.5</td><td>Python ≥ 3.10</td>
-          <td class="num">3.0.1 <span class="tag ok">states 3.9 support</span></td><td>MIT</td></tr>
-      <tr><td><b>django-admin-interface</b> (C)</td><td class="num">0.32.0</td><td>no floor declared</td>
-          <td class="num">0.32.0 <span class="tag warn">needs verifying</span></td><td>MIT</td></tr>
-      <tr><td>django-baton</td><td class="num">5.9.3</td><td>Python ≥ 3.10</td>
-          <td class="num">5.4.1 <span class="tag warn">needs verifying</span></td><td>MIT</td></tr>
-      <tr><td>django-jet-reboot</td><td class="num">1.3.10</td><td>—</td><td>—</td>
-          <td><span class="tag bad">AGPLv3 / non-commercial</span></td></tr>
-    </tbody>
-  </table></div>
-  <p><b>django-jet-reboot is ruled out</b> — it is AGPLv3 and licensed "free for non-commercial use", which
-  fails the requirement that the library be free <i>and</i> licensed for commercial use.</p>
-  <div class="note warn"><b>What this means in practice:</b> whichever library we choose stays pinned at that
-  version and stops receiving upstream fixes. Upgrading Python to 3.12 would clear this, but it also means
-  re-pinning pandas / numpy / reportlab and re-running the whole test suite — so it belongs in a
-  <b>separate ticket</b>. We are not touching it here.</div>
-</section>
-
-<section>
-  <h2>Options</h2>
-  <p class="h2sub">The three candidates</p>
+  <h2>Option A</h2>
+  <p class="h2sub">django-unfold</p>
 
   <div class="cand">
     <div class="hd">
-      <div class="rank"><span class="dot">A</span>Recommended</div>
+      <div class="rank"><span class="dot">A</span>Most polished</div>
       <h3>django-unfold 0.67.0</h3>
-      <p class="sub">Built on Tailwind CSS: left sidebar, dark mode, ⌘K command palette.
-      The most modern of the three, and the one that pays off later.</p>
+      <p class="sub">Tailwind CSS. Collapsible sidebar, dark mode, ⌘K command palette, and a set of
+      chart/table/card components meant for building dashboards.</p>
       <div class="badges">
         <span class="chip">MIT</span><span class="chip">Dependencies <b>0</b></span>
-        <span class="chip">Python <b>≥3.9 declared</b></span><span class="chip">Released 2025-09</span>
-        <span class="chip">Chart components <b>included</b></span>
+        <span class="chip">Python <b>≥3.9</b></span><span class="chip">Django <b>≥4.2</b></span>
+        <span class="chip warn">Pinned to <b>0.67.0</b></span>
+      </div>
+      <div class="links">
+        <a href="https://unfoldadmin.com/docs/"><b>Docs</b></a>
+        <a href="https://demo.unfoldadmin.com/"><b>Live demo</b> demo / demo</a>
+        <a href="https://github.com/unfoldadmin/django-unfold"><b>GitHub</b></a>
+        <a href="https://pypi.org/project/django-unfold/0.67.0/"><b>PyPI</b> 0.67.0</a>
       </div>
     </div>
     <div class="body">
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
-<div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
-<div class="vp h-list"><div class="inner sk-unfold"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>
-<span class="bt"><span class="bn">DCS Admin<i>0.67.0</i></span><span class="bs">Distribution Calculating System</span></span>
-<span class="ch">&#8597;</span></div>
-<div class="m-sbox">Search apps and models<span class="kbd">&#8984;K</span></div>
-<div class="m-grp">Dashboards</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-grp">Activity log</div><div class="m-nl on"><i class="m-ico"></i>Detail<span class="nb">18k</span></div><div class="m-nl"><i class="m-ico"></i>Summary</div><div class="m-grp">Master data</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-grp">System</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks<span class="nb b">2</span></div>
-<div class="m-me"><span class="av"></span>
-<span class="mt"><span class="mn">Admin User</span><span class="mm">admin@example.co.jp</span></span>
-<span class="ch">&#8597;</span></div>
-</div>
-<div class="m-main">
-<div class="m-top"><span class="m-tgl"></span>
-<span class="m-bc">Activity log &rsaquo; <b>Detail</b></span>
-<span class="m-acts"><span class="m-b2">View summary</span><span class="m-b1">Download CSV</span></span></div>
-<div class="m-body"><div class="m-bar"><span class="cb"></span>
-<span class="ph">Search by user, key or path</span><span class="sl">/</span>
-<span class="fb">Filters</span></div>
-<div class="m-flex"><div class="m-grow"><div class="m-card"><table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table></div>
-<div class="m-pg"><b>1</b> 2 3 4 5 6 &middot; 18,432 events</div></div>
-<div class="m-side"><h4>Filters</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-b1">Apply</span></div></div></div></div></div></div></div></div></div>
-<p class="cap"><b>Option A / django-unfold</b> — left sidebar, ⌘K command palette, dark-mode toggle. The filter names and behaviour stay exactly as they are.</p>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
+        <img src="images/unfold-list.png" alt="DCS activity log list rendered by django-unfold"></div>
+      <p class="cap"><b>Activity log list.</b> Every column, label and value is ours. The sidebar groups our
+      real apps. ⚠️ Look at the top right: 「集計を見る」 and 「CSVダウンロード」 are our two custom buttons, and
+      they land there <b>unstyled and cramped</b> — they would need moving to Unfold's own action slot.</p>
+
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
-<div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
-<div class="vp h-sum"><div class="inner sk-unfold"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>
-<span class="bt"><span class="bn">DCS Admin<i>0.67.0</i></span><span class="bs">Distribution Calculating System</span></span>
-<span class="ch">&#8597;</span></div>
-<div class="m-sbox">Search apps and models<span class="kbd">&#8984;K</span></div>
-<div class="m-grp">Dashboards</div><div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-grp">Activity log</div><div class="m-nl"><i class="m-ico"></i>Detail<span class="nb">18k</span></div><div class="m-nl on"><i class="m-ico"></i>Summary</div><div class="m-grp">Master data</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-grp">System</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks<span class="nb b">2</span></div>
-<div class="m-me"><span class="av"></span>
-<span class="mt"><span class="mn">Admin User</span><span class="mm">admin@example.co.jp</span></span>
-<span class="ch">&#8597;</span></div>
-</div>
-<div class="m-main">
-<div class="m-top"><span class="m-tgl"></span>
-<span class="m-bc">Activity log &rsaquo; <b>Summary</b></span>
-<span class="m-acts"><span class="m-b2">View summary</span><span class="m-b1">Download CSV</span></span></div>
-<div class="m-body"><div class="m-tools" style="margin-bottom:14px"><span class="m-chipr on">Last 30 days</span>
-<span class="m-chipr">Last 7 days</span><span class="m-chipr">Custom range</span></div>
-<div class="m-cards"><div class="m-stat"><span class="sc"><span class="m-k">Total events</span><div class="m-v">18,432<span class="up">&#9650; +12.4%</span></div></span><svg class="m-spark" viewBox="0 0 76 34" fill="none" preserveAspectRatio="none"><polyline points="0,26 8,19 16,23 24,12 32,17 40,8 48,14 56,6 64,11 76,3" stroke="#9333ea" stroke-width="1.6" fill="none"/></svg></div><div class="m-stat"><span class="sc"><span class="m-k">Active users</span><div class="m-v">19<span class="up">&#9650; +3.1%</span></div></span><svg class="m-spark" viewBox="0 0 76 34" fill="none" preserveAspectRatio="none"><polyline points="0,26 8,19 16,23 24,12 32,17 40,8 48,14 56,6 64,11 76,3" stroke="#9333ea" stroke-width="1.6" fill="none"/></svg></div><div class="m-stat"><span class="sc"><span class="m-k">Sessions</span><div class="m-v">1,204<span class="up">&#9650; +8.7%</span></div></span><svg class="m-spark" viewBox="0 0 76 34" fill="none" preserveAspectRatio="none"><polyline points="0,26 8,19 16,23 24,12 32,17 40,8 48,14 56,6 64,11 76,3" stroke="#9333ea" stroke-width="1.6" fill="none"/></svg></div><div class="m-stat"><span class="sc"><span class="m-k">Unused features</span><div class="m-v">47<span class="up">&#9650; -4.2%</span></div></span><svg class="m-spark" viewBox="0 0 76 34" fill="none" preserveAspectRatio="none"><polyline points="0,26 8,19 16,23 24,12 32,17 40,8 48,14 56,6 64,11 76,3" stroke="#9333ea" stroke-width="1.6" fill="none"/></svg></div></div>
-<div class="m-card" style="padding:16px 18px">
-<div style="font-size:12.5px;font-weight:700;color:#111827;margin-bottom:12px">Most-viewed screens</div><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div></div></div></div></div></div></div>
-<p class="cap"><b>Option A / django-unfold</b> — the summary page. The stat cards and tables can be rebuilt from unfold's own components.</p>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
+        <img src="images/unfold-filters.png" alt="Unfold's filter panel showing our three filters"></div>
+      <p class="cap"><b>Filters.</b> Unfold hides filters behind a button and opens them as a panel. Our
+      種別 and ユーザー filters are picked up and styled automatically. ⚠️ Our custom <b>期間</b> filter is the
+      raw block at the bottom — it keeps working, but it needs restyling.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
+        <img src="images/unfold-summary.png" alt="The activity log summary page under django-unfold"></div>
+      <p class="cap"><b>Summary page.</b> This is a page we wrote by hand, and it survived better than
+      expected — the tables and stat boxes still read correctly inside Unfold's chrome.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/user/user/1/change/</div></div>
+        <img src="images/unfold-userform.png" alt="The user edit form under django-unfold"></div>
+      <p class="cap"><b>User edit form</b> — the screen most likely to break, because DCS stores group
+      membership differently from standard Django. It renders correctly <b>and saves correctly</b>; we
+      tested the save, not just the display.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/</div></div>
+        <img src="images/unfold-index.png" alt="The admin home page under django-unfold"></div>
+      <p class="cap"><b>Admin home.</b> Our real app groups, down the sidebar and across the page.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/login/</div></div>
+        <img src="images/unfold-login.png" alt="The login screen under django-unfold"></div>
+      <p class="cap"><b>Login.</b></p>
+
       <div class="pros">
         <div><h4>Strengths</h4><ul>
-          <li>The only one of the three whose <b>own metadata declares Python 3.9 support</b></li>
-          <li>Ships <b>chart, table and card components</b>, so the follow-up dashboard ticket lands straight on top of it</li>
-          <li><b>Zero</b> additional dependencies — the smallest possible blast radius</li>
-          <li>Dark mode, richer filters, ⌘K search</li>
+          <li>The most finished-looking of the two, with dark mode and a command palette</li>
+          <li>Ships <b>chart, table and card components</b>, so the follow-up dashboard builds on it directly</li>
+          <li><b>Zero</b> runtime dependencies</li>
+          <li>Large, actively maintained project (1M+ installs/month)</li>
         </ul></div>
         <div><h4>Cost and caveats</h4><ul>
-          <li>All <b>13 registered admin classes</b> must be switched to unfold's base class</li>
-          <li>The user, group and scheduled-task screens need <b>re-registering</b>, or they render unstyled</li>
-          <li>Some of the theme's own labels will have <b>no Japanese translation</b></li>
-          <li>Longest implementation of the three (~4 working days)</li>
+          <li><b>Pinned to 0.67.0</b> (Sep 2025) — the current release needs Python 3.12, so we get no upstream fixes</li>
+          <li>Every one of our <b>13 admin classes</b> must be changed to inherit Unfold's base class</li>
+          <li>The user/group screens need re-registering with Unfold's own forms</li>
+          <li>Our two custom buttons and the 期間 filter need restyling</li>
         </ul></div>
       </div>
-      <div class="rec"><b>Why we recommend it:</b> it is the only option that both <b>provably runs on Python 3.9</b>
-      and <b>gives us the foundation for the analytics dashboard</b> that prompted this ticket. The higher
-      migration cost is recovered by the next ticket.</div>
     </div>
   </div>
+</section>
+
+<section>
+  <h2>Option B</h2>
+  <p class="h2sub">django-daisy</p>
 
   <div class="cand">
     <div class="hd">
-      <div class="rank"><span class="dot">B</span>Safe choice</div>
-      <h3>django-jazzmin 3.0.1</h3>
-      <p class="sub">Built on AdminLTE 3 / Bootstrap 5. Switched on with a settings block —
-      it barely touches existing code.</p>
+      <div class="rank"><span class="dot">B</span>Not frozen</div>
+      <h3>django-daisy 2.0.15</h3>
+      <p class="sub">DaisyUI + Tailwind. Built-in theme switcher, RTL support, tabbed inline admin —
+      and the only option we can run on its current release.</p>
       <div class="badges">
         <span class="chip">MIT</span><span class="chip">Dependencies <b>Django only</b></span>
-        <span class="chip">Python <b>3.9 declared</b></span><span class="chip">Released 2024-10</span>
-        <span class="chip">Code changes <b>almost none</b></span>
+        <span class="chip ok">Python <b>3.8+</b></span><span class="chip">Django <b>3.2–6.1</b></span>
+        <span class="chip ok">Latest release <b>usable</b></span>
+      </div>
+      <div class="links">
+        <a href="https://hypy13.github.io/django-daisy-docs/"><b>Docs</b></a>
+        <a href="https://hypy13-django-daisy.hf.space/admin/"><b>Live demo</b> demo / demo</a>
+        <a href="https://hypy13-django-daisy.hf.space/fa/admin/"><b>RTL demo</b></a>
+        <a href="https://github.com/hypy13/django-daisy"><b>GitHub</b></a>
+        <a href="https://pypi.org/project/django-daisy/"><b>PyPI</b></a>
+        <a href="https://www.youtube.com/watch?v=WEKTXu1la9M"><b>Video</b></a>
       </div>
     </div>
     <div class="body">
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
-<div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
-<div class="vp h-list"><div class="inner sk-jazz"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS</div>
-<div class="m-user"><span class="av"></span><div>admin@example.co.jp</div></div>
-<div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-grp">Activity log</div><div class="m-nl on"><i class="m-ico"></i>Detail</div><div class="m-nl"><i class="m-ico"></i>Summary</div><div class="m-grp">Master data</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-grp">System</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
-<div class="m-main">
-<div class="m-top"><span class="bars">&#9776;</span>
-<span class="t on">Home</span><span class="t">Activity log</span><span class="t">Master data &#9662;</span>
-<span class="m-nsearch"><span>Search users...</span><i>&#9906;</i></span>
-<span class="icons"><span>&#9638;</span><span>&#9634;</span><span>&#9712;</span></span></div>
-<div class="m-crumbbar"><h1>User activity log</h1><div class="c"><a>Home</a> / <a>Activity log</a> / Detail</div></div>
-<div class="m-body"><div class="m-card">
-<div class="m-ch"><h3>Select activity event to change</h3><span class="sp"></span>
-<span class="m-seg"><span class="on">All dates</span><span>2026-10-01</span><span>2026-10-14</span></span>
-<span class="m-sel">Type<i>&#9662;</i></span>
-<span class="m-sel">User<i>&#9662;</i></span>
-<span class="m-b1">Search</span></div>
-<div class="m-act"><span class="m-sel">---------<i>&#9662;</i></span><span class="m-b1">Go</span>
-<span>0 of 18,432 selected</span>
-<span class="sp"></span><span class="m-b2">View summary</span><span class="m-bg">Download CSV</span></div>
-<table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table>
-<div class="m-pg"><b>1</b> 2 3 4 5 6 &middot; 18,432 events</div></div></div></div></div></div></div></div>
-<p class="cap"><b>Option B / django-jazzmin</b> — AdminLTE 3 / Bootstrap 5, with a record count in the card header and a dark navy sidebar.</p>
-      <div class="shot"><div class="bar"><i></i><i></i><i></i>
-<div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
-<div class="vp h-sum"><div class="inner sk-jazz"><div class="m-row"><div class="m-nav">
-<div class="m-brand"><span class="lg">D</span>DCS</div>
-<div class="m-user"><span class="av"></span><div>admin@example.co.jp</div></div>
-<div class="m-nl"><i class="m-ico"></i>Home</div><div class="m-grp">Activity log</div><div class="m-nl"><i class="m-ico"></i>Detail</div><div class="m-nl on"><i class="m-ico"></i>Summary</div><div class="m-grp">Master data</div><div class="m-nl"><i class="m-ico"></i>Users</div><div class="m-nl"><i class="m-ico"></i>Royalty companies</div><div class="m-nl"><i class="m-ico"></i>Guidelines</div><div class="m-grp">System</div><div class="m-nl"><i class="m-ico"></i>Scheduled tasks</div></div>
-<div class="m-main">
-<div class="m-top"><span class="bars">&#9776;</span>
-<span class="t on">Home</span><span class="t">Activity log</span><span class="t">Master data &#9662;</span>
-<span class="m-nsearch"><span>Search users...</span><i>&#9906;</i></span>
-<span class="icons"><span>&#9638;</span><span>&#9634;</span><span>&#9712;</span></span></div>
-<div class="m-crumbbar"><h1>User activity log</h1><div class="c"><a>Home</a> / <a>Activity log</a> / Summary</div></div>
-<div class="m-body"><div class="m-cards"><div class="m-stat"><div class="m-k">Total events</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">Active users</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">Sessions</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">Unused features</div><div class="m-v">47</div></div></div>
-<div class="m-card"><div class="m-ch"><h3>Most-viewed screens</h3><span class="sp"></span>
-<span class="m-seg"><span class="on">Last 30 days</span><span>Last 7 days</span></span></div>
-<div style="padding:15px 17px"><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div></div></div></div></div></div></div></div>
-<p class="cap"><b>Option B / django-jazzmin</b> — the summary page, inside a Bootstrap card.</p>
-      <div class="pros">
-        <div><h4>Strengths</h4><ul>
-          <li><b>Configuration only</b> — no admin classes to rewrite, so the least risk of breaking a working feature</li>
-          <li>Includes a visual UI customizer for colours and layout</li>
-          <li>Bootstrap keeps it looking like a familiar admin panel</li>
-          <li>~2.5 working days to implement</li>
-        </ul></div>
-        <div><h4>Cost and caveats</h4><ul>
-          <li>Its last 3.9-compatible release is from <b>October 2024</b> — the oldest of the three</li>
-          <li>No charting API, so the follow-up dashboard would be <b>built from scratch</b></li>
-          <li>Ships <b>no Japanese translation</b> (8 locales, none of them Japanese)</li>
-          <li>Looks distinctly "Bootstrap"; less contemporary than A</li>
-        </ul></div>
-      </div>
-    </div>
-  </div>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
+        <img src="images/daisy-list.png" alt="DCS activity log list rendered by django-daisy"></div>
+      <p class="cap"><b>Activity log list.</b> This required <b>no code changes whatsoever</b> — it is our
+      admin, untouched, with the theme installed. The filter rail stays open on the right and our 種別 /
+      ユーザー filters become removable chips. ⚠️ Because the rail is always open the table is narrower, so
+      this dense screen wraps more than under Unfold. Our 期間 filter is again unstyled.</p>
 
-  <div class="cand">
-    <div class="hd">
-      <div class="rank"><span class="dot">C</span>Minimal change</div>
-      <h3>django-admin-interface 0.32.0</h3>
-      <p class="sub">Keeps Django's layout exactly as it is and changes only the colours, logo and corners.
-      The option that prioritises "nothing people know how to use moves".</p>
-      <div class="badges">
-        <span class="chip">MIT</span><span class="chip">Dependencies <b>2</b></span>
-        <span class="chip warn">Python 3.9 <b>needs verifying</b></span><span class="chip">Released 2025-12</span>
-        <span class="chip">Migration cost <b>lowest</b></span>
-      </div>
-    </div>
-    <div class="body">
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
-<div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
-<div class="vp h-list"><div class="inner sk-ai"><div class="m-row"><div class="m-main">
-<div class="m-top"><span class="n">DCS</span>
-<span class="ut"><span class="dot">&#9679;</span> PRODUCTION &mdash; WELCOME, <b>ADMIN</b>.
-<b>VIEW SITE</b> / <b>CHANGE PASSWORD</b> / <b>LOG OUT</b></span></div>
-<div class="m-crumb"><a>Home</a> &rsaquo; <a>Activity log</a> &rsaquo; Detail</div>
-<div class="m-body">
-<div class="m-hdrow"><h1 class="m-ttl">Select activity event to view</h1>
-<div class="m-tools"><a>View summary</a><a class="alt">Download CSV</a></div></div>
-<div class="m-act">Action: <span class="m-sel">---------<i>&#9662;</i></span>
-<span class="m-gobtn">Go</span><span>0 of 18,432 selected</span></div>
-<div class="m-flex"><div class="m-grow"><table><thead><tr><th>Timestamp (JST)</th><th>User</th><th>Type</th><th>Label</th><th>Key</th><th>Path</th></tr></thead><tbody><tr><td>2026/10/14 18:32:10</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Project detail</td><td>/project-detail</td><td>/project-detail/601</td></tr><tr><td>2026/10/14 18:31:44</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export project P&L</td><td>exportProject</td><td>—</td></tr><tr><td>2026/10/14 18:28:03</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Query</span></td><td>Contract list</td><td>allContractInstance</td><td>—</td></tr><tr><td>2026/10/14 18:12:55</td><td>staff-a@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Contract management</td><td>/contract-management</td><td>/contract-management</td></tr><tr><td>2026/10/14 09:04:21</td><td>staff-b@example.co.jp</td><td><span class="m-pill g">Login</span></td><td>Login</td><td>login</td><td>—</td></tr><tr><td>2026/10/13 17:40:09</td><td>admin@example.co.jp</td><td><span class="m-pill b">Action</span></td><td>Export payslip</td><td>exportPaySlipStatement</td><td>—</td></tr><tr><td>2026/10/13 16:58:30</td><td>admin@example.co.jp</td><td><span class="m-pill ">Page view</span></td><td>Royalty sales</td><td>/royalty</td><td>/royalty</td></tr></tbody></table>
-<div class="m-ft">18,432 events</div></div>
-<div class="m-side"><h4>Filter</h4><div class="g"><b>Type</b><a class="on">All</a><a>Login</a><a>Page view</a><a>Action</a><a>Query</a></div><div class="g"><b>User</b><a class="on">All</a><a>admin@example.co.jp</a><a>staff-a@example.co.jp</a></div><div class="g"><b>Period (JST)</b><span class="m-in">2026-10-01</span><span class="m-in">2026-10-14</span><span class="m-btn">Apply</span></div></div></div>
-</div></div></div></div></div></div>
-<p class="cap"><b>Option C / django-admin-interface</b> — Django's structure is untouched; only the colours and the logo change. The smallest migration of the three.</p>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
+        <img src="images/daisy-summary.png" alt="The activity log summary page under django-daisy"></div>
+      <p class="cap"><b>Summary page.</b> More horizontal room than Unfold here, since this page has no
+      filter rail. Our hand-written page carries over cleanly.</p>
+
       <div class="shot"><div class="bar"><i></i><i></i><i></i>
-<div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
-<div class="vp h-sum"><div class="inner sk-ai"><div class="m-row"><div class="m-main">
-<div class="m-top"><span class="n">DCS</span>
-<span class="ut"><span class="dot">&#9679;</span> PRODUCTION &mdash; WELCOME, <b>ADMIN</b>.
-<b>VIEW SITE</b> / <b>CHANGE PASSWORD</b> / <b>LOG OUT</b></span></div>
-<div class="m-crumb"><a>Home</a> &rsaquo; <a>Activity log</a> &rsaquo; Summary</div>
-<div class="m-body">
-<h1 class="m-ttl">User activity log &mdash; Summary</h1>
-<div style="margin:14px 0 16px;font-size:11.5px;color:#5a6276">
-Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</span>
-&ndash; <span class="m-in" style="display:inline-block;width:110px">2026-10-14</span>
-<span class="m-btn">Show</span></div>
-<div class="m-cards"><div class="m-stat"><div class="m-k">Total events</div><div class="m-v">18,432</div></div><div class="m-stat"><div class="m-k">Active users</div><div class="m-v">19</div></div><div class="m-stat"><div class="m-k">Sessions</div><div class="m-v">1,204</div></div><div class="m-stat"><div class="m-k">Unused features</div><div class="m-v">47</div></div></div>
-<div style="border:1px solid #dfe3ec;border-radius:5px;padding:14px 16px">
-<div class="m-k" style="margin-bottom:11px">Most-viewed screens</div><div class="m-bars"><div class="m-bl"><span>Project list</span><span class="m-bt"><span class="m-bf" style="width:100%"></span></span><span class="m-bn">3,210</span></div><div class="m-bl"><span>Contract management</span><span class="m-bt"><span class="m-bf" style="width:90%"></span></span><span class="m-bn">2,884</span></div><div class="m-bl"><span>Project detail</span><span class="m-bt"><span class="m-bf" style="width:66%"></span></span><span class="m-bn">2,106</span></div><div class="m-bl"><span>Royalty sales</span><span class="m-bt"><span class="m-bf" style="width:45%"></span></span><span class="m-bn">1,455</span></div><div class="m-bl"><span>Payslips</span><span class="m-bt"><span class="m-bf" style="width:31%"></span></span><span class="m-bn">980</span></div></div></div>
-</div></div></div></div></div></div>
-<p class="cap"><b>Option C / django-admin-interface</b> — the summary page. The layout is identical to today's.</p>
+        <div class="url">dcs.example.com/admin/user/user/1/change/</div></div>
+        <img src="images/daisy-userform.png" alt="The user edit form under django-daisy"></div>
+      <p class="cap"><b>User edit form.</b> Collapsible sections and tabs, again with no code changes.
+      It <b>saves correctly</b> — verified, not assumed.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/</div></div>
+        <img src="images/daisy-index.png" alt="The admin home page under django-daisy"></div>
+      <p class="cap"><b>Admin home.</b> The icon at the top right is the built-in theme switcher — colours
+      can be changed without a deploy.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/login/</div></div>
+        <img src="images/daisy-login.png" alt="The login screen under django-daisy"></div>
+      <p class="cap"><b>Login.</b></p>
+
       <div class="pros">
         <div><h4>Strengths</h4><ul>
-          <li>The layout does not move, so <b>every existing workflow still applies</b></li>
-          <li>Colours and logo are editable <b>from inside the admin</b> — no deploy per tweak</li>
-          <li>Smallest impact on our existing custom pages, such as the summary screen</li>
-          <li>~1.5 working days to implement</li>
+          <li><b>Runs its current release on our Python</b> — the only candidate that is not frozen</li>
+          <li>Needed <b>no changes to any admin class</b>; installation is configuration only</li>
+          <li>Built-in theme switcher, so colours change without a deploy</li>
+          <li>Supports Django 3.2 all the way to 6.1, so it will not block a future Django upgrade</li>
         </ul></div>
         <div><h4>Cost and caveats</h4><ul>
-          <li><b>Python 3.9 support is unconfirmed</b> — its metadata assumes 3.10+, so this needs testing first</li>
-          <li>Two extra dependencies (<code>django-colorfield</code>, <code>python-slugify</code>)</li>
-          <li>Stores the theme in the database, so it <b>adds a migration</b></li>
-          <li>The weakest answer to "modernize the UI" of the three</li>
+          <li>A <b>younger, smaller project</b> than Unfold — fewer users, fewer maintainers</li>
+          <li>No chart components, so the follow-up dashboard would be built from scratch</li>
+          <li>Requires adding <code>django.contrib.humanize</code> (a Django built-in we do not currently enable)</li>
+          <li>The dense activity-log table wraps more than under Unfold; our 期間 filter still needs restyling</li>
+          <li>Its licence is stated two ways — <code>LICENSE</code> says MIT, packaging says Apache-2.0. Both allow commercial use.</li>
         </ul></div>
       </div>
     </div>
@@ -754,35 +341,90 @@ Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</s
   <h2>At a glance</h2>
   <p class="h2sub">Side by side</p>
   <div class="tscroll"><table>
-    <thead><tr><th></th><th>A — unfold</th><th>B — jazzmin</th><th>C — admin-interface</th></tr></thead>
+    <thead><tr><th></th><th>A — django-unfold</th><th>B — django-daisy</th></tr></thead>
     <tbody>
-      <tr><td><b>Look</b></td><td>Tailwind, dark mode</td><td>AdminLTE / Bootstrap</td><td>Stock Django, repainted</td></tr>
-      <tr><td><b>License</b></td><td>MIT</td><td>MIT</td><td>MIT</td></tr>
-      <tr><td><b>Extra dependencies</b></td><td><span class="tag ok">0</span></td><td><span class="tag ok">0</span></td><td>2</td></tr>
-      <tr><td><b>Python 3.9</b></td><td><span class="tag ok">declared</span></td><td><span class="tag ok">declared</span></td><td><span class="tag warn">unverified</span></td></tr>
-      <tr><td><b>Code changes needed</b></td><td>13 admin classes + re-register third-party screens</td><td><span class="tag ok">settings only</span></td><td>settings + 1 migration</td></tr>
-      <tr><td><b>Japanese translation</b></td><td>not bundled</td><td>not bundled</td><td>layout unchanged, so minimal impact</td></tr>
-      <tr><td><b>Value for the dashboard follow-up</b></td><td><span class="tag ok">chart components</span></td><td>build our own</td><td>none</td></tr>
-      <tr><td><b>Estimated implementation</b></td><td>~4 working days</td><td>~2.5 working days</td><td>~1.5 working days</td></tr>
-      <tr><td><b>Release recency</b></td><td>2025-09</td><td>2024-10</td><td>2025-12</td></tr>
+      <tr><td><b>Version we'd run</b></td><td>0.67.0 <span class="tag warn">pinned, Sep 2025</span></td>
+          <td>2.0.15 <span class="tag ok">current</span></td></tr>
+      <tr><td><b>Why pinned?</b></td><td>latest needs Python 3.12</td><td><span class="tag ok">not pinned</span></td></tr>
+      <tr><td><b>License</b></td><td>MIT</td><td>MIT / Apache-2.0</td></tr>
+      <tr><td><b>Extra dependencies</b></td><td><span class="tag ok">0</span></td><td><span class="tag ok">0</span></td></tr>
+      <tr><td><b>Changes to our admin code</b></td><td>13 classes + auth re-registration</td>
+          <td><span class="tag ok">none</span></td></tr>
+      <tr><td><b>User form saves correctly</b></td><td><span class="tag ok">verified</span></td>
+          <td><span class="tag ok">verified</span></td></tr>
+      <tr><td><b>Custom 期間 filter</b></td><td>needs restyling</td><td>needs restyling</td></tr>
+      <tr><td><b>Custom summary page</b></td><td>carries over</td><td>carries over</td></tr>
+      <tr><td><b>Dark mode / theming</b></td><td>dark mode built in</td><td>theme switcher built in</td></tr>
+      <tr><td><b>Dashboard follow-up</b></td><td><span class="tag ok">chart components</span></td><td>build our own</td></tr>
+      <tr><td><b>Project size</b></td><td>large, very active</td><td>smaller, newer</td></tr>
+      <tr><td><b>Estimated effort</b></td><td>~4 working days</td><td>~2 working days</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="verdict">
+    <div><div class="k">Pick A if</div>the priority is the most polished result and the analytics
+    dashboard we want next, and we accept running a pinned release until Python is upgraded.</div>
+    <div><div class="k">Pick B if</div>the priority is staying current and low-risk — no admin code
+    changes, no frozen dependency, and roughly half the work.</div>
+  </div>
+</section>
+
+<section>
+  <h2>Rejected</h2>
+  <p class="h2sub">Evaluated and not proposed</p>
+  <div class="tscroll"><table>
+    <thead><tr><th>Library</th><th>Why not</th></tr></thead>
+    <tbody>
+      <tr><td><b>django-jet-reboot</b> 1.3.10</td>
+          <td><b>Licensing.</b> It is AGPLv3, and its own packaging declares
+          <i>"Free for non-commercial use"</i> — which fails our requirement that libraries be free
+          <b>and</b> licensed for commercial use. AGPL also carries a network-use clause that can oblige
+          publishing source for a service we expose to users. Separately, it has no working demo: the
+          original project's demo site is offline and its screenshots are from the predecessor project.
+          <a href="https://github.com/assem-ch/django-jet-reboot">repo</a> ·
+          <a href="https://django-jet-reboot.readthedocs.io/">docs</a></td></tr>
+      <tr><td><b>django-jazzmin</b> 3.0.1</td>
+          <td>Permissively licensed, but its last release compatible with our Python is from
+          <b>October 2024</b>, and it moves list filters into header dropdowns, so our custom filter would
+          need porting anyway. Daisy covers the same ground while staying current.</td></tr>
+      <tr><td><b>django-admin-interface</b> 0.32.0</td>
+          <td>Permissively licensed, but declares no Python floor and its metadata targets 3.10+, so
+          support for our Python is unverified. Adds two dependencies and a database migration, and
+          changes the least visually.</td></tr>
     </tbody>
   </table></div>
 </section>
 
 <section>
+  <h2>Constraint</h2>
+  <p class="h2sub">Why versions matter here</p>
+  <p>DCS runs <b>Python 3.9</b>. Most Django admin themes have raised their minimum Python past that, so
+  for most candidates we would be stuck on an old release with no upstream fixes. That is the single
+  biggest difference between the two options:</p>
+  <ul>
+    <li><b>Unfold</b> — current release requires Python 3.12. We would run <b>0.67.0</b>, the last release
+      that supports 3.9, and stay there until Python is upgraded.</li>
+    <li><b>Daisy</b> — supports Python 3.8+ and Django 3.2–6.1, so we run the <b>current</b> release and
+      keep receiving updates. Verified by installing it on our actual Python and compiling the package.</li>
+  </ul>
+  <div class="note warn">Upgrading Python 3.9 → 3.12 would remove this constraint entirely, but it means
+  re-pinning several numerical and PDF libraries and re-running the whole test suite. It is <b>a separate
+  ticket</b>, not part of this work. Choosing Daisy makes it less urgent.</div>
+</section>
+
+<section>
   <h2>Audience</h2>
   <p class="h2sub">Who sees this change</p>
-  <p>In every option, the only UI that changes is <code>/admin/</code>. The DCS product itself (the SPA) is
-  <b>completely untouched</b>. One thing worth flagging first, though: the admin is not purely internal.</p>
+  <p>Only <code>/admin/</code> changes. The DCS product itself is <b>untouched</b>. One thing to note:
+  the production admin is not purely internal.</p>
   <ul>
-    <li>The accounts that can reach the production admin include <b>administrator accounts belonging to the
-      client</b>, not only our own staff (exact figures and addresses are in the ClickUp ticket).</li>
-    <li>Because of that, the <b>two activity-log screens stay internal-only</b> — they are gated by an email
-      allowlist, and we are not changing that gate in this work.</li>
+    <li>Accounts that can reach the production admin include <b>administrator accounts belonging to the
+      client</b>, not only our own staff (figures are in the ClickUp ticket).</li>
+    <li>The <b>two activity-log screens stay internal-only</b> — they are gated by an email allowlist that
+      this work does not change.</li>
     <li>Every other admin screen is <b>already visible to the client side</b>, so the visual change will be too.</li>
   </ul>
-  <div class="note"><b>Decision needed:</b> whether the client should be notified in advance. If so, we will
-  add it to the pre-release checklist.</div>
+  <div class="note"><b>Decision needed:</b> whether the client should be told in advance.</div>
 </section>
 
 <section>
@@ -791,33 +433,11 @@ Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</s
   <div class="tscroll"><table>
     <thead><tr><th>Phase</th><th>What happens</th><th>Effort</th></tr></thead>
     <tbody>
-      <tr><td>1. Research &amp; proposal</td><td>Library research, compatibility checks, this document</td><td class="num">2 days <span class="tag ok">done</span></td></tr>
-      <tr><td>2. Review</td><td><b>Coco picks one option</b></td><td class="num">1–3 days</td></tr>
-      <tr><td>3. Implementation</td><td>De-couple tests from markup → install → migrate admin classes → port the 3 custom templates</td><td class="num">A:4 / B:2.5 / C:1.5 days</td></tr>
-      <tr><td>4. Verification</td><td>Full test suite (~41,500 lines across 11 apps) + a pass over every admin screen</td><td class="num">1 day</td></tr>
+      <tr><td>1. Research &amp; proposal</td><td>Licensing and compatibility checks, both themes installed and photographed, this document</td><td class="num">done</td></tr>
+      <tr><td>2. Review</td><td><b>Coco picks A or B</b></td><td class="num">1–3 days</td></tr>
+      <tr><td>3. Implementation</td><td>De-couple tests from markup → install → (A only: migrate admin classes) → restyle the custom buttons and 期間 filter</td><td class="num">A: ~4 / B: ~2 days</td></tr>
+      <tr><td>4. Verification</td><td>Full test suite + a pass over every admin screen</td><td class="num">1 day</td></tr>
       <tr><td>5. UAT</td><td>Deploy to staging, reviewed by the UAT owner</td><td class="num">1–2 days</td></tr>
-    </tbody>
-  </table></div>
-  <p>For option A that is roughly <b>two calendar weeks from approval</b> to release — about 6 working days of
-  our effort, with the rest being review and UAT time.</p>
-</section>
-
-<section>
-  <h2>Risks</h2>
-  <p class="h2sub">What we are watching for</p>
-  <div class="tscroll"><table>
-    <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
-    <tbody>
-      <tr><td>The user edit form breaks — DCS stores group membership differently from stock Django</td>
-          <td>Don't just open the form; <b>save it</b> as part of the verification pass. The riskiest single edit in option A.</td></tr>
-      <tr><td>Tests silently stop asserting anything once the theme renames the HTML they look for</td>
-          <td><b>Rewrite those tests first, on the current theme</b>, and confirm they are green before the theme goes in.</td></tr>
-      <tr><td>The internal-only gate on the activity log comes loose</td>
-          <td>Log in as a non-allowlisted account every time and confirm the section is absent and both pages return 403.</td></tr>
-      <tr><td>Static files (CSS/JS) are not served in production</td>
-          <td>Verify on <b>both</b> staging and production after deploy — the web-server config lives outside the repo, so fixing one box does not fix the other.</td></tr>
-      <tr><td>One scheduled-task screen exists only in production and cannot be checked on staging</td>
-          <td>Cover it with tests and confirm visually right after the production release.</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -826,51 +446,21 @@ Period <span class="m-in" style="display:inline-block;width:110px">2026-09-15</s
   <h2>Next</h2>
   <p class="h2sub">Next steps</p>
   <ul>
-    <li><b>Coco:</b> pick A, B or C. If something needs changing, point at the section on this page.</li>
-    <li><b>Husen:</b> after approval, implement on <code>feat/z94amcqevr-modernize-admin-ui</code> and raise a PR against <code>dev</code>.</li>
+    <li><b>Coco:</b> pick A or B. If something needs changing, point at the section on this page.</li>
+    <li><b>Husen:</b> after approval, implement and raise a PR against <code>dev</code>.</li>
     <li><b>After that:</b> charts and dashboards go in as a separate ticket, built on the approved option.</li>
   </ul>
-  <div class="note warn"><b>About the images on this page:</b> each screen above <b>recreates how that
-  library looks</b>, applied to DCS's real columns, buttons and filters. They are not screenshots of a running
-  DCS. All three were rebuilt against the real products rather than from memory: Option A against the live
-  <a href="https://demo.unfoldadmin.com/">unfold demo</a> (its colour palette and table styling were read out
-  of the running app), Option B against the
-  <a href="https://django-jazzmin.readthedocs.io/">jazzmin documentation screenshots</a>, and Option C against
-  the <a href="https://github.com/fabiocaccamo/django-admin-interface">admin-interface</a> project README.
-  <br><br><b>One caveat on Option A specifically:</b> that public demo runs unfold <b>0.108.0</b>, while Python
-  3.9 limits us to <b>0.67.0</b>. The design language has been stable across those releases, but small details
-  may differ. We will confirm against a real 0.67.0 install before anything is built.
-  <br><br>Note also that the live DCS admin is in <b>Japanese</b>; the mockups are labelled in English for this
-  document. And because this page is served from a public repository, the email addresses, hostname and account
-  figures shown are <b>placeholders</b> — the real values are in the ClickUp ticket.</div>
+  <div class="note"><b>About these images:</b> every figure is a screenshot of the real DCS admin with that
+  theme actually installed, running on a throwaway database. The admin's own language is Japanese, which is
+  why the screens are Japanese while this document is English.
+  <br><br>Because this page is served from a public repository, the database was seeded with
+  <b>placeholder data</b> — the addresses and hostnames you see are invented. Real figures are in the
+  ClickUp ticket.</div>
 </section>
 
 <footer style="padding:40px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)">
   <p style="margin:0">DCS admin UI modernization proposal · ClickUp z94amcqevr · 2026-10-15 · Husen Efendi</p>
 </footer>
 </div>
-
-<script>
-// Each mock screen is drawn at a fixed 1600px design width and scaled down to
-// whatever space it actually has, so the layout never reflows and nothing is
-// ever clipped. Breakpoints could not be exact at every width; measuring can.
-(function () {
-  var DESIGN = 1600;
-  var vps = document.querySelectorAll('.vp');
-  function fit() {
-    for (var i = 0; i < vps.length; i++) {
-      var w = vps[i].clientWidth;
-      if (w) vps[i].style.setProperty('--s', (w / DESIGN).toFixed(4));
-    }
-  }
-  fit();
-  window.addEventListener('resize', fit);
-  if (window.ResizeObserver && vps.length) {
-    var ro = new ResizeObserver(fit);
-    ro.observe(document.body);
-  }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
-})();
-</script>
 </body>
 </html>

@@ -1,34 +1,38 @@
 # -*- coding: utf-8 -*-
-import io, re
+"""Assemble index.html from the page shell and the body.
+
+The mock-screen generator (gen.py / _mock.css) is gone: every figure on the
+page is now a real screenshot in ../images/, captured against a locally
+installed theme on a seeded throwaway database.
+"""
+import io
+import re
+
 
 def rd(p):
     with io.open(p, encoding="utf-8") as fh:
         return fh.read()
 
-head = rd("_head.html")         # page shell: <!doctype> ... <div class="wrap">
-mock = rd("_mock.css")
+
+head = rd("_head.html")
 body = rd("body.html")
-
-# fold the mock stylesheet into the existing <style> block
-assert "</style>" in head
-head = head.replace("</style>", "\n/* ==== mock screens ==== */\n" + mock + "\n</style>", 1)
-
-for key, frag in [
-    ("__STOCK_LIST__",  "frag_stock_list.html"),
-    ("__STOCK_SUM__",   "frag_stock_sum.html"),
-    ("__UNFOLD_LIST__", "frag_unfold_list.html"),
-    ("__UNFOLD_SUM__",  "frag_unfold_sum.html"),
-    ("__JAZZ_LIST__",   "frag_jazz_list.html"),
-    ("__JAZZ_SUM__",    "frag_jazz_sum.html"),
-    ("__AI_LIST__",     "frag_ai_list.html"),
-    ("__AI_SUM__",      "frag_ai_sum.html"),
-]:
-    assert key in body, key
-    body = body.replace(key, rd(frag))
 
 out = head + body
 left = re.findall(r"__[A-Z_]+__", out)
 assert not left, left
-with io.open("site.html", "w", encoding="utf-8") as fh:
+
+# Fold the dark-mode block into its conventional form (nested @media inside a
+# rule is CSS nesting; this keeps it working in older engines too).
+old = ':root:not([data-theme="light"]){ @media (prefers-color-scheme: dark){'
+if old in out:
+    i = out.index(old)
+    j = out.index(':root[data-theme="dark"]{', i)
+    inner = out[i:j][len(old):].rstrip()[:-2].strip()
+    out = (out[:i]
+           + '@media (prefers-color-scheme: dark){\n:root:not([data-theme="light"]){\n'
+           + inner + '\n}}\n'
+           + out[j:])
+
+with io.open("../index.html", "w", encoding="utf-8") as fh:
     fh.write(out)
-print("built site.html: %d bytes, %d lines" % (len(out.encode("utf-8")), out.count("\n")))
+print("built ../index.html: %d bytes" % len(out.encode("utf-8")))

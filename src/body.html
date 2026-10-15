@@ -1,15 +1,15 @@
 <header class="top">
   <p class="eyebrow">DCS / Admin panel · Proposal</p>
   <h1>Modernizing the Django<br>admin with free OSS</h1>
-  <p class="lede">We want to make user-activity analysis easier. The admin UI is the foundation that
-  has to be modernized first. Here are three options, each shown against <b>DCS's own screens</b>.
+  <p class="lede">Two candidate themes, both installed against <b>the real DCS admin</b> and
+  photographed on our own screens. Everything below is a screenshot of a running system, not a mockup.
   Please pick one.</p>
   <div class="meta">
     <span class="chip">ClickUp <b>z94amcqevr</b></span>
     <span class="chip">Owner <b>Husen</b></span>
     <span class="chip">Approver <b>Coco</b></span>
-    <span class="chip">Drafted <b>2026-10-15</b></span>
-    <span class="chip">License <b>MIT (commercial use OK) — all three</b></span>
+    <span class="chip">Updated <b>2026-10-15</b></span>
+    <span class="chip">Both options <b>MIT · commercial use OK</b></span>
   </div>
 </header>
 
@@ -17,157 +17,180 @@
   <h2>Summary</h2>
   <p class="h2sub">The short version</p>
   <ul>
-    <li>We re-skin the admin with a <b>free, commercially-licensed (MIT)</b> OSS library.
-      The candidates are <b>A: django-unfold</b>, <b>B: django-jazzmin</b> and <b>C: django-admin-interface</b>.</li>
-    <li>The goal this time is <b>the look only</b>. Every existing admin feature must keep working exactly as it does
-      today; new charts and dashboards are deliberately split into a <b>follow-up ticket</b>.</li>
-    <li>DCS runs <b>Python 3.9</b>, so none of the three can use its latest release — each gets
-      <b>pinned one version back</b>. That is the only technical constraint, and it is covered below.</li>
+    <li>Three libraries were shortlisted. <b>django-jet-reboot had to be dropped</b> — it is AGPLv3 and
+      its own packaging says <i>"free for non-commercial use"</i>, which fails this project's licensing
+      requirement outright. That leaves two.</li>
+    <li><b>A — django-unfold</b> is the more polished product and the better foundation for the analytics
+      dashboard we want next. It must be <b>pinned to an older release</b> to run on our Python.</li>
+    <li><b>B — django-daisy</b> is the only candidate that runs its <b>current</b> release on our Python,
+      and it needed <b>no code changes at all</b> to work.</li>
+    <li>Both were installed and driven for real. In both, the user edit form <b>saved correctly</b> — the
+      single thing most likely to have broken. In both, one custom screen needs restyling.</li>
   </ul>
-  <div class="note ok"><b>What we need from you:</b> choose one of A / B / C. Once it is approved we start
-  implementing. From approval to handing it over for UAT we estimate roughly <b>4 working days for A</b>,
-  <b>2.5 for B</b>, or <b>1.5 for C</b>.</div>
+  <div class="note ok"><b>What we need from you:</b> choose A or B. From approval to UAT we estimate
+  <b>~4 working days for A</b> or <b>~2 days for B</b>.</div>
 </section>
 
 <section>
   <h2>Before</h2>
-  <p class="h2sub">What the admin looks like today</p>
-  <p>What we are re-skinning is the stock Django 4.2 admin. The two <b>user activity log</b> screens are the
-  busiest and the most information-dense, so every comparison below uses those same two screens.</p>
-  __STOCK_LIST__
-  __STOCK_SUM__
-  <div class="note"><b>Explicitly out of scope:</b> the filter fields (Type / User / Period), the contents of the
-  CSV export, and the query-parameter names (<code>start</code> / <code>end</code> / <code>user</code>) all
-  stay <b>exactly as they are</b> — those parameters are what link the Detail, Summary and CSV together.</div>
+  <p class="h2sub">The admin as it is today</p>
+  <p>Stock Django 4.2. The busiest admin screen we have is the user activity log, so every comparison
+  below uses that same screen.</p>
+  <div class="shot"><div class="bar"><i></i><i></i><i></i>
+    <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
+    <img src="images/stock-list.png" alt="The current stock Django admin showing the user activity log list"></div>
+  <p class="cap"><b>Today</b> — stock Django. Note the filter rail on the right: the 種別 and ユーザー filters
+  are standard Django, while 期間 is a custom widget we wrote to match Django's own markup. That is exactly
+  why it stops matching once a theme is applied.</p>
 </section>
 
 <section>
-  <h2>Constraint</h2>
-  <p class="h2sub">Python 3.9 — the one thing to know up front</p>
-  <p>DCS runs on Python 3.9 with Django 4.2. Over the last year or two, every major admin-theme library has
-  raised its Python floor to 3.10 or higher, which means <b>no option can use its latest release</b>.
-  Verified against PyPI today:</p>
-  <div class="tscroll"><table>
-    <thead><tr><th>Library</th><th>Latest</th><th>Latest requires</th><th>Last release usable on 3.9</th><th>License</th></tr></thead>
-    <tbody>
-      <tr><td><b>django-unfold</b> (A)</td><td class="num">0.110.0</td><td>Python ≥ 3.12</td>
-          <td class="num">0.67.0 <span class="tag ok">states 3.9 support</span></td><td>MIT</td></tr>
-      <tr><td><b>django-jazzmin</b> (B)</td><td class="num">3.0.5</td><td>Python ≥ 3.10</td>
-          <td class="num">3.0.1 <span class="tag ok">states 3.9 support</span></td><td>MIT</td></tr>
-      <tr><td><b>django-admin-interface</b> (C)</td><td class="num">0.32.0</td><td>no floor declared</td>
-          <td class="num">0.32.0 <span class="tag warn">needs verifying</span></td><td>MIT</td></tr>
-      <tr><td>django-baton</td><td class="num">5.9.3</td><td>Python ≥ 3.10</td>
-          <td class="num">5.4.1 <span class="tag warn">needs verifying</span></td><td>MIT</td></tr>
-      <tr><td>django-jet-reboot</td><td class="num">1.3.10</td><td>—</td><td>—</td>
-          <td><span class="tag bad">AGPLv3 / non-commercial</span></td></tr>
-    </tbody>
-  </table></div>
-  <p><b>django-jet-reboot is ruled out</b> — it is AGPLv3 and licensed "free for non-commercial use", which
-  fails the requirement that the library be free <i>and</i> licensed for commercial use.</p>
-  <div class="note warn"><b>What this means in practice:</b> whichever library we choose stays pinned at that
-  version and stops receiving upstream fixes. Upgrading Python to 3.12 would clear this, but it also means
-  re-pinning pandas / numpy / reportlab and re-running the whole test suite — so it belongs in a
-  <b>separate ticket</b>. We are not touching it here.</div>
-</section>
-
-<section>
-  <h2>Options</h2>
-  <p class="h2sub">The three candidates</p>
+  <h2>Option A</h2>
+  <p class="h2sub">django-unfold</p>
 
   <div class="cand">
     <div class="hd">
-      <div class="rank"><span class="dot">A</span>Recommended</div>
+      <div class="rank"><span class="dot">A</span>Most polished</div>
       <h3>django-unfold 0.67.0</h3>
-      <p class="sub">Built on Tailwind CSS: left sidebar, dark mode, ⌘K command palette.
-      The most modern of the three, and the one that pays off later.</p>
+      <p class="sub">Tailwind CSS. Collapsible sidebar, dark mode, ⌘K command palette, and a set of
+      chart/table/card components meant for building dashboards.</p>
       <div class="badges">
         <span class="chip">MIT</span><span class="chip">Dependencies <b>0</b></span>
-        <span class="chip">Python <b>≥3.9 declared</b></span><span class="chip">Released 2025-09</span>
-        <span class="chip">Chart components <b>included</b></span>
+        <span class="chip">Python <b>≥3.9</b></span><span class="chip">Django <b>≥4.2</b></span>
+        <span class="chip warn">Pinned to <b>0.67.0</b></span>
+      </div>
+      <div class="links">
+        <a href="https://unfoldadmin.com/docs/"><b>Docs</b></a>
+        <a href="https://demo.unfoldadmin.com/"><b>Live demo</b> demo / demo</a>
+        <a href="https://github.com/unfoldadmin/django-unfold"><b>GitHub</b></a>
+        <a href="https://pypi.org/project/django-unfold/0.67.0/"><b>PyPI</b> 0.67.0</a>
       </div>
     </div>
     <div class="body">
-      __UNFOLD_LIST__
-      __UNFOLD_SUM__
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
+        <img src="images/unfold-list.png" alt="DCS activity log list rendered by django-unfold"></div>
+      <p class="cap"><b>Activity log list.</b> Every column, label and value is ours. The sidebar groups our
+      real apps. ⚠️ Look at the top right: 「集計を見る」 and 「CSVダウンロード」 are our two custom buttons, and
+      they land there <b>unstyled and cramped</b> — they would need moving to Unfold's own action slot.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
+        <img src="images/unfold-filters.png" alt="Unfold's filter panel showing our three filters"></div>
+      <p class="cap"><b>Filters.</b> Unfold hides filters behind a button and opens them as a panel. Our
+      種別 and ユーザー filters are picked up and styled automatically. ⚠️ Our custom <b>期間</b> filter is the
+      raw block at the bottom — it keeps working, but it needs restyling.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
+        <img src="images/unfold-summary.png" alt="The activity log summary page under django-unfold"></div>
+      <p class="cap"><b>Summary page.</b> This is a page we wrote by hand, and it survived better than
+      expected — the tables and stat boxes still read correctly inside Unfold's chrome.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/user/user/1/change/</div></div>
+        <img src="images/unfold-userform.png" alt="The user edit form under django-unfold"></div>
+      <p class="cap"><b>User edit form</b> — the screen most likely to break, because DCS stores group
+      membership differently from standard Django. It renders correctly <b>and saves correctly</b>; we
+      tested the save, not just the display.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/</div></div>
+        <img src="images/unfold-index.png" alt="The admin home page under django-unfold"></div>
+      <p class="cap"><b>Admin home.</b> Our real app groups, down the sidebar and across the page.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/login/</div></div>
+        <img src="images/unfold-login.png" alt="The login screen under django-unfold"></div>
+      <p class="cap"><b>Login.</b></p>
+
       <div class="pros">
         <div><h4>Strengths</h4><ul>
-          <li>The only one of the three whose <b>own metadata declares Python 3.9 support</b></li>
-          <li>Ships <b>chart, table and card components</b>, so the follow-up dashboard ticket lands straight on top of it</li>
-          <li><b>Zero</b> additional dependencies — the smallest possible blast radius</li>
-          <li>Dark mode, richer filters, ⌘K search</li>
+          <li>The most finished-looking of the two, with dark mode and a command palette</li>
+          <li>Ships <b>chart, table and card components</b>, so the follow-up dashboard builds on it directly</li>
+          <li><b>Zero</b> runtime dependencies</li>
+          <li>Large, actively maintained project (1M+ installs/month)</li>
         </ul></div>
         <div><h4>Cost and caveats</h4><ul>
-          <li>All <b>13 registered admin classes</b> must be switched to unfold's base class</li>
-          <li>The user, group and scheduled-task screens need <b>re-registering</b>, or they render unstyled</li>
-          <li>Some of the theme's own labels will have <b>no Japanese translation</b></li>
-          <li>Longest implementation of the three (~4 working days)</li>
+          <li><b>Pinned to 0.67.0</b> (Sep 2025) — the current release needs Python 3.12, so we get no upstream fixes</li>
+          <li>Every one of our <b>13 admin classes</b> must be changed to inherit Unfold's base class</li>
+          <li>The user/group screens need re-registering with Unfold's own forms</li>
+          <li>Our two custom buttons and the 期間 filter need restyling</li>
         </ul></div>
       </div>
-      <div class="rec"><b>Why we recommend it:</b> it is the only option that both <b>provably runs on Python 3.9</b>
-      and <b>gives us the foundation for the analytics dashboard</b> that prompted this ticket. The higher
-      migration cost is recovered by the next ticket.</div>
     </div>
   </div>
+</section>
+
+<section>
+  <h2>Option B</h2>
+  <p class="h2sub">django-daisy</p>
 
   <div class="cand">
     <div class="hd">
-      <div class="rank"><span class="dot">B</span>Safe choice</div>
-      <h3>django-jazzmin 3.0.1</h3>
-      <p class="sub">Built on AdminLTE 3 / Bootstrap 5. Switched on with a settings block —
-      it barely touches existing code.</p>
+      <div class="rank"><span class="dot">B</span>Not frozen</div>
+      <h3>django-daisy 2.0.15</h3>
+      <p class="sub">DaisyUI + Tailwind. Built-in theme switcher, RTL support, tabbed inline admin —
+      and the only option we can run on its current release.</p>
       <div class="badges">
         <span class="chip">MIT</span><span class="chip">Dependencies <b>Django only</b></span>
-        <span class="chip">Python <b>3.9 declared</b></span><span class="chip">Released 2024-10</span>
-        <span class="chip">Code changes <b>almost none</b></span>
+        <span class="chip ok">Python <b>3.8+</b></span><span class="chip">Django <b>3.2–6.1</b></span>
+        <span class="chip ok">Latest release <b>usable</b></span>
+      </div>
+      <div class="links">
+        <a href="https://hypy13.github.io/django-daisy-docs/"><b>Docs</b></a>
+        <a href="https://hypy13-django-daisy.hf.space/admin/"><b>Live demo</b> demo / demo</a>
+        <a href="https://hypy13-django-daisy.hf.space/fa/admin/"><b>RTL demo</b></a>
+        <a href="https://github.com/hypy13/django-daisy"><b>GitHub</b></a>
+        <a href="https://pypi.org/project/django-daisy/"><b>PyPI</b></a>
+        <a href="https://www.youtube.com/watch?v=WEKTXu1la9M"><b>Video</b></a>
       </div>
     </div>
     <div class="body">
-      __JAZZ_LIST__
-      __JAZZ_SUM__
-      <div class="pros">
-        <div><h4>Strengths</h4><ul>
-          <li><b>Configuration only</b> — no admin classes to rewrite, so the least risk of breaking a working feature</li>
-          <li>Includes a visual UI customizer for colours and layout</li>
-          <li>Bootstrap keeps it looking like a familiar admin panel</li>
-          <li>~2.5 working days to implement</li>
-        </ul></div>
-        <div><h4>Cost and caveats</h4><ul>
-          <li>Its last 3.9-compatible release is from <b>October 2024</b> — the oldest of the three</li>
-          <li>No charting API, so the follow-up dashboard would be <b>built from scratch</b></li>
-          <li>Ships <b>no Japanese translation</b> (8 locales, none of them Japanese)</li>
-          <li>Looks distinctly "Bootstrap"; less contemporary than A</li>
-        </ul></div>
-      </div>
-    </div>
-  </div>
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/</div></div>
+        <img src="images/daisy-list.png" alt="DCS activity log list rendered by django-daisy"></div>
+      <p class="cap"><b>Activity log list.</b> This required <b>no code changes whatsoever</b> — it is our
+      admin, untouched, with the theme installed. The filter rail stays open on the right and our 種別 /
+      ユーザー filters become removable chips. ⚠️ Because the rail is always open the table is narrower, so
+      this dense screen wraps more than under Unfold. Our 期間 filter is again unstyled.</p>
 
-  <div class="cand">
-    <div class="hd">
-      <div class="rank"><span class="dot">C</span>Minimal change</div>
-      <h3>django-admin-interface 0.32.0</h3>
-      <p class="sub">Keeps Django's layout exactly as it is and changes only the colours, logo and corners.
-      The option that prioritises "nothing people know how to use moves".</p>
-      <div class="badges">
-        <span class="chip">MIT</span><span class="chip">Dependencies <b>2</b></span>
-        <span class="chip warn">Python 3.9 <b>needs verifying</b></span><span class="chip">Released 2025-12</span>
-        <span class="chip">Migration cost <b>lowest</b></span>
-      </div>
-    </div>
-    <div class="body">
-      __AI_LIST__
-      __AI_SUM__
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/activitylog/activityevent/summary/</div></div>
+        <img src="images/daisy-summary.png" alt="The activity log summary page under django-daisy"></div>
+      <p class="cap"><b>Summary page.</b> More horizontal room than Unfold here, since this page has no
+      filter rail. Our hand-written page carries over cleanly.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/user/user/1/change/</div></div>
+        <img src="images/daisy-userform.png" alt="The user edit form under django-daisy"></div>
+      <p class="cap"><b>User edit form.</b> Collapsible sections and tabs, again with no code changes.
+      It <b>saves correctly</b> — verified, not assumed.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/</div></div>
+        <img src="images/daisy-index.png" alt="The admin home page under django-daisy"></div>
+      <p class="cap"><b>Admin home.</b> The icon at the top right is the built-in theme switcher — colours
+      can be changed without a deploy.</p>
+
+      <div class="shot"><div class="bar"><i></i><i></i><i></i>
+        <div class="url">dcs.example.com/admin/login/</div></div>
+        <img src="images/daisy-login.png" alt="The login screen under django-daisy"></div>
+      <p class="cap"><b>Login.</b></p>
+
       <div class="pros">
         <div><h4>Strengths</h4><ul>
-          <li>The layout does not move, so <b>every existing workflow still applies</b></li>
-          <li>Colours and logo are editable <b>from inside the admin</b> — no deploy per tweak</li>
-          <li>Smallest impact on our existing custom pages, such as the summary screen</li>
-          <li>~1.5 working days to implement</li>
+          <li><b>Runs its current release on our Python</b> — the only candidate that is not frozen</li>
+          <li>Needed <b>no changes to any admin class</b>; installation is configuration only</li>
+          <li>Built-in theme switcher, so colours change without a deploy</li>
+          <li>Supports Django 3.2 all the way to 6.1, so it will not block a future Django upgrade</li>
         </ul></div>
         <div><h4>Cost and caveats</h4><ul>
-          <li><b>Python 3.9 support is unconfirmed</b> — its metadata assumes 3.10+, so this needs testing first</li>
-          <li>Two extra dependencies (<code>django-colorfield</code>, <code>python-slugify</code>)</li>
-          <li>Stores the theme in the database, so it <b>adds a migration</b></li>
-          <li>The weakest answer to "modernize the UI" of the three</li>
+          <li>A <b>younger, smaller project</b> than Unfold — fewer users, fewer maintainers</li>
+          <li>No chart components, so the follow-up dashboard would be built from scratch</li>
+          <li>Requires adding <code>django.contrib.humanize</code> (a Django built-in we do not currently enable)</li>
+          <li>The dense activity-log table wraps more than under Unfold; our 期間 filter still needs restyling</li>
+          <li>Its licence is stated two ways — <code>LICENSE</code> says MIT, packaging says Apache-2.0. Both allow commercial use.</li>
         </ul></div>
       </div>
     </div>
@@ -178,35 +201,90 @@
   <h2>At a glance</h2>
   <p class="h2sub">Side by side</p>
   <div class="tscroll"><table>
-    <thead><tr><th></th><th>A — unfold</th><th>B — jazzmin</th><th>C — admin-interface</th></tr></thead>
+    <thead><tr><th></th><th>A — django-unfold</th><th>B — django-daisy</th></tr></thead>
     <tbody>
-      <tr><td><b>Look</b></td><td>Tailwind, dark mode</td><td>AdminLTE / Bootstrap</td><td>Stock Django, repainted</td></tr>
-      <tr><td><b>License</b></td><td>MIT</td><td>MIT</td><td>MIT</td></tr>
-      <tr><td><b>Extra dependencies</b></td><td><span class="tag ok">0</span></td><td><span class="tag ok">0</span></td><td>2</td></tr>
-      <tr><td><b>Python 3.9</b></td><td><span class="tag ok">declared</span></td><td><span class="tag ok">declared</span></td><td><span class="tag warn">unverified</span></td></tr>
-      <tr><td><b>Code changes needed</b></td><td>13 admin classes + re-register third-party screens</td><td><span class="tag ok">settings only</span></td><td>settings + 1 migration</td></tr>
-      <tr><td><b>Japanese translation</b></td><td>not bundled</td><td>not bundled</td><td>layout unchanged, so minimal impact</td></tr>
-      <tr><td><b>Value for the dashboard follow-up</b></td><td><span class="tag ok">chart components</span></td><td>build our own</td><td>none</td></tr>
-      <tr><td><b>Estimated implementation</b></td><td>~4 working days</td><td>~2.5 working days</td><td>~1.5 working days</td></tr>
-      <tr><td><b>Release recency</b></td><td>2025-09</td><td>2024-10</td><td>2025-12</td></tr>
+      <tr><td><b>Version we'd run</b></td><td>0.67.0 <span class="tag warn">pinned, Sep 2025</span></td>
+          <td>2.0.15 <span class="tag ok">current</span></td></tr>
+      <tr><td><b>Why pinned?</b></td><td>latest needs Python 3.12</td><td><span class="tag ok">not pinned</span></td></tr>
+      <tr><td><b>License</b></td><td>MIT</td><td>MIT / Apache-2.0</td></tr>
+      <tr><td><b>Extra dependencies</b></td><td><span class="tag ok">0</span></td><td><span class="tag ok">0</span></td></tr>
+      <tr><td><b>Changes to our admin code</b></td><td>13 classes + auth re-registration</td>
+          <td><span class="tag ok">none</span></td></tr>
+      <tr><td><b>User form saves correctly</b></td><td><span class="tag ok">verified</span></td>
+          <td><span class="tag ok">verified</span></td></tr>
+      <tr><td><b>Custom 期間 filter</b></td><td>needs restyling</td><td>needs restyling</td></tr>
+      <tr><td><b>Custom summary page</b></td><td>carries over</td><td>carries over</td></tr>
+      <tr><td><b>Dark mode / theming</b></td><td>dark mode built in</td><td>theme switcher built in</td></tr>
+      <tr><td><b>Dashboard follow-up</b></td><td><span class="tag ok">chart components</span></td><td>build our own</td></tr>
+      <tr><td><b>Project size</b></td><td>large, very active</td><td>smaller, newer</td></tr>
+      <tr><td><b>Estimated effort</b></td><td>~4 working days</td><td>~2 working days</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="verdict">
+    <div><div class="k">Pick A if</div>the priority is the most polished result and the analytics
+    dashboard we want next, and we accept running a pinned release until Python is upgraded.</div>
+    <div><div class="k">Pick B if</div>the priority is staying current and low-risk — no admin code
+    changes, no frozen dependency, and roughly half the work.</div>
+  </div>
+</section>
+
+<section>
+  <h2>Rejected</h2>
+  <p class="h2sub">Evaluated and not proposed</p>
+  <div class="tscroll"><table>
+    <thead><tr><th>Library</th><th>Why not</th></tr></thead>
+    <tbody>
+      <tr><td><b>django-jet-reboot</b> 1.3.10</td>
+          <td><b>Licensing.</b> It is AGPLv3, and its own packaging declares
+          <i>"Free for non-commercial use"</i> — which fails our requirement that libraries be free
+          <b>and</b> licensed for commercial use. AGPL also carries a network-use clause that can oblige
+          publishing source for a service we expose to users. Separately, it has no working demo: the
+          original project's demo site is offline and its screenshots are from the predecessor project.
+          <a href="https://github.com/assem-ch/django-jet-reboot">repo</a> ·
+          <a href="https://django-jet-reboot.readthedocs.io/">docs</a></td></tr>
+      <tr><td><b>django-jazzmin</b> 3.0.1</td>
+          <td>Permissively licensed, but its last release compatible with our Python is from
+          <b>October 2024</b>, and it moves list filters into header dropdowns, so our custom filter would
+          need porting anyway. Daisy covers the same ground while staying current.</td></tr>
+      <tr><td><b>django-admin-interface</b> 0.32.0</td>
+          <td>Permissively licensed, but declares no Python floor and its metadata targets 3.10+, so
+          support for our Python is unverified. Adds two dependencies and a database migration, and
+          changes the least visually.</td></tr>
     </tbody>
   </table></div>
 </section>
 
 <section>
+  <h2>Constraint</h2>
+  <p class="h2sub">Why versions matter here</p>
+  <p>DCS runs <b>Python 3.9</b>. Most Django admin themes have raised their minimum Python past that, so
+  for most candidates we would be stuck on an old release with no upstream fixes. That is the single
+  biggest difference between the two options:</p>
+  <ul>
+    <li><b>Unfold</b> — current release requires Python 3.12. We would run <b>0.67.0</b>, the last release
+      that supports 3.9, and stay there until Python is upgraded.</li>
+    <li><b>Daisy</b> — supports Python 3.8+ and Django 3.2–6.1, so we run the <b>current</b> release and
+      keep receiving updates. Verified by installing it on our actual Python and compiling the package.</li>
+  </ul>
+  <div class="note warn">Upgrading Python 3.9 → 3.12 would remove this constraint entirely, but it means
+  re-pinning several numerical and PDF libraries and re-running the whole test suite. It is <b>a separate
+  ticket</b>, not part of this work. Choosing Daisy makes it less urgent.</div>
+</section>
+
+<section>
   <h2>Audience</h2>
   <p class="h2sub">Who sees this change</p>
-  <p>In every option, the only UI that changes is <code>/admin/</code>. The DCS product itself (the SPA) is
-  <b>completely untouched</b>. One thing worth flagging first, though: the admin is not purely internal.</p>
+  <p>Only <code>/admin/</code> changes. The DCS product itself is <b>untouched</b>. One thing to note:
+  the production admin is not purely internal.</p>
   <ul>
-    <li>The accounts that can reach the production admin include <b>administrator accounts belonging to the
-      client</b>, not only our own staff (exact figures and addresses are in the ClickUp ticket).</li>
-    <li>Because of that, the <b>two activity-log screens stay internal-only</b> — they are gated by an email
-      allowlist, and we are not changing that gate in this work.</li>
+    <li>Accounts that can reach the production admin include <b>administrator accounts belonging to the
+      client</b>, not only our own staff (figures are in the ClickUp ticket).</li>
+    <li>The <b>two activity-log screens stay internal-only</b> — they are gated by an email allowlist that
+      this work does not change.</li>
     <li>Every other admin screen is <b>already visible to the client side</b>, so the visual change will be too.</li>
   </ul>
-  <div class="note"><b>Decision needed:</b> whether the client should be notified in advance. If so, we will
-  add it to the pre-release checklist.</div>
+  <div class="note"><b>Decision needed:</b> whether the client should be told in advance.</div>
 </section>
 
 <section>
@@ -215,33 +293,11 @@
   <div class="tscroll"><table>
     <thead><tr><th>Phase</th><th>What happens</th><th>Effort</th></tr></thead>
     <tbody>
-      <tr><td>1. Research &amp; proposal</td><td>Library research, compatibility checks, this document</td><td class="num">2 days <span class="tag ok">done</span></td></tr>
-      <tr><td>2. Review</td><td><b>Coco picks one option</b></td><td class="num">1–3 days</td></tr>
-      <tr><td>3. Implementation</td><td>De-couple tests from markup → install → migrate admin classes → port the 3 custom templates</td><td class="num">A:4 / B:2.5 / C:1.5 days</td></tr>
-      <tr><td>4. Verification</td><td>Full test suite (~41,500 lines across 11 apps) + a pass over every admin screen</td><td class="num">1 day</td></tr>
+      <tr><td>1. Research &amp; proposal</td><td>Licensing and compatibility checks, both themes installed and photographed, this document</td><td class="num">done</td></tr>
+      <tr><td>2. Review</td><td><b>Coco picks A or B</b></td><td class="num">1–3 days</td></tr>
+      <tr><td>3. Implementation</td><td>De-couple tests from markup → install → (A only: migrate admin classes) → restyle the custom buttons and 期間 filter</td><td class="num">A: ~4 / B: ~2 days</td></tr>
+      <tr><td>4. Verification</td><td>Full test suite + a pass over every admin screen</td><td class="num">1 day</td></tr>
       <tr><td>5. UAT</td><td>Deploy to staging, reviewed by the UAT owner</td><td class="num">1–2 days</td></tr>
-    </tbody>
-  </table></div>
-  <p>For option A that is roughly <b>two calendar weeks from approval</b> to release — about 6 working days of
-  our effort, with the rest being review and UAT time.</p>
-</section>
-
-<section>
-  <h2>Risks</h2>
-  <p class="h2sub">What we are watching for</p>
-  <div class="tscroll"><table>
-    <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
-    <tbody>
-      <tr><td>The user edit form breaks — DCS stores group membership differently from stock Django</td>
-          <td>Don't just open the form; <b>save it</b> as part of the verification pass. The riskiest single edit in option A.</td></tr>
-      <tr><td>Tests silently stop asserting anything once the theme renames the HTML they look for</td>
-          <td><b>Rewrite those tests first, on the current theme</b>, and confirm they are green before the theme goes in.</td></tr>
-      <tr><td>The internal-only gate on the activity log comes loose</td>
-          <td>Log in as a non-allowlisted account every time and confirm the section is absent and both pages return 403.</td></tr>
-      <tr><td>Static files (CSS/JS) are not served in production</td>
-          <td>Verify on <b>both</b> staging and production after deploy — the web-server config lives outside the repo, so fixing one box does not fix the other.</td></tr>
-      <tr><td>One scheduled-task screen exists only in production and cannot be checked on staging</td>
-          <td>Cover it with tests and confirm visually right after the production release.</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -250,51 +306,21 @@
   <h2>Next</h2>
   <p class="h2sub">Next steps</p>
   <ul>
-    <li><b>Coco:</b> pick A, B or C. If something needs changing, point at the section on this page.</li>
-    <li><b>Husen:</b> after approval, implement on <code>feat/z94amcqevr-modernize-admin-ui</code> and raise a PR against <code>dev</code>.</li>
+    <li><b>Coco:</b> pick A or B. If something needs changing, point at the section on this page.</li>
+    <li><b>Husen:</b> after approval, implement and raise a PR against <code>dev</code>.</li>
     <li><b>After that:</b> charts and dashboards go in as a separate ticket, built on the approved option.</li>
   </ul>
-  <div class="note warn"><b>About the images on this page:</b> each screen above <b>recreates how that
-  library looks</b>, applied to DCS's real columns, buttons and filters. They are not screenshots of a running
-  DCS. All three were rebuilt against the real products rather than from memory: Option A against the live
-  <a href="https://demo.unfoldadmin.com/">unfold demo</a> (its colour palette and table styling were read out
-  of the running app), Option B against the
-  <a href="https://django-jazzmin.readthedocs.io/">jazzmin documentation screenshots</a>, and Option C against
-  the <a href="https://github.com/fabiocaccamo/django-admin-interface">admin-interface</a> project README.
-  <br><br><b>One caveat on Option A specifically:</b> that public demo runs unfold <b>0.108.0</b>, while Python
-  3.9 limits us to <b>0.67.0</b>. The design language has been stable across those releases, but small details
-  may differ. We will confirm against a real 0.67.0 install before anything is built.
-  <br><br>Note also that the live DCS admin is in <b>Japanese</b>; the mockups are labelled in English for this
-  document. And because this page is served from a public repository, the email addresses, hostname and account
-  figures shown are <b>placeholders</b> — the real values are in the ClickUp ticket.</div>
+  <div class="note"><b>About these images:</b> every figure is a screenshot of the real DCS admin with that
+  theme actually installed, running on a throwaway database. The admin's own language is Japanese, which is
+  why the screens are Japanese while this document is English.
+  <br><br>Because this page is served from a public repository, the database was seeded with
+  <b>placeholder data</b> — the addresses and hostnames you see are invented. Real figures are in the
+  ClickUp ticket.</div>
 </section>
 
 <footer style="padding:40px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)">
   <p style="margin:0">DCS admin UI modernization proposal · ClickUp z94amcqevr · 2026-10-15 · Husen Efendi</p>
 </footer>
 </div>
-
-<script>
-// Each mock screen is drawn at a fixed 1600px design width and scaled down to
-// whatever space it actually has, so the layout never reflows and nothing is
-// ever clipped. Breakpoints could not be exact at every width; measuring can.
-(function () {
-  var DESIGN = 1600;
-  var vps = document.querySelectorAll('.vp');
-  function fit() {
-    for (var i = 0; i < vps.length; i++) {
-      var w = vps[i].clientWidth;
-      if (w) vps[i].style.setProperty('--s', (w / DESIGN).toFixed(4));
-    }
-  }
-  fit();
-  window.addEventListener('resize', fit);
-  if (window.ResizeObserver && vps.length) {
-    var ro = new ResizeObserver(fit);
-    ro.observe(document.body);
-  }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
-})();
-</script>
 </body>
 </html>
